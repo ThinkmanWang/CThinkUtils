@@ -1,6 +1,0 @@
-/Users/wangxiaofeng/Github-Thinkman/CHelloWorld/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/Users/wangxiaofeng/Github-Thinkman/CHelloWorld/cmake-build-debug/CMakeFiles/edit_cache.dir
-/Users/wangxiaofeng/Github-Thinkman/CHelloWorld/cmake-build-debug/CMakeFiles/CHelloWorld.dir
-/Users/wangxiaofeng/Github-Thinkman/CHelloWorld/cmake-build-debug/log/CMakeFiles/rebuild_cache.dir
-/Users/wangxiaofeng/Github-Thinkman/CHelloWorld/cmake-build-debug/log/CMakeFiles/edit_cache.dir
-/Users/wangxiaofeng/Github-Thinkman/CHelloWorld/cmake-build-debug/log/CMakeFiles/log.dir
