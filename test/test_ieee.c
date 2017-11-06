@@ -43,6 +43,7 @@ int main(int argc, char* argv[])
             char tmp[40] = "";
             char bin[64] = "";
             itoa_x(ieee, tmp, 2); //binary output
+//            sprintf(tmp, "%x", ieee);
 
             //if tmp.length < 32, fill with '0'
             if (strlen(tmp) < 32) {
@@ -55,16 +56,16 @@ int main(int argc, char* argv[])
             }
             strcat(bin, tmp);
 
-            printf("ieee for %f\n", val);
-            printf("%s\n", bin);
-            printf("0x%X\n", ieee);
+            DEBUG("ieee for %f\n", val);
+            DEBUG("%s\n", bin);
+            DEBUG("0x%X\n", ieee);
         }
     }
 
     else if (0 == strcmp("-f", argv[1])) {
         unsigned long val;
         if (1 == sscanf(argv[2],"%X", &val)) {
-            printf("float for 0x%X : %f\n", val, ieee2float(val));
+            DEBUG("float for 0x%X : %f\n", val, ieee2float(val));
         }
     }
 
