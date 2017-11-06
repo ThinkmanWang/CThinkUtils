@@ -1,6 +1,22 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <glib.h>
+
+#include "log.h"
+
+DEFINE_EA_MOD(MOD_MAIN);
+
 
 int main() {
-    printf("Hello, World!\n");
+    ELInit(NULL, log_module);
+    ELSetDefaultLogTable(EA_LOG_DEBUG);
+    ELSetModuleLogLevel(MOD_MAIN, EA_LOG_DEBUG);
+    ELSetModuleLogLevel(MOD_UI, EA_LOG_DEBUG);
+    ELSetModuleLogLevel(MOD_DATA, EA_LOG_DEBUG);
+    ELSetModuleLogLevel(MOD_NETWORK, EA_LOG_DEBUG);
+    ELPrintLogTable();
+
+    DEBUG("Hello World!\n");
+
     return 0;
 }
