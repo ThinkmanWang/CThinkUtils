@@ -6,8 +6,8 @@
 
 DEFINE_EA_MOD(MOD_MAIN);
 
-
-int main() {
+int main()
+{
     ELInit(NULL, log_module);
     ELSetDefaultLogTable(EA_LOG_DEBUG);
     ELSetModuleLogLevel(MOD_MAIN, EA_LOG_DEBUG);
