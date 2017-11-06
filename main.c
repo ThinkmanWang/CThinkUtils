@@ -3,6 +3,7 @@
 #include <glib.h>
 
 #include "log.h"
+#include "test.h"
 
 DEFINE_EA_MOD(MOD_MAIN);
 
@@ -17,6 +18,7 @@ int main()
     ELPrintLogTable();
 
     DEBUG("Hello World!\n");
+    func1();
 
     return 0;
 }
