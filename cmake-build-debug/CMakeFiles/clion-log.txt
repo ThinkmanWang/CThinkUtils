@@ -1,0 +1,7 @@
+/Applications/CLion.app/Contents/bin/cmake/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /Users/wangxiaofeng/Github-Thinkman/CHelloWorld
+CMake Error at CMakeLists.txt:6 (pkg_check_modules):
+  Unknown CMake command "pkg_check_modules".
+
+
+-- Configuring incomplete, errors occurred!
+See also "/Users/wangxiaofeng/Github-Thinkman/CHelloWorld/cmake-build-debug/CMakeFiles/CMakeOutput.log".

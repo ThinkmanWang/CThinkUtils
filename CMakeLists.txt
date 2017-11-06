@@ -1,0 +1,23 @@
+cmake_minimum_required(VERSION 3.8)
+project(CHelloWorld)
+
+set(CMAKE_C_STANDARD 99)
+
+INCLUDE(FindGLIB2.cmake)
+
+pkg_check_modules(GLIB2 REQUIRED glib-2.0)
+IF (GLIB2_FOUND)
+    MESSAGE ("Glib found")
+    INCLUDE_DIRECTORIES(${GLIB2_INCLUDE_DIRS})
+    MESSAGE (${GLIB2_INCLUDE_DIRS})
+    #LINK_DIRECTORIES(${GLIB2_LIBRARIES})
+    #LINK_DIRECTORIES(${GTHREAD2_LIBRARIES})
+ELSE (GLIB2_FOUND)
+    MESSAGE ("Glib not found")
+ENDIF (GLIB2_FOUND)
+
+set(SOURCE_FILES main.c)
+add_executable(CHelloWorld ${SOURCE_FILES})
+
+ADD_SUBDIRECTORY(log)
+INCLUDE_DIRECTORIES(log)
