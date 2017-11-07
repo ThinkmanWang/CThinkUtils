@@ -4,6 +4,7 @@
 
 #include "log.h"
 #include "test.h"
+#include "datetime.h"
 
 DEFINE_EA_MOD(MOD_MAIN);
 
@@ -18,6 +19,9 @@ int main()
     ELPrintLogTable();
 
     DEBUG("Hello World!\n");
+
+    char szDate[256];
+    DEBUG("%s\n", now(szDate))
     func1();
 
     return 0;
