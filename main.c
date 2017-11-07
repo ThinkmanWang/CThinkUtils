@@ -6,22 +6,14 @@
 #include "test.h"
 #include "datetime.h"
 
-DEFINE_EA_MOD(MOD_MAIN);
 
 int main()
 {
-    ELInit(NULL, log_module);
-    ELSetDefaultLogTable(EA_LOG_DEBUG);
-    ELSetModuleLogLevel(MOD_MAIN, EA_LOG_DEBUG);
-    ELSetModuleLogLevel(MOD_UI, EA_LOG_DEBUG);
-    ELSetModuleLogLevel(MOD_DATA, EA_LOG_DEBUG);
-    ELSetModuleLogLevel(MOD_NETWORK, EA_LOG_DEBUG);
-    ELPrintLogTable();
 
-    DEBUG("Hello World!\n");
+    log_debug("Hello World!\n");
 
     char szDate[256];
-    DEBUG("%s\n", now(szDate))
+    log_debug("%s\n", now(szDate));
     func1();
 
     return 0;
