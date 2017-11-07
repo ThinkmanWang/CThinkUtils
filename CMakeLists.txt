@@ -29,3 +29,11 @@ ADD_SUBDIRECTORY(test)
 
 TARGET_LINK_LIBRARIES(CHelloWorld ${GLIB2_LIBRARIES} ${GTHREAD2_LIBRARIES})
 TARGET_LINK_LIBRARIES(CHelloWorld pthread log thinkutils)
+
+add_custom_command(TARGET CHelloWorld
+        POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/config.ini ${CMAKE_CURRENT_BINARY_DIR}/config.ini)
+
+add_custom_command(TARGET CHelloWorld
+        POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/config.ini config.ini)
