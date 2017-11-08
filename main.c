@@ -25,11 +25,8 @@ void test_ini()
     log_debug("server: %s:%d\n", server, port);
 }
 
-int main()
+void datetime_test()
 {
-
-    log_debug("Hello World!\n");
-
     char szDate[256];
     log_debug("%s\n", now(szDate));
     func1();
@@ -37,7 +34,14 @@ int main()
     char buf[256];
     getcwd(buf,sizeof(buf));
     log_debug("current working directory: %s\n", buf);
+}
 
+int main()
+{
+
+    log_debug("Hello World!\n");
+
+    datetime_test();
     test_ini();
 
     return 0;
