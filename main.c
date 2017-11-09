@@ -2,11 +2,18 @@
 #include <stdlib.h>
 #include <glib.h>
 #include <unistd.h>
+#include <string.h>
+
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
 #include "log.h"
 #include "test.h"
 #include "datetime.h"
 #include "ini.h"
+#include "md5.h"
 
 void test_ini()
 {
@@ -36,6 +43,25 @@ void datetime_test()
     log_debug("current working directory: %s\n", buf);
 }
 
+void test_md5()
+{
+    int ret;
+    const char *file_path = "config.ini";
+    char md5_str[MD5_STR_LEN + 1];
+    const char *test_str = "gchinaran@gmail.com";
+
+    // test file md5
+    ret = Compute_file_md5(file_path, md5_str);
+    if (0 == ret)
+    {
+        log_debug("[file - %s] md5 value ==> %s\n", file_path, md5_str);
+    }
+
+    // test string md5
+    Compute_string_md5((unsigned char *)test_str, strlen(test_str), md5_str);
+    log_debug("[string - %s] md5 value ==> %s\n", test_str, md5_str);
+}
+
 int main()
 {
 
@@ -43,6 +69,7 @@ int main()
 
     datetime_test();
     test_ini();
+    test_md5();
 
     return 0;
 }
