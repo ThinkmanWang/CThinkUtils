@@ -14,6 +14,7 @@
 #include "datetime.h"
 #include "ini.h"
 #include "md5.h"
+#include "netutils.h"
 
 void test_ini()
 {
@@ -62,6 +63,13 @@ void test_md5()
     log_debug("[string - %s] md5 value ==> %s\n", test_str, md5_str);
 }
 
+void test_ip_address()
+{
+    char szIP[256];
+    int nRet = get_local_ip("en0", szIP, 256);
+    log_debug("%s\n", szIP);
+}
+
 int main()
 {
 
@@ -70,6 +78,7 @@ int main()
     datetime_test();
     test_ini();
     test_md5();
+    test_ip_address();
 
     return 0;
 }
