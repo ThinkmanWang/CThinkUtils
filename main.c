@@ -15,6 +15,7 @@
 #include "ini.h"
 #include "md5.h"
 #include "netutils.h"
+#include "string_utils.h"
 
 void test_ini()
 {
@@ -91,6 +92,23 @@ void test_ip_address()
     log_debug("%s\n", szIP);
 }
 
+void uuid_test()
+{
+    gchar* pszUuid = g_uuid_string_random();
+    log_debug("uuid ==> %s\n", pszUuid);
+
+
+    g_free(pszUuid);
+}
+
+void string_test()
+{
+    gchar szSrc[] = "870b5a59-c840-4164-9b5f-69003f034b50";
+    gchar szDst[MAX_INPUT];
+
+    log_debug("%s\n", string_replace(szSrc, szDst, MAX_INPUT, "-", ""));
+}
+
 int main()
 {
 
@@ -100,6 +118,8 @@ int main()
     test_ini();
     test_md5();
     test_ip_address();
+    uuid_test();
+    string_test();
 
     return 0;
 }
