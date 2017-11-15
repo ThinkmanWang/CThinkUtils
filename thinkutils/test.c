@@ -5,5 +5,5 @@
 
 void func1()
 {
-    log_debug("FXXK\n");
+    log_debug("FXXK");
 }
