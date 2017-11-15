@@ -42,6 +42,27 @@ void datetime_test()
     char buf[256];
     getcwd(buf,sizeof(buf));
     log_debug("current working directory: %s\n", buf);
+
+    int nDiffDay = -3;
+    log_debug("diffday %d ==> %s", nDiffDay, diffday(szDate, nDiffDay));
+
+    nDiffDay = -2;
+    log_debug("diffday %d ==> %s", nDiffDay, diffday(szDate, nDiffDay));
+
+    nDiffDay = -1;
+    log_debug("diffday %d ==> %s", nDiffDay, diffday(szDate, nDiffDay));
+
+    nDiffDay = 0;
+    log_debug("diffday %d ==> %s", nDiffDay, diffday(szDate, nDiffDay));
+
+    nDiffDay = 1;
+    log_debug("diffday %d ==> %s", nDiffDay, diffday(szDate, nDiffDay));
+
+    nDiffDay = 2;
+    log_debug("diffday %d ==> %s", nDiffDay, diffday(szDate, nDiffDay));
+
+    nDiffDay = 3;
+    log_debug("diffday %d ==> %s", nDiffDay, diffday(szDate, nDiffDay));
 }
 
 void test_md5()

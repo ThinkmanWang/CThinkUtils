@@ -5,6 +5,7 @@
 extern "C" {
 #endif
 char* now(char* currTime);
+char* diffday(char* szDate, int nDiffDay);
 #ifdef __cplusplus
 }
 #endif

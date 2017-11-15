@@ -40,3 +40,20 @@ char* today(char* currTime)
     strcpy(currTime, szTime);
     return currTime;
 }
+
+char* diffday(char* szDate, int nDiffDay)
+{
+    g_return_val_if_fail(szDate != NULL, NULL);
+
+    struct tm* ptm = NULL;
+    time_t tme;
+    tme = time(NULL) + (long) ((long) nDiffDay * 3600L * 24L);
+    ptm = localtime(&tme);
+    char szTime[256];
+
+    memset(szTime, 0, 256);
+    sprintf(szTime, "%d-%02d-%02d", (ptm->tm_year + 1900), ptm->tm_mon + 1, ptm->tm_mday);
+
+    strcpy(szDate, szTime);
+    return szDate;
+}
