@@ -107,6 +107,10 @@ void string_test()
     gchar szDst[MAX_INPUT];
 
     log_debug("%s\n", string_replace(szSrc, szDst, MAX_INPUT, "-", ""));
+
+    log_debug("%d", is_empty_string(NULL));
+    log_debug("%d", is_empty_string(""));
+    log_debug("%d", is_empty_string("123"));
 }
 
 int main()

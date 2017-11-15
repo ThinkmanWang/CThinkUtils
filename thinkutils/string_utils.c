@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "string_utils.h"
+#include <glib.h>
 
 char* string_replace(const char* src, char* dst, size_t dst_size, const char* search, const char* replace_with) {
     char * replace_buf = (char *)malloc(dst_size);
@@ -19,4 +20,12 @@ char* string_replace(const char* src, char* dst, size_t dst_size, const char* se
         free(replace_buf);
     }
     return dst;
+}
+
+gboolean is_empty_string(const gchar* pszTxt)
+{
+    g_return_val_if_fail(pszTxt != NULL, TRUE);
+    g_return_val_if_fail(strlen(pszTxt) > 0, TRUE);
+
+    return FALSE;
 }
