@@ -22,7 +22,7 @@ void test_ini()
     ini_t *config = ini_load("config.ini");
     const char *name = ini_get(config, "owner", "name");
     if (name) {
-        log_debug("name: %s\n", name);
+        log_debug("name: %s", name);
     }
 
     const char *server = "default";
@@ -31,18 +31,18 @@ void test_ini()
     ini_sget(config, "database", "server", NULL, &server);
     ini_sget(config, "database", "port", "%d", &port);
 
-    log_debug("server: %s:%d\n", server, port);
+    log_debug("server: %s:%d", server, port);
 }
 
 void datetime_test()
 {
     char szDate[256];
-    log_debug("%s\n", now(szDate));
+    log_debug("%s", now(szDate));
     func1();
 
     char buf[256];
     getcwd(buf,sizeof(buf));
-    log_debug("current working directory: %s\n", buf);
+    log_debug("current working directory: %s", buf);
 
     int nDiffDay = -3;
     log_debug("diffday %d ==> %s", nDiffDay, diffday(szDate, nDiffDay));
@@ -77,25 +77,25 @@ void test_md5()
     ret = Compute_file_md5(file_path, md5_str);
     if (0 == ret)
     {
-        log_debug("[file - %s] md5 value ==> %s\n", file_path, md5_str);
+        log_debug("[file - %s] md5 value ==> %s", file_path, md5_str);
     }
 
     // test string md5
     Compute_string_md5((unsigned char *)test_str, strlen(test_str), md5_str);
-    log_debug("[string - %s] md5 value ==> %s\n", test_str, md5_str);
+    log_debug("[string - %s] md5 value ==> %s", test_str, md5_str);
 }
 
 void test_ip_address()
 {
     char szIP[256];
     int nRet = get_local_ip("en0", szIP, 256);
-    log_debug("%s\n", szIP);
+    log_debug("%s", szIP);
 }
 
 void uuid_test()
 {
     gchar* pszUuid = g_uuid_string_random();
-    log_debug("uuid ==> %s\n", pszUuid);
+    log_debug("uuid ==> %s", pszUuid);
 
 
     g_free(pszUuid);
@@ -106,7 +106,7 @@ void string_test()
     gchar szSrc[] = "870b5a59-c840-4164-9b5f-69003f034b50";
     gchar szDst[MAX_INPUT];
 
-    log_debug("%s\n", string_replace(szSrc, szDst, MAX_INPUT, "-", ""));
+    log_debug("%s", string_replace(szSrc, szDst, MAX_INPUT, "-", ""));
 
     log_debug("%d", is_empty_string(NULL));
     log_debug("%d", is_empty_string(""));
@@ -116,7 +116,7 @@ void string_test()
 int main()
 {
 
-    log_debug("Hello World!\n");
+    log_debug("Hello World!");
 
     datetime_test();
     test_ini();
