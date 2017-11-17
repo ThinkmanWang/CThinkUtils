@@ -131,15 +131,15 @@ void test_json()
     root = json_parser_get_root(parser);
 
     log_debug("%s", test_base_object_data);
-//    const gchar* pszText = json_node_get_string(root);
 
     JsonReader *reader = json_reader_new (json_parser_get_root(parser));
-    json_reader_read_member (reader, "text");
-    const char* pszText = json_reader_get_string_value (reader);
+    json_reader_read_member(reader, "text");
+    const gchar* pszText = json_reader_get_string_value (reader);
 
     log_debug("%s", pszText);
 
-    g_free(pszText);
+    g_object_unref(reader);
+    g_object_unref(parser);
     json_node_free(root);
 }
 
