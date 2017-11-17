@@ -4,6 +4,8 @@
 #include <glib.h>
 #include <string.h>
 #include <stdio.h>
+#include <ntsid.h>
+#include <sys/time.h>
 
 
 char* now(char* currTime)

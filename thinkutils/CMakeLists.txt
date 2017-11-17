@@ -3,3 +3,6 @@ AUX_SOURCE_DIRECTORY(. log_SOURCE_DIR)
 ADD_LIBRARY (thinkutils test.c datetime.c ini.c md5.c netutils.c string_utils.c parson.c)
 TARGET_LINK_LIBRARIES(thinkutils ${GLIB2_LIBRARIES} ${GTHREAD2_LIBRARIES})
 TARGET_LINK_LIBRARIES(thinkutils pthread log)
+
+INCLUDE_DIRECTORIES(${GLIB2_INCLUDE_DIR}
+        ${JsonGlib_INCLUDE_DIRS})

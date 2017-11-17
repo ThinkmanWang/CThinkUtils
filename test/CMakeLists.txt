@@ -11,3 +11,6 @@ TARGET_LINK_LIBRARIES(test_ieee pthread log thinkutils)
 add_executable(json_test json_test.c)
 TARGET_LINK_LIBRARIES(json_test ${GLIB2_LIBRARIES} ${GTHREAD2_LIBRARIES})
 TARGET_LINK_LIBRARIES(json_test pthread log thinkutils)
+
+INCLUDE_DIRECTORIES(${GLIB2_INCLUDE_DIR}
+        ${JsonGlib_INCLUDE_DIRS})

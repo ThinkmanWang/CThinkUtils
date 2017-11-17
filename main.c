@@ -116,6 +116,25 @@ void string_test()
     log_debug("%d", is_empty_string("123"));
 }
 
+void test_json()
+{
+    JsonParser* parser;
+    JsonNode* root;
+    GError* error;
+
+    parser = json_parser_new ();
+    error = NULL;
+
+    const gchar* test_base_object_data =
+            "{ \"text\" : \"hello, world!\", \"foo\" : null, \"blah\" : 47, \"double\" : 42.47 }";
+    json_parser_load_from_data(parser, test_base_object_data, -1, &error);
+    root = json_parser_get_root(parser);
+
+    const gchar* pszText = json_node_get_string(root);
+
+    log_debug("%s", pszText);
+}
+
 int main()
 {
 
@@ -127,6 +146,7 @@ int main()
     test_ip_address();
     uuid_test();
     string_test();
+    test_json();
 
     return 0;
 }
