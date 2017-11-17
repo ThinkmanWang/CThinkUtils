@@ -9,6 +9,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <glib-object.h>
+#include <json-glib/json-glib.h>
 
 #include "log.h"
 #include "test.h"
