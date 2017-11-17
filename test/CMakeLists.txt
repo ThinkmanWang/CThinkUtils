@@ -8,3 +8,6 @@ add_executable(test_ieee test_ieee.c)
 TARGET_LINK_LIBRARIES(test_ieee ${GLIB2_LIBRARIES} ${GTHREAD2_LIBRARIES})
 TARGET_LINK_LIBRARIES(test_ieee pthread log thinkutils)
 
+add_executable(json_test json_test.c)
+TARGET_LINK_LIBRARIES(json_test ${GLIB2_LIBRARIES} ${GTHREAD2_LIBRARIES})
+TARGET_LINK_LIBRARIES(json_test pthread log thinkutils)
