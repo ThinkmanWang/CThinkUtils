@@ -40,11 +40,11 @@ void test_ini()
 
 void datetime_test()
 {
-    char szDate[256];
+    char szDate[MAX_INPUT];
     log_debug("%s", now(szDate));
     func1();
 
-    char buf[256];
+    char buf[MAX_INPUT];
     getcwd(buf,sizeof(buf));
     log_debug("current working directory: %s", buf);
 
@@ -91,8 +91,8 @@ void test_md5()
 
 void test_ip_address()
 {
-    char szIP[256];
-    int nRet = get_local_ip("en0", szIP, 256);
+    char szIP[MAX_INPUT];
+    int nRet = get_local_ip("en0", szIP, MAX_INPUT);
     log_debug("%s", szIP);
 }
 
@@ -155,6 +155,7 @@ int main()
     uuid_test();
     string_test();
     test_json();
+    log_debug("FXXK");
 
     return 0;
 }
