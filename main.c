@@ -48,6 +48,8 @@ void datetime_test()
     getcwd(buf,sizeof(buf));
     log_debug("current working directory: %s", buf);
 
+    log_debug("hour ==> %d", hour());
+
     int nDiffDay = -3;
     log_debug("diffday %d ==> %s", nDiffDay, diffday(szDate, nDiffDay));
 
