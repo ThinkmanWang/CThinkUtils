@@ -12,5 +12,10 @@ add_executable(json_test json_test.c)
 TARGET_LINK_LIBRARIES(json_test ${GLIB2_LIBRARIES} ${GTHREAD2_LIBRARIES})
 TARGET_LINK_LIBRARIES(json_test pthread log thinkutils)
 
+add_executable(data_struct_test data_struct_test.c)
+TARGET_LINK_LIBRARIES(data_struct_test ${GLIB2_LIBRARIES} ${GTHREAD2_LIBRARIES})
+TARGET_LINK_LIBRARIES(data_struct_test pthread log thinkutils data_struct)
+
 INCLUDE_DIRECTORIES(${GLIB2_INCLUDE_DIR}
-        ${JsonGlib_INCLUDE_DIRS})
+        ${JsonGlib_INCLUDE_DIRS} thinkutils/data_struct)
+
