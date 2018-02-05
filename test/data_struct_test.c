@@ -73,5 +73,19 @@ int main(int argc, char* argv[])
 
     think_ptr_array_free(&pArray);
 
+    pArray = think_ptr_array_new(free);
+    for (int i = 0; i < 1000; ++i) {
+        int* pElement = malloc(sizeof(int));
+        *pElement = i;
+        think_ptr_array_append(pArray, pElement);
+    }
+
+    log_debug("");
+    for (int i = 0; i < think_ptr_array_size(pArray); ++i) {
+        pData = think_ptr_array_get_array_index(pArray, i);
+        log_debug("%d", *pData);
+    }
+    think_ptr_array_free(&pArray);
+
     return 0;
 }
