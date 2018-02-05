@@ -123,7 +123,7 @@ void think_ptr_array_remove(ThinkPtrArray* pArray, void* pData, int bFree)
     }
 
     for (int i = 0; i < pArray->m_nLen; ++i) {
-        if (pArray == pArray->m_pData[i]) {
+        if (pData == pArray->m_pData[i]) {
             think_ptr_array_remove_at(pArray, i, bFree);
             break;
         }

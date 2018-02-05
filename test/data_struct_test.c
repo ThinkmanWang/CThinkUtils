@@ -42,7 +42,22 @@ int main(int argc, char* argv[])
         log_debug("%d", *pData);
     }
 
-    think_ptr_array_free(pArray);
+    log_debug("");
+
+    think_ptr_array_remove_at(pArray, 2, 1);
+    for (int i = 0; i < think_ptr_array_size(pArray); ++i) {
+        int* pData = think_ptr_array_get_array_index(pArray, i);
+        log_debug("%d", *pData);
+    }
+
+    log_debug("");
+    think_ptr_array_remove(pArray, pC, 1);
+    for (int i = 0; i < think_ptr_array_size(pArray); ++i) {
+        int* pData = think_ptr_array_get_array_index(pArray, i);
+        log_debug("%d", *pData);
+    }
+
+    think_ptr_array_free(&pArray);
 
     return 0;
 }
