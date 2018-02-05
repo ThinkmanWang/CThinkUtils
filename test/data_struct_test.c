@@ -14,6 +14,35 @@
 
 int main(int argc, char* argv[])
 {
+    ThinkPtrArray* pArray = think_ptr_array_new(free);
+    int* pA = (int*) malloc(sizeof(int));
+    *pA = 123;
+    think_ptr_array_append(pArray, (void*) pA);
+
+    int* pB = (int*) malloc(sizeof(int));
+    *pB = 456;
+    think_ptr_array_append(pArray, (void*) pB);
+
+    int* pC = (int*) malloc(sizeof(int));
+    *pC = 789;
+    think_ptr_array_append(pArray, (void*) pC);
+
+    int* pD = (int*) malloc(sizeof(int));
+    *pD = 111;
+    think_ptr_array_insert_at(pArray, (void*) pD, 0);
+
+    int* pE = (int*) malloc(sizeof(int));
+    *pE = 222;
+    think_ptr_array_prepend(pArray, (void*) pE);
+
+    log_debug("Lenth: %d", think_ptr_array_size(pArray));
+
+    for (int i = 0; i < think_ptr_array_size(pArray); ++i) {
+        int* pData = think_ptr_array_get_array_index(pArray, i);
+        log_debug("%d", *pData);
+    }
+
+    think_ptr_array_free(pArray);
 
     return 0;
 }
