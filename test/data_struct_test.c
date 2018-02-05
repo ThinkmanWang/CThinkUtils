@@ -57,6 +57,20 @@ int main(int argc, char* argv[])
         log_debug("%d", *pData);
     }
 
+    log_debug("");
+    int* pData = think_ptr_array_pop(pArray);
+    log_debug("%d", *pData);
+
+    log_debug("");
+    pData = think_ptr_array_pop_tail(pArray);
+    log_debug("%d", *pData);
+
+    log_debug("");
+    for (int i = 0; i < think_ptr_array_size(pArray); ++i) {
+        pData = think_ptr_array_get_array_index(pArray, i);
+        log_debug("%d", *pData);
+    }
+
     think_ptr_array_free(&pArray);
 
     return 0;
