@@ -98,10 +98,10 @@ ThinkList* think_list_insert(ThinkList* pList, void* pData, unsigned int nIndex)
     }
 
     pNewNode->m_pNext = pNode;
-    pNewNode->m_pPre = pHead->m_pPre;
+    pNewNode->m_pPre = pNode->m_pPre;
 
     pNode->m_pPre->m_pNext = pNewNode;
-    pNewNode->m_pPre = pNewNode;
+    pNode->m_pPre = pNewNode;
 
     return pList;
 }
