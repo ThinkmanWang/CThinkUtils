@@ -28,8 +28,8 @@ ThinkList* think_list_remove(ThinkList* pList, void* pData, ThinkDestoryFunc pFu
 ThinkList* think_list_remove_at(ThinkList* pList, unsigned int nIndex, ThinkDestoryFunc pFunc);
 
 void* think_list_get(ThinkList* pList, unsigned int nIndex);
-void* think_list_pop(ThinkList** pList);
-void* think_list_pop_tail(ThinkList** pList);
+void* think_list_pop(ThinkList** ppList);
+void* think_list_pop_tail(ThinkList** ppList);
 
 unsigned int think_list_length(ThinkList* pList);
 

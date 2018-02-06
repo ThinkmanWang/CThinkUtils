@@ -199,26 +199,26 @@ void* think_list_get(ThinkList* pList, unsigned int nIndex)
     return pNode->m_pData;
 }
 
-void* think_list_pop(ThinkList** pList)
+void* think_list_pop(ThinkList** ppList)
 {
-    return_val_if_fail(pList != NULL, NULL);
-    return_val_if_fail(*pList != NULL, NULL);
+    return_val_if_fail(ppList != NULL, NULL);
+    return_val_if_fail(*ppList != NULL, NULL);
 
-    ThinkList* pNode = *pList;
+    ThinkList* pNode = *ppList;
     void* pRet = pNode->m_pData;
 
-    *pList = think_list_remove_at(*pList, 0, NULL);
+    *ppList = think_list_remove_at(*ppList, 0, NULL);
 
     return pRet;
 }
 
-void* think_list_pop_tail(ThinkList** pList)
+void* think_list_pop_tail(ThinkList** ppList)
 {
-    return_val_if_fail(pList != NULL, NULL);
-    return_val_if_fail(*pList != NULL, NULL);
+    return_val_if_fail(ppList != NULL, NULL);
+    return_val_if_fail(*ppList != NULL, NULL);
 
-    void* pData = think_list_get(*pList, think_list_length(*pList) - 1);
-    *pList = think_list_remove_at(*pList, think_list_length(*pList) - 1, NULL);
+    void* pData = think_list_get(*ppList, think_list_length(*ppList) - 1);
+    *ppList = think_list_remove_at(*ppList, think_list_length(*ppList) - 1, NULL);
 
     return pData;
 }
