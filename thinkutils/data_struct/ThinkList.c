@@ -1,0 +1,247 @@
+//
+// Created by 王晓丰 on 05/02/2018.
+//
+
+#include "ThinkList.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "utils.h"
+
+static ThinkList* think_list_create_node(void* pData)
+{
+    ThinkList* pNode = malloc(sizeof(ThinkList));
+    pNode->m_pData = pData;
+    pNode->m_pNext = NULL;
+    pNode->m_pPre = NULL;
+}
+
+static void think_list_free_node(ThinkList** pNode)
+{
+    free(*pNode);
+    *pNode = NULL;
+}
+
+static ThinkList* think_list_last_node(ThinkList* pList)
+{
+    return_val_if_fail(pList != NULL, NULL);
+
+    ThinkList* pNode = pList;
+    while (pNode->m_pNext) {
+        pNode = pNode->m_pNext;
+    }
+
+    return pNode;
+}
+
+ThinkList* think_list_append(ThinkList* pList, void* pData)
+{
+    ThinkList* pNode = think_list_create_node(pData);
+    ThinkList* pLastNode = think_list_last_node(pList);
+
+    if (NULL == pLastNode) {
+        return pNode;
+    }
+
+    pLastNode->m_pNext = pNode;
+    pNode->m_pPre = pLastNode;
+
+    return pLastNode;
+}
+
+ThinkList* think_list_prepend(ThinkList* pList, void* pData)
+{
+    return_val_if_fail(pData != NULL, pList);
+
+    ThinkList* pNode = think_list_create_node(pData);
+    if (NULL == pList) {
+        return pNode;
+    }
+
+    pNode->m_pNext = pList;
+    pList->m_pPre = pNode;
+
+    return pNode;
+}
+
+ThinkList* think_list_insert(ThinkList* pList, void* pData, unsigned int nIndex)
+{
+    return_val_if_fail(pData != NULL, pList);
+
+    if (NULL == pList && nIndex != 0) {
+        return pList;
+    }
+
+    if (pList != NULL && nIndex > think_list_length(pList)) {
+        return pList;
+    }
+
+    if (NULL == pList || 0 == nIndex) {
+        return think_list_prepend(pList, pData);
+    }
+
+    if (pList != NULL && nIndex == think_list_length(pList)) {
+        return think_list_append(pList, pData);
+    }
+
+    int i = 0;
+    ThinkList* pHead = pList;
+    ThinkList* pNode = pList;
+    ThinkList* pNewNode = think_list_create_node(pData);
+    while (pNode && i < nIndex) {
+        i += 1;
+        pNode = pNode->m_pNext;
+    }
+
+    pNewNode->m_pNext = pNode;
+    pNewNode->m_pPre = pHead->m_pPre;
+
+    pNode->m_pPre->m_pNext = pNewNode;
+    pNewNode->m_pPre = pNewNode;
+
+    return pList;
+}
+
+ThinkList* think_list_concat(ThinkList* pList1, ThinkList* pList2)
+{
+    if (NULL == pList1) {
+        return pList2;
+    }
+
+    if (NULL == pList2) {
+        return pList1;
+    }
+
+    ThinkList* pLastNode = think_list_last_node(pList1);
+    pLastNode->m_pNext = pList2;
+    pList2->m_pPre = pLastNode;
+
+    return pList1;
+}
+
+ThinkList* think_list_remove(ThinkList* pList, void* pData, ThinkDestoryFunc pFunc)
+{
+    if (NULL == pData) {
+        return pList;
+    }
+
+    if (pData == pList->m_pData) {
+        ThinkList* pHead = pList->m_pNext;
+        pHead->m_pPre = NULL;
+
+        if (pFunc) {
+            (*pFunc)(pList->m_pData);
+        }
+
+        think_list_free_node(&pList);
+
+        return pHead;
+    }
+
+    int bFound = 0;
+    ThinkList* pNode = pList;
+    while (pNode) {
+        if (pData == pNode->m_pData) {
+            bFound = 1;
+            break;
+        }
+        pNode = pNode->m_pNext;
+    }
+
+    if (bFound) {
+        if (NULL == pNode->m_pNext) {
+            pNode->m_pPre->m_pNext = NULL;
+
+            if (pFunc) {
+                (*pFunc)(pList->m_pData);
+            }
+            think_list_free_node(&pNode);
+        } else {
+            pNode->m_pNext->m_pPre = pNode->m_pPre;
+            pNode->m_pPre->m_pNext = pNode->m_pNext;
+
+            if (pFunc) {
+                (*pFunc)(pList->m_pData);
+            }
+            think_list_free_node(&pNode);
+        }
+    }
+
+    return pList;
+}
+
+ThinkList* think_list_remove_at(ThinkList* pList, unsigned int nIndex, ThinkDestoryFunc pFunc)
+{
+    return_val_if_fail(pList != NULL, pList);
+    return_val_if_fail(nIndex < think_list_length(pList), pList);
+
+    void* pData = think_list_get(pList, nIndex);
+
+    return think_list_remove(pList, pData, pFunc);
+
+    return NULL;
+}
+
+void* think_list_get(ThinkList* pList, unsigned int nIndex)
+{
+    return_val_if_fail(pList != NULL, NULL);
+    return_val_if_fail(nIndex < think_list_length(pList), NULL);
+
+    ThinkList* pNode = pList;
+    for (int i = 0; i < nIndex; ++i) {
+        pNode = pNode->m_pNext;
+    }
+
+    return pNode->m_pData;
+}
+
+void* think_list_pop(ThinkList** pList)
+{
+    return_val_if_fail(pList != NULL, NULL);
+    return_val_if_fail(*pList != NULL, NULL);
+
+    ThinkList* pNode = *pList;
+    void* pRet = pNode->m_pData;
+
+    *pList = think_list_remove_at(*pList, 0, NULL);
+
+    return pRet;
+}
+
+void* think_list_pop_tail(ThinkList** pList)
+{
+    return_val_if_fail(pList != NULL, NULL);
+    return_val_if_fail(*pList != NULL, NULL);
+
+    void* pData = think_list_get(*pList, think_list_length(*pList) - 1);
+    *pList = think_list_remove_at(*pList, think_list_length(*pList) - 1, NULL);
+
+    return pData;
+}
+
+unsigned int think_list_length(ThinkList* pList)
+{
+    return_val_if_fail(pList != NULL, 0);
+
+    ThinkList* pNode = pList;
+
+    unsigned int nLength = 0;
+    while (pNode) {
+        nLength++;
+        pNode = pNode->m_pNext;
+    }
+
+    return nLength;
+}
+
+void think_list_free(ThinkList** pList, ThinkDestoryFunc pFunc)
+{
+    return_if_fail(pList != NULL);
+    return_if_fail(*pList != NULL);
+
+    while (*pList != NULL) {
+        *pList =  think_list_remove_at(*pList, 0, pFunc);
+    }
+}

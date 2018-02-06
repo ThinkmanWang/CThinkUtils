@@ -23,7 +23,7 @@ typedef struct {
 ThinkPtrArray* think_ptr_array_new(ThinkDestoryFunc pDestroyFunc);
 void think_ptr_array_free(ThinkPtrArray** pArray);
 
-unsigned int think_ptr_array_size(ThinkPtrArray* pArray);
+unsigned int think_ptr_array_length(ThinkPtrArray *pArray);
 
 void think_ptr_array_append(ThinkPtrArray* pArray, void* pData);
 void think_ptr_array_insert_at(ThinkPtrArray* pArray, void* pData, unsigned int nIndex);

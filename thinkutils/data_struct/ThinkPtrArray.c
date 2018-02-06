@@ -47,7 +47,7 @@ void think_ptr_array_free(ThinkPtrArray** pArray)
 
     for (int i = 0; i < (*pArray)->m_nLen; ++i) {
         if ((*pArray)->m_pDestoryFunc != NULL) {
-            (*pArray)->m_pDestoryFunc((*pArray)->m_pData[i]);
+            (*((*pArray)->m_pDestoryFunc))((*pArray)->m_pData[i]);
         }
     }
 
@@ -67,7 +67,7 @@ static void think_ptr_array_maybe_expand(ThinkPtrArray* pArray)
     pArray->m_nArySize = pArray->m_nArySize * 2;
 }
 
-unsigned int think_ptr_array_size(ThinkPtrArray* pArray)
+unsigned int think_ptr_array_length(ThinkPtrArray *pArray)
 {
     return_val_if_fail(NULL != pArray, 0);
 
@@ -148,7 +148,7 @@ void think_ptr_array_remove_at(ThinkPtrArray* pArray, unsigned int nIndex, int b
     }
 
     if (bFree && pArray->m_pDestoryFunc != NULL) {
-        pArray->m_pDestoryFunc(pData);
+        (*(pArray->m_pDestoryFunc))(pData);
     }
 
     pArray->m_nLen -= 1;

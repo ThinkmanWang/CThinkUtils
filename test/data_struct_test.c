@@ -35,9 +35,9 @@ int main(int argc, char* argv[])
     *pE = 222;
     think_ptr_array_prepend(pArray, (void*) pE);
 
-    log_debug("Lenth: %d", think_ptr_array_size(pArray));
+    log_debug("Lenth: %d", think_ptr_array_length(pArray));
 
-    for (int i = 0; i < think_ptr_array_size(pArray); ++i) {
+    for (int i = 0; i < think_ptr_array_length(pArray); ++i) {
         int* pData = think_ptr_array_get_array_index(pArray, i);
         log_debug("%d", *pData);
     }
@@ -45,14 +45,14 @@ int main(int argc, char* argv[])
     log_debug("");
 
     think_ptr_array_remove_at(pArray, 2, 1);
-    for (int i = 0; i < think_ptr_array_size(pArray); ++i) {
+    for (int i = 0; i < think_ptr_array_length(pArray); ++i) {
         int* pData = think_ptr_array_get_array_index(pArray, i);
         log_debug("%d", *pData);
     }
 
     log_debug("");
     think_ptr_array_remove(pArray, pC, 1);
-    for (int i = 0; i < think_ptr_array_size(pArray); ++i) {
+    for (int i = 0; i < think_ptr_array_length(pArray); ++i) {
         int* pData = think_ptr_array_get_array_index(pArray, i);
         log_debug("%d", *pData);
     }
@@ -66,7 +66,7 @@ int main(int argc, char* argv[])
     log_debug("%d", *pData);
 
     log_debug("");
-    for (int i = 0; i < think_ptr_array_size(pArray); ++i) {
+    for (int i = 0; i < think_ptr_array_length(pArray); ++i) {
         pData = think_ptr_array_get_array_index(pArray, i);
         log_debug("%d", *pData);
     }
@@ -81,7 +81,7 @@ int main(int argc, char* argv[])
     }
 
     log_debug("");
-    for (int i = 0; i < think_ptr_array_size(pArray); ++i) {
+    for (int i = 0; i < think_ptr_array_length(pArray); ++i) {
         pData = think_ptr_array_get_array_index(pArray, i);
         log_debug("%d", *pData);
     }

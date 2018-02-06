@@ -16,5 +16,6 @@
     }
 
 typedef void (*ThinkDestoryFunc) (void* pData);
+typedef void (*ThinkCommonFunc) (void* pData, void* user_data);
 
 #endif //CHELLOWORLD_UTILS_H
