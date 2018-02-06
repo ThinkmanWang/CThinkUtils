@@ -11,8 +11,9 @@
 
 #include "log.h"
 #include "ThinkPtrArray.h"
+#include "ThinkList.h"
 
-int main(int argc, char* argv[])
+void ptr_array_test()
 {
     ThinkPtrArray* pArray = think_ptr_array_new(free);
     int* pA = (int*) malloc(sizeof(int));
@@ -86,6 +87,50 @@ int main(int argc, char* argv[])
         log_debug("%d", *pData);
     }
     think_ptr_array_free(&pArray);
+}
+
+void list_test()
+{
+    int* pData = malloc(sizeof(int));
+    *pData = 1;
+    ThinkList* pList = think_list_append(NULL, pData);
+
+    pData = malloc(sizeof(int));
+    *pData = 2;
+    pList = think_list_append(pList, pData);
+
+    pData = malloc(sizeof(int));
+    *pData = 3;
+    pList = think_list_insert(pList, pData, 1);
+
+    for (unsigned int i = 0; i < think_list_length(pList); ++i) {
+        pData = think_list_get(pList, i);
+        log_debug("%d", *pData);
+    }
+
+    pList = think_list_remove_at(pList, 0, free);
+
+    log_debug("");
+    for (unsigned int i = 0; i < think_list_length(pList); ++i) {
+        pData = think_list_get(pList, i);
+        log_debug("%d", *pData);
+    }
+
+    pData = think_list_get(pList, 0);
+    pList = think_list_remove(pList, pData, free);
+
+    log_debug("");
+    for (unsigned int i = 0; i < think_list_length(pList); ++i) {
+        pData = think_list_get(pList, i);
+        log_debug("%d", *pData);
+    }
+
+    think_list_free(&pList, free);
+}
+
+int main(int argc, char* argv[])
+{
+    list_test();
 
     return 0;
 }

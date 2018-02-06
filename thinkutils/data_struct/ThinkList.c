@@ -16,6 +16,8 @@ static ThinkList* think_list_create_node(void* pData)
     pNode->m_pData = pData;
     pNode->m_pNext = NULL;
     pNode->m_pPre = NULL;
+
+    return pNode;
 }
 
 static void think_list_free_node(ThinkList** pNode)
@@ -129,13 +131,15 @@ ThinkList* think_list_remove(ThinkList* pList, void* pData, ThinkDestoryFunc pFu
 
     if (pData == pList->m_pData) {
         ThinkList* pHead = pList->m_pNext;
-        pHead->m_pPre = NULL;
 
         if (pFunc) {
             (*pFunc)(pList->m_pData);
         }
-
         think_list_free_node(&pList);
+
+        if (pHead) {
+            pHead->m_pPre = NULL;
+        }
 
         return pHead;
     }
@@ -180,8 +184,6 @@ ThinkList* think_list_remove_at(ThinkList* pList, unsigned int nIndex, ThinkDest
     void* pData = think_list_get(pList, nIndex);
 
     return think_list_remove(pList, pData, pFunc);
-
-    return NULL;
 }
 
 void* think_list_get(ThinkList* pList, unsigned int nIndex)
@@ -242,6 +244,6 @@ void think_list_free(ThinkList** pList, ThinkDestoryFunc pFunc)
     return_if_fail(*pList != NULL);
 
     while (*pList != NULL) {
-        *pList =  think_list_remove_at(*pList, 0, pFunc);
+        *pList = think_list_remove_at(*pList, 0, pFunc);
     }
 }
