@@ -107,6 +107,10 @@ void list_test()
     *pData = 4;
     pList = think_list_insert(pList, pData, 1);
 
+    pData = malloc(sizeof(int));
+    *pData = 5;
+    pList = think_list_insert(pList, pData, 0);
+
     for (unsigned int i = 0; i < think_list_length(pList); ++i) {
         pData = think_list_get(pList, i);
         log_debug("%d", *pData);
