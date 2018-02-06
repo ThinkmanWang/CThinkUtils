@@ -87,6 +87,7 @@ void ptr_array_test()
         log_debug("%d", *pData);
     }
     think_ptr_array_free(&pArray);
+
 }
 
 void list_test()
@@ -127,6 +128,24 @@ void list_test()
     pData = think_list_get(pList, 0);
     pList = think_list_remove(pList, pData, free);
 
+    log_debug("");
+    for (unsigned int i = 0; i < think_list_length(pList); ++i) {
+        pData = think_list_get(pList, i);
+        log_debug("%d", *pData);
+    }
+
+    log_debug("");
+    pData = think_list_pop(&pList);
+    log_debug("%d", *pData);
+    log_debug("");
+    for (unsigned int i = 0; i < think_list_length(pList); ++i) {
+        pData = think_list_get(pList, i);
+        log_debug("%d", *pData);
+    }
+
+    log_debug("");
+    pData = think_list_pop_tail(&pList);
+    log_debug("%d", *pData);
     log_debug("");
     for (unsigned int i = 0; i < think_list_length(pList); ++i) {
         pData = think_list_get(pList, i);
