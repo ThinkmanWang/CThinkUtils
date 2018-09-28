@@ -5,20 +5,30 @@
 #include "ThinkHashmap.h"
 #include "ThinkList.h"
 
-static int hash(const char* key)
+//static int hash(const char* key)
+//{
+//    if (key == NULL) {
+//        return 0;
+//    }
+//
+//    size_t len = strlen(key);
+//    int index = (int) key[0];
+//    for (int i = 1; i<len; ++i) {
+//        index *= 1103515245 + (int)key[i];
+//    }
+//    index >>= 27;
+//
+//    return (abs(index));
+//}
+
+static unsigned int hash(const char* pszKey)
 {
-    if (key == NULL) {
-        return 0;
+    unsigned int hash = 0;
+    while (*pszKey) {
+        hash = (*pszKey++) + (hash << 6) + (hash << 16) - hash;
     }
 
-    size_t len = strlen(key);
-    int index = (int) key[0];
-    for (int i = 1; i<len; ++i) {
-        index *= 1103515245 + (int)key[i];
-    }
-    index >>= 27;
-
-    return (abs(index));
+    return (hash & 0x7FFFFFFF);
 }
 
 static ThinkHashmapNode* think_hashmap_node_new(const char* pszKey, void* pData)

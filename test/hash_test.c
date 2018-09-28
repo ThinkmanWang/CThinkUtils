@@ -7,20 +7,14 @@
 #include "ThinkHashmap.h"
 
 
-int hash(const char* key)
+static unsigned int hash(const char* pszKey)
 {
-    if (key == NULL) {
-        return 0;
+    unsigned int hash = 0;
+    while (*pszKey) {
+        hash = (*pszKey++) + (hash << 6) + (hash << 16) - hash;
     }
 
-    size_t len = strlen(key);
-    int index = (int) key[0];
-    for (int i = 1; i<len; ++i) {
-        index *= 1103515245 + (int)key[i];
-    }
-    index >>= 27;
-
-    return (abs(index));
+    return (hash & 0x7FFFFFFF);
 }
 
 void foreach_map(char* pszKey, void* pData, void* pUserData) {
@@ -31,9 +25,14 @@ int main(){
     log_debug("%d", hash("1"));
     log_debug("%d", hash("2"));
     log_debug("%d", hash("3"));
-//    printf("%d\n", hash("efgh"));
-//    printf("%d\n", hash("asdfasf"));
-//    printf("%d\n", hash("asdfasfasdfagagdfgsdfgerwgrgwrgrtwgrtgrwtskadjfaksfhalkfadfadfadfafafadhasfhaskfhg"));
+//    for (int i = 0; i < 1024; ++i) {
+//        char szTxt[8] = "";
+//        sprintf(szTxt, "%d", i);
+//        log_debug("%d->%d", i, hash(szTxt));
+//    }
+    log_debug("%d\n", hash("efgh"));
+    log_debug("%d\n", hash("asdfasf"));
+    log_debug("%d\n", hash("asdfasfasdfagagdfgsdfgerwgrgwrgrtwgrtgrwtskadjfaksfhalkfadfadfadfafafadhasfhaskfhg"));
 
     ThinkHashmap* pMap = think_hashmap_new(NULL);
 
