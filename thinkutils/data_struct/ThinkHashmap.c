@@ -142,7 +142,29 @@ void think_hashmap_remove(ThinkHashmap* pMap, const char* pszKey)
 }
 
 
-void think_hashmao_foreach(ThinkHashmap* pMap, ThinkHashFunc pFunc, void* pUserData)
+void think_hashmap_foreach(ThinkHashmap* pMap, ThinkHashFunc pFunc, void* pUserData)
 {
+    return_if_fail(pMap != NULL);
+
+    for (int i = 0; i < HASHMAP_SIZE; ++i) {
+        ThinkList *pList = pMap->m_pArray[i];
+        if (NULL == pList) {
+            continue;
+        }
+
+        size_t nSize = think_list_length(pList);
+        for (int nIndex = 0; nIndex < nSize; ++nIndex) {
+            ThinkHashmapNode *pNode = think_list_get(pList, nIndex);
+            if (NULL == pNode) {
+                continue;
+            }
+
+            if (NULL == pFunc) {
+                continue;
+            }
+
+            pFunc(pNode->m_pszKey, pNode->m_pData, pUserData);
+        }
+    }
 
 }

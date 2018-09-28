@@ -23,12 +23,14 @@ int hash(const char* key)
     return (abs(index));
 }
 
-
+void foreach_map(char* pszKey, void* pData, void* pUserData) {
+    log_debug("Hashmap size: %s->%d %p", pszKey, pData, pUserData);
+}
 
 int main(){
-    printf("%d\n", hash("1"));
-    printf("%d\n", hash("2"));
-    printf("%d\n", hash("3"));
+    log_debug("%d", hash("1"));
+    log_debug("%d", hash("2"));
+    log_debug("%d", hash("3"));
 //    printf("%d\n", hash("efgh"));
 //    printf("%d\n", hash("asdfasf"));
 //    printf("%d\n", hash("asdfasfasdfagagdfgsdfgerwgrgwrgrtwgrtgrwtskadjfaksfhalkfadfadfadfafafadhasfhaskfhg"));
@@ -43,6 +45,8 @@ int main(){
     log_debug("Hashmap size: %s->%d", "1", think_hashmap_get(pMap, "1"));
     log_debug("Hashmap size: %s->%d", "2", think_hashmap_get(pMap, "2"));
     log_debug("Hashmap size: %s->%d", "3", think_hashmap_get(pMap, "3"));
+
+    think_hashmap_foreach(pMap, (ThinkHashFunc) foreach_map, NULL);
 
     log_debug("Hashmap %p", pMap);
     think_hashmap_free(&pMap);

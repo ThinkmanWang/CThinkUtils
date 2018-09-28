@@ -34,7 +34,7 @@ void think_hashmap_put(ThinkHashmap* pMap, const char* pszKey, void* pData);
 void* think_hashmap_get(ThinkHashmap* pMap, const char* pszKey);
 void think_hashmap_remove(ThinkHashmap* pMap, const char* pszKey);
 
-void think_hashmao_foreach(ThinkHashmap* pMap, ThinkHashFunc pFunc, void* pUserData);
+void think_hashmap_foreach(ThinkHashmap* pMap, ThinkHashFunc pFunc, void* pUserData);
 
 
 #ifdef __cplusplus
