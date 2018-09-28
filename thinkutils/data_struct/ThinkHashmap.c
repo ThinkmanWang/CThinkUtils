@@ -66,7 +66,26 @@ ThinkHashmap* think_hashmap_new(ThinkDestoryFunc pDestoryFunc)
 
 void think_hashmap_free(ThinkHashmap** ppMap)
 {
+    return_if_fail(ppMap != NULL);
+    return_if_fail(*ppMap != NULL);
 
+    for (int i = 0; i < HASHMAP_SIZE; ++i) {
+        ThinkList* pList = (*ppMap)->m_pArray[i];
+        if (NULL == pList) {
+            continue;
+        }
+
+        ThinkHashmapNode* pNode = think_list_pop(&pList);
+        while (pNode != NULL) {
+            think_hashmap_node_free((*ppMap), &pNode);
+            (*ppMap)->m_nSize -= 1;
+
+            pNode = think_list_pop(&pList);
+        }
+    }
+
+    free((*ppMap));
+    *ppMap = NULL;
 }
 
 size_t think_hashmap_size(ThinkHashmap* pMap)

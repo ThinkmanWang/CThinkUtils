@@ -26,14 +26,14 @@ int hash(const char* key)
 
 
 int main(){
-//    printf("%d\n", hash("abcd"));
-//    printf("%d\n", hash("dcba"));
-//    printf("%d\n", hash("abcd"));
+    printf("%d\n", hash("1"));
+    printf("%d\n", hash("2"));
+    printf("%d\n", hash("3"));
 //    printf("%d\n", hash("efgh"));
 //    printf("%d\n", hash("asdfasf"));
 //    printf("%d\n", hash("asdfasfasdfagagdfgsdfgerwgrgwrgrtwgrtgrwtskadjfaksfhalkfadfadfadfafafadhasfhaskfhg"));
 
-    ThinkHashmap* pMap = think_hashmap_new(free);
+    ThinkHashmap* pMap = think_hashmap_new(NULL);
 
     think_hashmap_put(pMap, "1", (void*)1);
     think_hashmap_put(pMap, "2", (void*)2);
