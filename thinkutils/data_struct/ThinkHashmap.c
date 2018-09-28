@@ -37,7 +37,7 @@ static void think_hashmap_node_free(ThinkHashmap* pMap, ThinkHashmapNode** ppNod
     return_if_fail(ppNode != NULL);
     return_if_fail(*ppNode != NULL);
 
-    if ((*ppNode)->m_pData) {
+    if ((*ppNode)->m_pData && *pMap->m_pDestoryFunc != NULL) {
         (*pMap->m_pDestoryFunc)((*ppNode)->m_pData);
         (*ppNode)->m_pData = NULL;
     }
