@@ -1,6 +1,6 @@
 project(data_struct)
 AUX_SOURCE_DIRECTORY(. log_SOURCE_DIR)
-ADD_LIBRARY (data_struct ThinkPtrArray.c ThinkList.h ThinkList.c)
+ADD_LIBRARY (data_struct ThinkPtrArray.c ThinkList.h ThinkList.c ThinkBSTree.h)
 TARGET_LINK_LIBRARIES(data_struct ${GLIB2_LIBRARIES} ${GTHREAD2_LIBRARIES})
 TARGET_LINK_LIBRARIES(data_struct pthread log)
 
