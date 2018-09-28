@@ -26,6 +26,18 @@ static void think_list_free_node(ThinkList** pNode)
     *pNode = NULL;
 }
 
+static ThinkList* think_list_first_node(ThinkList* pList)
+{
+    return_val_if_fail(pList != NULL, NULL);
+
+    ThinkList* pNode = pList;
+    while (pNode->m_pPre) {
+        pNode = pNode->m_pPre;
+    }
+
+    return pNode;
+}
+
 static ThinkList* think_list_last_node(ThinkList* pList)
 {
     return_val_if_fail(pList != NULL, NULL);
@@ -50,7 +62,7 @@ ThinkList* think_list_append(ThinkList* pList, void* pData)
     pLastNode->m_pNext = pNode;
     pNode->m_pPre = pLastNode;
 
-    return pLastNode;
+    return think_list_first_node(pList);
 }
 
 ThinkList* think_list_prepend(ThinkList* pList, void* pData)
@@ -65,7 +77,7 @@ ThinkList* think_list_prepend(ThinkList* pList, void* pData)
     pNode->m_pNext = pList;
     pList->m_pPre = pNode;
 
-    return pNode;
+    return think_list_first_node(pList);
 }
 
 ThinkList* think_list_insert(ThinkList* pList, void* pData, unsigned int nIndex)
@@ -103,7 +115,7 @@ ThinkList* think_list_insert(ThinkList* pList, void* pData, unsigned int nIndex)
     pNode->m_pPre->m_pNext = pNewNode;
     pNode->m_pPre = pNewNode;
 
-    return pList;
+    return think_list_first_node(pList);
 }
 
 ThinkList* think_list_concat(ThinkList* pList1, ThinkList* pList2)
@@ -120,7 +132,7 @@ ThinkList* think_list_concat(ThinkList* pList1, ThinkList* pList2)
     pLastNode->m_pNext = pList2;
     pList2->m_pPre = pLastNode;
 
-    return pList1;
+    return think_list_first_node(pList1);
 }
 
 ThinkList* think_list_remove(ThinkList* pList, void* pData, ThinkDestoryFunc pFunc)
@@ -141,7 +153,7 @@ ThinkList* think_list_remove(ThinkList* pList, void* pData, ThinkDestoryFunc pFu
             pHead->m_pPre = NULL;
         }
 
-        return pHead;
+        return think_list_first_node(pHead);
     }
 
     int bFound = 0;
@@ -173,7 +185,7 @@ ThinkList* think_list_remove(ThinkList* pList, void* pData, ThinkDestoryFunc pFu
         }
     }
 
-    return pList;
+    return think_list_first_node(pList);
 }
 
 ThinkList* think_list_remove_at(ThinkList* pList, unsigned int nIndex, ThinkDestoryFunc pFunc)
