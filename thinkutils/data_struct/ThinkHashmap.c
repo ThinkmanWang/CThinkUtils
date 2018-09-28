@@ -138,6 +138,26 @@ void* think_hashmap_get(ThinkHashmap* pMap, const char* pszKey)
 
 void think_hashmap_remove(ThinkHashmap* pMap, const char* pszKey)
 {
+    return_if_fail(pMap != NULL);
+    return_if_fail(pszKey != NULL);
+
+    int nIndex = hash(pszKey) % HASHMAP_SIZE;
+    ThinkList* pList = pMap->m_pArray[nIndex];
+    ThinkList* pListHead = pList;
+
+    return_if_fail(pList != NULL);
+
+    while (pListHead != NULL) {
+        ThinkHashmapNode* pHashmapNode = pListHead->m_pData;
+        if (pHashmapNode != NULL && 0 == strcmp(pHashmapNode->m_pszKey, pszKey)) {
+            pMap->m_pArray[nIndex] = think_list_remove(pList, pHashmapNode, NULL);
+            think_hashmap_node_free(pMap, &pHashmapNode);
+
+            return;
+        }
+
+        pListHead = pListHead->m_pNext;
+    }
 
 }
 

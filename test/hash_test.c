@@ -47,6 +47,9 @@ int main(){
     log_debug("Hashmap size: %s->%d", "3", think_hashmap_get(pMap, "3"));
 
     think_hashmap_foreach(pMap, (ThinkHashFunc) foreach_map, NULL);
+    log_debug("");
+    think_hashmap_remove(pMap, "2");
+    think_hashmap_foreach(pMap, (ThinkHashFunc) foreach_map, NULL);
 
     log_debug("Hashmap %p", pMap);
     think_hashmap_free(&pMap);
