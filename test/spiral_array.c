@@ -33,7 +33,7 @@ int main(int argc,char** argv)
     for (int i = 0; i < nRow; ++i) {
         for (int j = 0; j < nCel; ++j) {
             ppArray[i][j] = 0;
-            printf("%d ", ppArray[i][j]);
+            printf("\t%d", ppArray[i][j]);
         }
 
         printf("\n");
