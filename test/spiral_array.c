@@ -90,7 +90,7 @@ int main(int argc,char** argv)
 
     for (int i = 0; i < nRow; ++i) {
         for (int j = 0; j < nCel; ++j) {
-            printf("%d ", ppArray[i][j]);
+            printf("\t%d", ppArray[i][j]);
         }
 
         printf("\n");
