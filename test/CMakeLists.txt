@@ -19,6 +19,8 @@ TARGET_LINK_LIBRARIES(data_struct_test pthread log thinkutils data_struct)
 add_executable(hash_test hash_test.c)
 TARGET_LINK_LIBRARIES(hash_test ${GLIB2_LIBRARIES} ${GTHREAD2_LIBRARIES} log thinkutils data_struct)
 
+add_executable(spiral_array spiral_array.c)
+
 
 INCLUDE_DIRECTORIES(${GLIB2_INCLUDE_DIR}
         ${JsonGlib_INCLUDE_DIRS} thinkutils/data_struct)
