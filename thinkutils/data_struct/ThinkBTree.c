@@ -148,52 +148,108 @@ void think_btree_foreach_dlr(ThinkBTree* pTree, ThinkCommonFunc pFunc, void* pUs
 
 bool think_btree_remove(ThinkBTree* pTree, const void* pData)
 {
+    /*
+    1
+     \
+       3
+     /   \
+    2     5
+         /  \
+        4    7
+            / \
+           6   9
+              / \
+             8   10
+
+     find node for remove and its parent
+
+     if (parent == nNode)
+         means remove root
+         if root->left
+             root = root->left
+             add root->right
+             destory node
+         else
+             root = root->right
+     else
+         pParentLeft = parent->left
+         pParentRight = parent->right
+         pLeft = node->left
+         pRight = node->Right
+
+         destory node
+
+         add pParentLeft
+         add pParentRight
+         add pLeft
+         add pRight
+
+     */
     return_val_if_fail(pTree != NULL, false);
 
     ThinkBTreeNode* pParent = pTree->m_pNodeRoot;
     ThinkBTreeNode* pCur = pParent;
+    bool bFound = false;
 
-    while (pCur != NULL) {
+    while (pCur) {
         int nVal = (pTree->m_pCompareFunc)(pData, pCur->m_pData);
         if (nVal < 0) {
             pParent = pCur;
             pCur = pCur->m_pChildLeft;
         } else if (0 == nVal) {
-            if (pParent->m_pChildLeft == pCur) {
-                pParent->m_pChildLeft = NULL;
-            } else {
-                pParent->m_pChildRight = NULL;
-            }
-            ThinkBTreeNode *pLeft = pCur->m_pChildLeft;
-            ThinkBTreeNode *pRight = pCur->m_pChildRight;
-
-            think_btree_destory_node(pTree, &pCur);
-
-            ThinkBTreeNode* pParentLeft = pParent->m_pChildLeft;
-            pParent->m_pChildLeft = NULL;
-
-            ThinkBTreeNode* pParentRight = pParent->m_pChildRight;
-            pParent->m_pChildRight = NULL;
-
-            if (pTree->m_pNodeRoot == pLeft) {
-                think_btree_insert_node(pTree, pRight);
-            } else {
-                think_btree_insert_node(pTree, pLeft);
-                think_btree_insert_node(pTree, pRight);
-
-                think_btree_insert_node(pTree, pParentLeft);
-                think_btree_insert_node(pTree, pParentRight);
-            }
-
-            return true;
+            bFound = true;
+            break;
         } else { //nVal > 0
             pParent = pCur;
             pCur = pCur->m_pChildRight;
         }
     }
 
+    return_val_if_fail(bFound != false, false);
 
-    return false;
+    if (pParent == pCur) {
+        //remove root
+        if (pCur->m_pChildLeft) {
+            pTree->m_pNodeRoot = pCur->m_pChildLeft;
+
+            ThinkBTreeNode* pCurRight = pCur->m_pChildRight;
+            think_btree_insert_node(pTree, pCurRight);
+        } else if (pCur->m_pChildRight) {
+            pTree->m_pNodeRoot = pCur->m_pChildRight;
+
+            ThinkBTreeNode* pCurLeft = pCur->m_pChildLeft;
+            think_btree_insert_node(pTree, pCurLeft);
+
+        } else {
+            pTree->m_pNodeRoot = NULL;
+        }
+
+        think_btree_destory_node(pTree, &pCur);
+    } else {
+        ThinkBTreeNode* pParentLeft = pParent->m_pChildLeft;
+        ThinkBTreeNode* pParentRight = pParent->m_pChildRight;
+        ThinkBTreeNode* pCurLeft = pCur->m_pChildLeft;
+        ThinkBTreeNode* pCurRight = pCur->m_pChildRight;
+
+        if (pParentLeft == pCur) {
+            pParent->m_pChildLeft = NULL;
+            pParentLeft = NULL;
+        }
+
+        if (pParentRight == pCur) {
+            pParent->m_pChildRight = NULL;
+            pParentRight = NULL;
+        }
+
+        think_btree_destory_node(pTree, &pCur);
+
+        think_btree_insert_node(pTree, pParentLeft);
+        think_btree_insert_node(pTree, pParentRight);
+        think_btree_insert_node(pTree, pCurLeft);
+        think_btree_insert_node(pTree, pCurRight);
+    }
+
+    return true;
 }
 
 static ThinkBTreeNode* think_btree_node_exists(ThinkBTree* pTree, const void* pData)
