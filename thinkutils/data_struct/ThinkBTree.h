@@ -19,7 +19,6 @@ typedef struct _ThinkBTreeNode {
 typedef struct _ThinkBTree {
     ThinkBTreeNode* m_pNodeRoot;
 
-    unsigned int m_nSize;
     ThinkDestoryFunc m_pDestoryFunc;
     ThinkCompareDataFunc m_pCompareFunc;
 }ThinkBTree;
