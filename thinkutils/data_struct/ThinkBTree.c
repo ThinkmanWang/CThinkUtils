@@ -3,6 +3,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+typedef enum {
+    FOREACH_BY_DLR
+    , FOREACH_BY_LDR
+    , FOREACH_BY_LRD
+} ForEachMethod;
+
+static ThinkBTreeNode* think_btree_node_new(void* pData);
+static ThinkBTreeNode* think_btree_node_exists(ThinkBTree* pTree, const void* pData);
+static void think_btree_node_destory(ThinkBTree* pTree, ThinkBTreeNode** ppNode);
+static void think_btree_node_foreach(ThinkBTreeNode* pRoot, ThinkCommonFunc pFunc, void* pUserData, ForEachMethod method);
+
 ThinkBTree* think_btree_new(ThinkCompareDataFunc pCompareFunc, ThinkDestoryFunc pDestoryFunc)
 {
     return_val_if_fail(pCompareFunc != NULL, NULL);
@@ -11,6 +22,8 @@ ThinkBTree* think_btree_new(ThinkCompareDataFunc pCompareFunc, ThinkDestoryFunc 
     pTree->m_pNodeRoot = NULL;
     pTree->m_pCompareFunc = pCompareFunc;
     pTree->m_pDestoryFunc = pDestoryFunc;
+
+    return pTree;
 }
 
 static ThinkBTreeNode* think_btree_node_new(void* pData)
@@ -19,6 +32,8 @@ static ThinkBTreeNode* think_btree_node_new(void* pData)
     pNode->m_pData = pData;
     pNode->m_pChildLeft = NULL;
     pNode->m_pChildRight = NULL;
+
+    return pNode;
 }
 
 static void think_btree_node_destory(ThinkBTree* pTree, ThinkBTreeNode** ppNode)
@@ -48,7 +63,7 @@ void think_btree_insert(ThinkBTree* pTree, void* pData)
         return;
     }
 
-    ThinkBTreeNode* pOldNode = _think_btree_exists(pTree, pData);
+    ThinkBTreeNode* pOldNode = think_btree_node_exists(pTree, pData);
     if (NULL != pOldNode) {
         if (pTree->m_pDestoryFunc) {
             (pTree->m_pDestoryFunc)(pOldNode->m_pData);
@@ -82,12 +97,6 @@ void think_btree_insert(ThinkBTree* pTree, void* pData)
     }
     pTree->m_nSize++;
 }
-
-typedef enum {
-    FOREACH_BY_DLR
-    , FOREACH_BY_LDR
-    , FOREACH_BY_LRD
-} ForEachMethod;
 
 static void think_btree_node_foreach(ThinkBTreeNode* pRoot, ThinkCommonFunc pFunc, void* pUserData, ForEachMethod method)
 {
@@ -138,7 +147,7 @@ bool think_btree_remove(ThinkBTree* pTree, const void* pData)
     return false;
 }
 
-static ThinkBTreeNode* _think_btree_exists(ThinkBTree* pTree, const void* pData)
+static ThinkBTreeNode* think_btree_node_exists(ThinkBTree* pTree, const void* pData)
 {
     return_val_if_fail(pTree != NULL, NULL);
     return_val_if_fail(pData != NULL, NULL);
@@ -167,11 +176,13 @@ bool think_btree_exists(ThinkBTree* pTree, const void* pData)
     return_val_if_fail(pTree != NULL, false);
     return_val_if_fail(pData != NULL, false);
 
-    ThinkBTreeNode* pNode = _think_btree_exists(pTree, pData);
+    ThinkBTreeNode* pNode = think_btree_node_exists(pTree, pData);
     return NULL != pNode;
 }
 
 unsigned int think_btree_size(ThinkBTree* pTree)
 {
-    return 0;
+    return_val_if_fail(pTree != NULL, 0);
+
+    return pTree->m_nSize;
 }

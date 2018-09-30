@@ -20,7 +20,7 @@ add_executable(hash_test hash_test.c)
 TARGET_LINK_LIBRARIES(hash_test ${GLIB2_LIBRARIES} ${GTHREAD2_LIBRARIES} log thinkutils data_struct)
 
 add_executable(btree_test btree_test.c)
-TARGET_LINK_LIBRARIES(hash_test ${GLIB2_LIBRARIES} ${GTHREAD2_LIBRARIES} log thinkutils data_struct)
+TARGET_LINK_LIBRARIES(btree_test ${GLIB2_LIBRARIES} ${GTHREAD2_LIBRARIES} log thinkutils data_struct)
 
 add_executable(spiral_array spiral_array.c)
 

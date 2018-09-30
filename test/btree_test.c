@@ -32,5 +32,13 @@ int main()
     think_btree_insert(pTree, (void*)10);
 
     log_debug("Set size: %d", think_btree_size(pTree));
+
+    log_debug("");
+    think_btree_foreach_dlr(pTree, foreach_set, NULL);
+
+    log_debug("");
     think_btree_foreach_ldr(pTree, foreach_set, NULL);
+
+    log_debug("");
+    think_btree_foreach_lrd(pTree, foreach_set, NULL);
 }
