@@ -232,14 +232,14 @@ bool think_btree_remove(ThinkBTree* pTree, const void* pData)
         ThinkBTreeNode* pCurRight = pCur->m_pChildRight;
 
         if (pParentLeft == pCur) {
-            pParent->m_pChildLeft = NULL;
             pParentLeft = NULL;
         }
 
         if (pParentRight == pCur) {
-            pParent->m_pChildRight = NULL;
             pParentRight = NULL;
         }
+        pParent->m_pChildLeft = NULL;
+        pParent->m_pChildRight = NULL;
 
         think_btree_destory_node(pTree, &pCur);
 
