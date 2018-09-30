@@ -17,11 +17,13 @@ static unsigned int hash(const char* pszKey)
     return (hash & 0x7FFFFFFF);
 }
 
-void foreach_map(char* pszKey, void* pData, void* pUserData) {
+void foreach_map(char* pszKey, void* pData, void* pUserData)
+{
     log_debug("Hashmap size: %s->%d %p", pszKey, pData, pUserData);
 }
 
-int main(){
+int main()
+{
     log_debug("%d", hash("1"));
     log_debug("%d", hash("2"));
     log_debug("%d", hash("3"));
