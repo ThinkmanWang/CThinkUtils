@@ -158,18 +158,18 @@ void test6()
 
     log_debug("");
     think_bstree_foreach_ldr(pTree, foreach_set, NULL);
-    
+
     log_debug("SUCCESS");
 }
 
 int main()
 {
-//    test1();
-//    test2();
-//    test3();
-//    test4();
-//
-//    test5();
+    test1();
+    test2();
+    test3();
+    test4();
+
+    test5();
 
     test6();
 }
