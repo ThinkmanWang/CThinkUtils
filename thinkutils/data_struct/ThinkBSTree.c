@@ -8,10 +8,10 @@ static ThinkBSTreeNode* think_bstree_node_new(void* pData);
 static void think_bstree_node_destory(ThinkBSTree* pTree, ThinkBSTreeNode** ppNode);
 static ThinkBSTreeNode* think_bstree_node_exists(ThinkBSTree* pTree, const void* pData);
 static ThinkBSTreeNode* think_bstree_max_node(ThinkBSTree* pTree, ThinkBSTreeNode* pNode);
-static void think_btree_insert_node(ThinkBSTree* pTree, ThinkBSTreeNode* pNodeNew);
+static void think_bstree_insert_nodeee(ThinkBSTree* pTree, ThinkBSTreeNode* pNodeNew);
+static void think_bstree_remove_node(ThinkBSTree* pTree, ThinkBSTreeNode* pNodeRemove);
 
-
-static void think_btree_insert_node(ThinkBSTree* pTree, ThinkBSTreeNode* pNodeNew) {
+static void think_bstree_insert_nodeee(ThinkBSTree* pTree, ThinkBSTreeNode* pNodeNew) {
     return_if_fail(pTree != NULL);
     return_if_fail(pNodeNew != NULL);
 
@@ -44,6 +44,10 @@ static void think_btree_insert_node(ThinkBSTree* pTree, ThinkBSTreeNode* pNodeNe
 
 }
 
+static void think_bstree_remove_node(ThinkBSTree* pTree, ThinkBSTreeNode* pNodeRemove)
+{
+
+}
 
 static ThinkBSTreeNode* think_bstree_node_new(void* pData)
 {
