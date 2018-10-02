@@ -19,4 +19,6 @@ typedef void (*ThinkDestoryFunc) (void* pData);
 typedef void (*ThinkCommonFunc) (void* pData, void* user_data);
 typedef int (*ThinkCompareDataFunc) (const void* a, const void* b);
 
+#define max( a , b ) ( (a) > (b) ? (a) : (b) )
+
 #endif //CHELLOWORLD_UTILS_H

@@ -38,6 +38,9 @@ int main()
     think_btree_insert(pTree, (void*)10);
 
     think_btree_remove(pTree, (void*)6);
+    think_btree_remove(pTree, (void*)1);
+    think_btree_remove(pTree, (void*)3);
+
 
     log_debug("Set size: %d", think_btree_size(pTree));
 
