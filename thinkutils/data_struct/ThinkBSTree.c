@@ -4,21 +4,67 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+typedef enum {
+    FOREACH_BY_DLR
+    , FOREACH_BY_LDR
+    , FOREACH_BY_LRD
+} ForEachMethod;
+
 static ThinkBSTreeNode* think_bstree_node_new(void* pData);
 static void think_bstree_node_destory(ThinkBSTree* pTree, ThinkBSTreeNode** ppNode);
 static ThinkBSTreeNode* think_bstree_node_exists(ThinkBSTree* pTree, const void* pData);
 static ThinkBSTreeNode* think_bstree_max_node(ThinkBSTree* pTree, ThinkBSTreeNode* pNode);
-static void think_bstree_insert_nodeee(ThinkBSTree* pTree, ThinkBSTreeNode* pNodeNew);
+static void think_bstree_insert_node(ThinkBSTree* pTree, ThinkBSTreeNode* pNodeNew);
 static void think_bstree_remove_node(ThinkBSTree* pTree, ThinkBSTreeNode* pNodeRemove);
+static void think_bstree_update_height(ThinkBSTreeNode* pNode);
+static void think_bstree_node_foreach(ThinkBSTreeNode* pRoot, ThinkCommonFunc pFunc, void* pUserData, ForEachMethod method);
 
-static void think_bstree_insert_nodeee(ThinkBSTree* pTree, ThinkBSTreeNode* pNodeNew) {
+static void think_bstree_node_foreach(ThinkBSTreeNode* pRoot, ThinkCommonFunc pFunc, void* pUserData, ForEachMethod method)
+{
+    return_if_fail(pRoot != NULL);
+    return_if_fail(pFunc != NULL);
+
+    if (FOREACH_BY_DLR == method) {
+        pFunc(pRoot->m_pData, pUserData);
+        think_bstree_node_foreach(pRoot->m_pChildLeft, pFunc, pUserData, method);
+        think_bstree_node_foreach(pRoot->m_pChildRight, pFunc, pUserData, method);
+    } else if (FOREACH_BY_LDR == method) {
+        think_bstree_node_foreach(pRoot->m_pChildLeft, pFunc, pUserData, method);
+        pFunc(pRoot->m_pData, pUserData);
+        think_bstree_node_foreach(pRoot->m_pChildRight, pFunc, pUserData, method);
+    } else {
+        think_bstree_node_foreach(pRoot->m_pChildLeft, pFunc, pUserData, method);
+        think_bstree_node_foreach(pRoot->m_pChildRight, pFunc, pUserData, method);
+        pFunc(pRoot->m_pData, pUserData);
+    }
+}
+
+static void think_bstree_update_height(ThinkBSTreeNode* pNode)
+{
+    return_if_fail(pNode != NULL);
+
+    ThinkBSTreeNode* pChild = pNode;
+
+    while (pChild->m_pParent) {
+        ThinkBSTreeNode* pParent = pChild->m_pParent;
+        if (pParent->m_pChildLeft == pChild) {
+            pParent->m_nHeightLeft = max(pChild->m_nHeightLeft, pChild->m_nHeightRight) + 1;
+        } else {
+            pParent->m_nHeightRight = max(pChild->m_nHeightLeft, pChild->m_nHeightRight) + 1;
+        }
+
+        pChild = pChild->m_pParent;
+    }
+}
+
+static void think_bstree_insert_node(ThinkBSTree* pTree, ThinkBSTreeNode* pNodeNew) {
     return_if_fail(pTree != NULL);
     return_if_fail(pNodeNew != NULL);
 
     ThinkBSTreeNode* pCur = pTree->m_pNodeRoot;
     if (NULL == pCur) {
         pTree->m_pNodeRoot = pNodeNew;
-        return;
+        goto insert_ret;
     }
 
     ThinkBSTreeNode* pParent = pCur;
@@ -42,6 +88,9 @@ static void think_bstree_insert_nodeee(ThinkBSTree* pTree, ThinkBSTreeNode* pNod
         pNodeNew->m_pParent = pParent;
     }
 
+insert_ret:
+    think_bstree_update_height(pNodeNew);
+    pTree->m_nSize++;
 }
 
 static void think_bstree_remove_node(ThinkBSTree* pTree, ThinkBSTreeNode* pNodeRemove)
@@ -151,22 +200,47 @@ void think_bstree_destory(ThinkBSTree** ppTree)
 
 void think_bstree_insert(ThinkBSTree* pTree, void* pData)
 {
+    return_if_fail(pTree != NULL);
+    return_if_fail(pData != NULL);
 
+    ThinkBSTreeNode* pNode = think_bstree_node_exists(pTree, pData);
+    if (pNode) {
+        if (pTree->m_pDestoryFunc) {
+            (pTree->m_pDestoryFunc)(pNode->m_pData);
+            pNode->m_pData = NULL;
+        }
+
+        pNode->m_pData = pData;
+
+        return;
+    }
+
+    pNode = think_bstree_node_new(pData);
+    think_bstree_insert_node(pTree, pNode);
 }
 
-void think_bstree_foreach_dlr(ThinkBSTree* pTree, ThinkCommonFunc func, void* pUserData)
+void think_bstree_foreach_dlr(ThinkBSTree* pTree, ThinkCommonFunc pFunc, void* pUserData)
 {
+    return_if_fail(pTree != NULL);
+    return_if_fail(pFunc != NULL);
 
+    think_bstree_node_foreach(pTree->m_pNodeRoot, pFunc, pUserData, FOREACH_BY_DLR);
 }
 
-void think_bstree_foreach_ldr(ThinkBSTree* pTree, ThinkCommonFunc func, void* pUserData)
+void think_bstree_foreach_ldr(ThinkBSTree* pTree, ThinkCommonFunc pFunc, void* pUserData)
 {
+    return_if_fail(pTree != NULL);
+    return_if_fail(pFunc != NULL);
 
+    think_bstree_node_foreach(pTree->m_pNodeRoot, pFunc, pUserData, FOREACH_BY_LDR);
 }
 
-void think_bstree_foreach_lrd(ThinkBSTree* pTree, ThinkCommonFunc func, void* pUserData)
+void think_bstree_foreach_lrd(ThinkBSTree* pTree, ThinkCommonFunc pFunc, void* pUserData)
 {
+    return_if_fail(pTree != NULL);
+    return_if_fail(pFunc != NULL);
 
+    think_bstree_node_foreach(pTree->m_pNodeRoot, pFunc, pUserData, FOREACH_BY_LRD);
 }
 
 bool think_bstree_remove(ThinkBSTree* pTree, const void* pData)
@@ -184,4 +258,11 @@ bool think_bstree_exists(ThinkBSTree* pTree, const void* pData)
 unsigned int think_bstree_size(ThinkBSTree* pTree)
 {
     return pTree->m_nSize;
+}
+
+unsigned int think_bstree_height(ThinkBSTree* pTree)
+{
+    return_val_if_fail(pTree != NULL, 0);
+
+    return max(pTree->m_pNodeRoot->m_nHeightLeft, pTree->m_pNodeRoot->m_nHeightRight) + 1;
 }

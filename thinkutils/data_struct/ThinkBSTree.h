@@ -42,7 +42,9 @@ void think_bstree_foreach_lrd(ThinkBSTree* pTree, ThinkCommonFunc func, void* pU
 
 bool think_bstree_remove(ThinkBSTree* pTree, const void* pData);
 bool think_bstree_exists(ThinkBSTree* pTree, const void* pData);
+
 unsigned int think_bstree_size(ThinkBSTree* pTree);
+unsigned int think_bstree_height(ThinkBSTree* pTree);
 
 #ifdef __cplusplus
 }
