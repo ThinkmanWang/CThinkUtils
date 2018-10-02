@@ -14,6 +14,7 @@ static ThinkBSTreeNode* think_bstree_node_new(void* pData);
 static void think_bstree_node_destory(ThinkBSTree* pTree, ThinkBSTreeNode** ppNode);
 static ThinkBSTreeNode* think_bstree_node_exists(ThinkBSTree* pTree, const void* pData);
 static ThinkBSTreeNode* think_bstree_max_node(ThinkBSTree* pTree, ThinkBSTreeNode* pNode);
+static ThinkBSTreeNode* think_bstree_min_node(ThinkBSTree* pTree, ThinkBSTreeNode* pNode);
 static void think_bstree_insert_node(ThinkBSTree* pTree, ThinkBSTreeNode* pNodeNew);
 static void think_bstree_remove_node(ThinkBSTree* pTree, ThinkBSTreeNode* pNodeRemove);
 static void think_bstree_update_height(ThinkBSTreeNode* pNode);
@@ -95,6 +96,99 @@ insert_ret:
 
 static void think_bstree_remove_node(ThinkBSTree* pTree, ThinkBSTreeNode* pNodeRemove)
 {
+    /*
+     if remove root node
+         if left child
+             make max node in left sub tree as root
+         else right tree
+             make child right as root
+         else
+            means only one node in this bstree
+            free node and set pTree->root as NULL
+     else
+         if left child
+             make max node in left for replace
+         else right tree
+             make min node in right for replace
+         else
+            means only one node in this sub bstree
+            free node
+
+     update tree height for pNode
+     update tree height for maxNode in subtree
+     */
+
+    if (pTree->m_pNodeRoot == pNodeRemove) {
+        if (pTree->m_pNodeRoot->m_pChildLeft) {
+            ThinkBSTreeNode* pMaxSubNode = think_bstree_max_node(pTree, pTree->m_pNodeRoot->m_pChildLeft);
+            pNodeRemove->m_pData = pMaxSubNode->m_pData;
+
+            if (pMaxSubNode == pMaxSubNode->m_pParent->m_pChildLeft) {
+                pMaxSubNode->m_pParent->m_nHeightLeft -= 1;
+                pMaxSubNode->m_pParent->m_pChildLeft = NULL;
+            } else {
+                pMaxSubNode->m_pParent->m_nHeightRight -= 1;
+                pMaxSubNode->m_pParent->m_pChildRight = NULL;
+            }
+
+            think_bstree_update_height(pMaxSubNode->m_pParent);
+            think_bstree_node_destory(pTree, &pMaxSubNode);
+        } else if (pTree->m_pNodeRoot->m_nHeightRight) {
+            pTree->m_pNodeRoot = pNodeRemove->m_pChildRight;
+            pNodeRemove->m_pChildRight->m_pParent = NULL;
+
+            think_bstree_node_destory(pTree, &pNodeRemove);
+        } else {
+            pTree->m_pNodeRoot = NULL;
+            think_bstree_node_destory(pTree, &pNodeRemove);
+        }
+
+    } else {
+        if (pNodeRemove->m_pChildLeft) {
+            ThinkBSTreeNode* pMaxSubNode = think_bstree_max_node(pTree, pNodeRemove->m_pChildLeft);
+            pNodeRemove->m_pData = pMaxSubNode->m_pData;
+
+            if (pMaxSubNode == pMaxSubNode->m_pParent->m_pChildLeft) {
+                pMaxSubNode->m_pParent->m_nHeightLeft -= 1;
+                pMaxSubNode->m_pParent->m_pChildLeft = NULL;
+            } else {
+                pMaxSubNode->m_pParent->m_nHeightRight -= 1;
+                pMaxSubNode->m_pParent->m_pChildRight = NULL;
+            }
+
+            think_bstree_update_height(pMaxSubNode->m_pParent);
+            think_bstree_node_destory(pTree, &pMaxSubNode);
+        } else if (pNodeRemove->m_pChildRight) {
+            ThinkBSTreeNode* pMinSubNode = think_bstree_max_node(pTree, pNodeRemove->m_pChildRight);
+
+            pNodeRemove->m_pData = pMinSubNode->m_pData;
+
+            if (pMinSubNode == pMinSubNode->m_pParent->m_pChildLeft) {
+                pMinSubNode->m_pParent->m_nHeightLeft -= 1;
+                pMinSubNode->m_pParent->m_pChildLeft = NULL;
+            } else {
+                pMinSubNode->m_pParent->m_nHeightRight -= 1;
+                pMinSubNode->m_pParent->m_pChildRight = NULL;
+            }
+
+            think_bstree_update_height(pMinSubNode->m_pParent);
+            think_bstree_node_destory(pTree, &pMinSubNode);
+        } else {
+            if (pNodeRemove == pNodeRemove->m_pParent->m_pChildLeft) {
+                pNodeRemove->m_pParent->m_nHeightLeft -= 1;
+                pNodeRemove->m_pParent->m_pChildLeft = NULL;
+            } else {
+                pNodeRemove->m_pParent->m_nHeightRight -= 1;
+                pNodeRemove->m_pParent->m_pChildRight = NULL;
+            }
+
+            think_bstree_update_height(pNodeRemove->m_pParent);
+            think_bstree_node_destory(pTree, &pNodeRemove);
+
+        }
+    }
+
+    think_bstree_update_height(pNodeRemove);
 
 }
 
@@ -166,6 +260,19 @@ static ThinkBSTreeNode* think_bstree_max_node(ThinkBSTree* pTree, ThinkBSTreeNod
     ThinkBSTreeNode* pCur = pNode;
     while (pCur->m_pChildRight) {
         pCur = pCur->m_pChildRight;
+    }
+
+    return pCur;
+}
+
+static ThinkBSTreeNode* think_bstree_min_node(ThinkBSTree* pTree, ThinkBSTreeNode* pNode)
+{
+    return_val_if_fail(pTree != NULL, NULL);
+    return_val_if_fail(pNode != NULL, NULL);
+
+    ThinkBSTreeNode* pCur = pNode;
+    while (pCur->m_pChildLeft) {
+        pCur = pCur->m_pChildLeft;
     }
 
     return pCur;
@@ -245,7 +352,15 @@ void think_bstree_foreach_lrd(ThinkBSTree* pTree, ThinkCommonFunc pFunc, void* p
 
 bool think_bstree_remove(ThinkBSTree* pTree, const void* pData)
 {
-    return false;
+    ThinkBSTreeNode* pNode = think_bstree_node_exists(pTree, pData);
+    if (NULL == pNode) {
+        return false;
+    }
+
+    think_bstree_remove_node(pTree, pNode);
+    pTree->m_nSize--;
+
+    return true;
 }
 
 bool think_bstree_exists(ThinkBSTree* pTree, const void* pData)

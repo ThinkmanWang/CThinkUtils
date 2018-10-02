@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 #include "log.h"
 #include "ThinkBSTree.h"
@@ -18,13 +19,96 @@ void foreach_set(void* pData, void* pUserData)
     log_debug("%d %p", (int) pData, pUserData);
 }
 
-int main()
+void test1()
 {
     ThinkBSTree* pTree = think_bstree_new(my_compare, NULL);
-//    for (int i = 0; i < 100; ++i) {
-//        int nRand = rand() % MY_RAND_MAX;
-//        think_btree_insert(pTree, (void*)nRand);
-//    }
+
+    think_bstree_insert(pTree, (void*)6);
+    think_bstree_insert(pTree, (void*)4);
+    think_bstree_insert(pTree, (void*)10);
+
+    assert(3 == think_bstree_size(pTree));
+    assert(2 == think_bstree_height(pTree));
+
+    think_bstree_remove(pTree, (void*)4);
+
+    assert(2 == think_bstree_size(pTree));
+    assert(2 == think_bstree_height(pTree));
+
+    think_bstree_remove(pTree, (void*)10);
+    assert(1 == think_bstree_size(pTree));
+    assert(1 == think_bstree_height(pTree));
+
+    log_debug("SUCCESS");
+}
+
+void test2()
+{
+    ThinkBSTree* pTree = think_bstree_new(my_compare, NULL);
+
+    think_bstree_insert(pTree, (void*)6);
+    think_bstree_insert(pTree, (void*)4);
+    think_bstree_insert(pTree, (void*)10);
+    think_bstree_insert(pTree, (void*)2);
+
+    assert(4 == think_bstree_size(pTree));
+    assert(3 == think_bstree_height(pTree));
+
+    think_bstree_remove(pTree, (void*)4);
+
+    assert(3 == think_bstree_size(pTree));
+    assert(2 == think_bstree_height(pTree));
+
+    think_bstree_remove(pTree, (void*)10);
+    assert(2 == think_bstree_size(pTree));
+    assert(2 == think_bstree_height(pTree));
+
+    log_debug("SUCCESS");
+}
+
+void test3()
+{
+    ThinkBSTree* pTree = think_bstree_new(my_compare, NULL);
+
+    think_bstree_insert(pTree, (void*)6);
+    think_bstree_insert(pTree, (void*)4);
+    think_bstree_insert(pTree, (void*)10);
+    think_bstree_insert(pTree, (void*)2);
+    think_bstree_insert(pTree, (void*)8);
+    think_bstree_insert(pTree, (void*)11);
+    think_bstree_insert(pTree, (void*)7);
+    think_bstree_insert(pTree, (void*)9);
+
+    assert(8 == think_bstree_size(pTree));
+    assert(4 == think_bstree_height(pTree));
+
+    think_bstree_remove(pTree, (void*)10);
+
+    assert(7 == think_bstree_size(pTree));
+    assert(4 == think_bstree_height(pTree));
+
+    log_debug("SUCCESS");
+}
+
+void test4()
+{
+    ThinkBSTree* pTree = think_bstree_new(my_compare, NULL);
+
+    think_bstree_insert(pTree, (void*)6);
+    think_bstree_insert(pTree, (void*)4);
+    think_bstree_insert(pTree, (void*)10);
+
+    think_bstree_remove(pTree, (void*)6);
+
+    assert(2 == think_bstree_size(pTree));
+    assert(2 == think_bstree_height(pTree));
+
+    log_debug("SUCCESS");
+}
+
+void test5() {
+    ThinkBSTree* pTree = think_bstree_new(my_compare, NULL);
+
     think_bstree_insert(pTree, (void*)6);
     think_bstree_insert(pTree, (void*)4);
     think_bstree_insert(pTree, (void*)10);
@@ -46,12 +130,22 @@ int main()
     log_debug("Set size: %d", think_bstree_size(pTree));
     log_debug("Set size: %d", think_bstree_height(pTree));
 
-//    log_debug("");
-//    think_btree_foreach_dlr(pTree, foreach_set, NULL);
+    log_debug("");
+    think_bstree_foreach_dlr(pTree, foreach_set, NULL);
 
     log_debug("");
     think_bstree_foreach_ldr(pTree, foreach_set, NULL);
 
-//    log_debug("");
-//    think_btree_foreach_lrd(pTree, foreach_set, NULL);
+    log_debug("");
+    think_bstree_foreach_lrd(pTree, foreach_set, NULL);
+}
+
+int main()
+{
+    test1();
+    test2();
+    test3();
+    test4();
+
+    test5();
 }
