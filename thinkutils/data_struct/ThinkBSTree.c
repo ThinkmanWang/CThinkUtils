@@ -159,7 +159,7 @@ static void think_bstree_remove_node(ThinkBSTree* pTree, ThinkBSTreeNode* pNodeR
             think_bstree_update_height(pMaxSubNode->m_pParent);
             think_bstree_node_destory(pTree, &pMaxSubNode);
         } else if (pNodeRemove->m_pChildRight) {
-            ThinkBSTreeNode* pMinSubNode = think_bstree_max_node(pTree, pNodeRemove->m_pChildRight);
+            ThinkBSTreeNode* pMinSubNode = think_bstree_min_node(pTree, pNodeRemove->m_pChildRight);
 
             pNodeRemove->m_pData = pMinSubNode->m_pData;
 

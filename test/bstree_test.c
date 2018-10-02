@@ -140,12 +140,36 @@ void test5() {
     think_bstree_foreach_lrd(pTree, foreach_set, NULL);
 }
 
+void test6()
+{
+    ThinkBSTree* pTree = think_bstree_new(my_compare, NULL);
+
+    think_bstree_insert(pTree, (void*)4);
+    think_bstree_insert(pTree, (void*)3);
+    think_bstree_insert(pTree, (void*)5);
+    think_bstree_insert(pTree, (void*)7);
+    think_bstree_insert(pTree, (void*)6);
+    think_bstree_insert(pTree, (void*)8);
+
+    think_bstree_remove(pTree, (void*)5);
+
+    assert(5 == think_bstree_size(pTree));
+    assert(4 == think_bstree_height(pTree));
+
+    log_debug("");
+    think_bstree_foreach_ldr(pTree, foreach_set, NULL);
+    
+    log_debug("SUCCESS");
+}
+
 int main()
 {
-    test1();
-    test2();
-    test3();
-    test4();
+//    test1();
+//    test2();
+//    test3();
+//    test4();
+//
+//    test5();
 
-    test5();
+    test6();
 }
