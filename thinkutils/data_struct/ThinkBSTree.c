@@ -133,7 +133,7 @@ static void think_bstree_remove_node(ThinkBSTree* pTree, ThinkBSTreeNode* pNodeR
 
             think_bstree_update_height(pMaxSubNode->m_pParent);
             think_bstree_node_destory(pTree, &pMaxSubNode);
-        } else if (pTree->m_pNodeRoot->m_nHeightRight) {
+        } else if (pTree->m_pNodeRoot->m_pChildRight) {
             pTree->m_pNodeRoot = pNodeRemove->m_pChildRight;
             pNodeRemove->m_pChildRight->m_pParent = NULL;
 
