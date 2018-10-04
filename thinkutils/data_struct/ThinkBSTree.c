@@ -10,14 +10,19 @@ typedef enum {
     , FOREACH_BY_LRD
 } ForEachMethod;
 
+typedef enum {
+    NODE_ADD
+    , NODE_DEL
+} NodeOperation;
+
 static ThinkBSTreeNode* think_bstree_node_new(void* pData);
-static void think_bstree_node_destory(ThinkBSTree* pTree, ThinkBSTreeNode** ppNode);
+static void think_bstree_node_destory(ThinkBSTree* pTree, ThinkBSTreeNode** ppNode, bool bFree);
 static ThinkBSTreeNode* think_bstree_node_exists(ThinkBSTree* pTree, const void* pData);
 static ThinkBSTreeNode* think_bstree_max_node(ThinkBSTree* pTree, ThinkBSTreeNode* pNode);
 static ThinkBSTreeNode* think_bstree_min_node(ThinkBSTree* pTree, ThinkBSTreeNode* pNode);
 static void think_bstree_insert_node(ThinkBSTree* pTree, ThinkBSTreeNode* pNodeNew);
-static void think_bstree_remove_node(ThinkBSTree* pTree, ThinkBSTreeNode* pNodeRemove);
-static void think_bstree_update_height(ThinkBSTreeNode* pNode);
+static void think_bstree_remove_node(ThinkBSTree* pTree, ThinkBSTreeNode* pNodeRemove, bool bFree);
+static void think_bstree_update_height(ThinkBSTreeNode* pNode, NodeOperation nOperation);
 static void think_bstree_node_foreach(ThinkBSTreeNode* pRoot, ThinkCommonFunc pFunc, void* pUserData, ForEachMethod method);
 
 static void think_bstree_node_foreach(ThinkBSTreeNode* pRoot, ThinkCommonFunc pFunc, void* pUserData, ForEachMethod method)
@@ -40,7 +45,7 @@ static void think_bstree_node_foreach(ThinkBSTreeNode* pRoot, ThinkCommonFunc pF
     }
 }
 
-static void think_bstree_update_height(ThinkBSTreeNode* pNode)
+static void think_bstree_update_height(ThinkBSTreeNode* pNode, NodeOperation nOperation)
 {
     return_if_fail(pNode != NULL);
 
@@ -49,9 +54,25 @@ static void think_bstree_update_height(ThinkBSTreeNode* pNode)
     while (pChild->m_pParent) {
         ThinkBSTreeNode* pParent = pChild->m_pParent;
         if (pParent->m_pChildLeft == pChild) {
-            pParent->m_nHeightLeft = max(pChild->m_nHeightLeft, pChild->m_nHeightRight) + 1;
+            if (NODE_ADD == nOperation) {
+                pParent->m_nHeightLeft = max(pChild->m_nHeightLeft, pChild->m_nHeightRight) + 1;
+            } else {
+                if (pChild == pNode) {
+                    pParent->m_nHeightLeft -= 1;
+                } else {
+                    pParent->m_nHeightLeft = max(pChild->m_nHeightLeft, pChild->m_nHeightRight) + 1;
+                }
+            }
         } else {
-            pParent->m_nHeightRight = max(pChild->m_nHeightLeft, pChild->m_nHeightRight) + 1;
+            if (NODE_ADD == nOperation) {
+                pParent->m_nHeightRight = max(pChild->m_nHeightLeft, pChild->m_nHeightRight) + 1;
+            } else {
+                if (pChild == pNode) {
+                    pParent->m_nHeightRight -= 1;
+                } else {
+                    pParent->m_nHeightRight = max(pChild->m_nHeightLeft, pChild->m_nHeightRight) + 1;
+                }
+            }
         }
 
         pChild = pChild->m_pParent;
@@ -90,11 +111,11 @@ static void think_bstree_insert_node(ThinkBSTree* pTree, ThinkBSTreeNode* pNodeN
     }
 
 insert_ret:
-    think_bstree_update_height(pNodeNew);
+    think_bstree_update_height(pNodeNew, NODE_ADD);
     pTree->m_nSize++;
 }
 
-static void think_bstree_remove_node(ThinkBSTree* pTree, ThinkBSTreeNode* pNodeRemove)
+static void think_bstree_remove_node(ThinkBSTree* pTree, ThinkBSTreeNode* pNodeRemove, bool bFree)
 {
     /*
      if remove root node
@@ -122,74 +143,33 @@ static void think_bstree_remove_node(ThinkBSTree* pTree, ThinkBSTreeNode* pNodeR
         if (pTree->m_pNodeRoot->m_pChildLeft) {
             ThinkBSTreeNode* pMaxSubNode = think_bstree_max_node(pTree, pTree->m_pNodeRoot->m_pChildLeft);
             pNodeRemove->m_pData = pMaxSubNode->m_pData;
-
-            if (pMaxSubNode == pMaxSubNode->m_pParent->m_pChildLeft) {
-                pMaxSubNode->m_pParent->m_nHeightLeft -= 1;
-                pMaxSubNode->m_pParent->m_pChildLeft = NULL;
-            } else {
-                pMaxSubNode->m_pParent->m_nHeightRight -= 1;
-                pMaxSubNode->m_pParent->m_pChildRight = NULL;
-            }
-
-            think_bstree_update_height(pMaxSubNode->m_pParent);
-            think_bstree_node_destory(pTree, &pMaxSubNode);
+            think_bstree_remove_node(pTree, pMaxSubNode, false);
         } else if (pTree->m_pNodeRoot->m_pChildRight) {
-            pTree->m_pNodeRoot = pNodeRemove->m_pChildRight;
-            pNodeRemove->m_pChildRight->m_pParent = NULL;
-
-            think_bstree_node_destory(pTree, &pNodeRemove);
+            ThinkBSTreeNode* pMinSubNode = think_bstree_min_node(pTree, pTree->m_pNodeRoot->m_pChildRight);
+            pNodeRemove->m_pData = pMinSubNode->m_pData;
+            think_bstree_remove_node(pTree, pMinSubNode, false);
         } else {
+            think_bstree_node_destory(pTree, &pNodeRemove, false);
             pTree->m_pNodeRoot = NULL;
-            think_bstree_node_destory(pTree, &pNodeRemove);
         }
-
     } else {
         if (pNodeRemove->m_pChildLeft) {
             ThinkBSTreeNode* pMaxSubNode = think_bstree_max_node(pTree, pNodeRemove->m_pChildLeft);
             pNodeRemove->m_pData = pMaxSubNode->m_pData;
-
-            if (pMaxSubNode == pMaxSubNode->m_pParent->m_pChildLeft) {
-                pMaxSubNode->m_pParent->m_nHeightLeft -= 1;
-                pMaxSubNode->m_pParent->m_pChildLeft = NULL;
-            } else {
-                pMaxSubNode->m_pParent->m_nHeightRight -= 1;
-                pMaxSubNode->m_pParent->m_pChildRight = NULL;
+            if (pTree->m_pDestoryFunc) {
+                (pTree->m_pDestoryFunc)(pNodeRemove->m_pData);
             }
 
-            think_bstree_update_height(pMaxSubNode->m_pParent);
-            think_bstree_node_destory(pTree, &pMaxSubNode);
+            think_bstree_remove_node(pTree, pMaxSubNode, false);
         } else if (pNodeRemove->m_pChildRight) {
             ThinkBSTreeNode* pMinSubNode = think_bstree_min_node(pTree, pNodeRemove->m_pChildRight);
-
             pNodeRemove->m_pData = pMinSubNode->m_pData;
-
-            if (pMinSubNode == pMinSubNode->m_pParent->m_pChildLeft) {
-                pMinSubNode->m_pParent->m_nHeightLeft -= 1;
-                pMinSubNode->m_pParent->m_pChildLeft = NULL;
-            } else {
-                pMinSubNode->m_pParent->m_nHeightRight -= 1;
-                pMinSubNode->m_pParent->m_pChildRight = NULL;
-            }
-
-            think_bstree_update_height(pMinSubNode->m_pParent);
-            think_bstree_node_destory(pTree, &pMinSubNode);
+            think_bstree_remove_node(pTree, pMinSubNode, false);
         } else {
-            if (pNodeRemove == pNodeRemove->m_pParent->m_pChildLeft) {
-                pNodeRemove->m_pParent->m_nHeightLeft -= 1;
-                pNodeRemove->m_pParent->m_pChildLeft = NULL;
-            } else {
-                pNodeRemove->m_pParent->m_nHeightRight -= 1;
-                pNodeRemove->m_pParent->m_pChildRight = NULL;
-            }
-
-            think_bstree_update_height(pNodeRemove->m_pParent);
-            think_bstree_node_destory(pTree, &pNodeRemove);
-
+            think_bstree_update_height(pNodeRemove, NODE_DEL);
+            think_bstree_node_destory(pTree, &pNodeRemove, false);
         }
     }
-
-    think_bstree_update_height(pNodeRemove);
-
 }
 
 static ThinkBSTreeNode* think_bstree_node_new(void* pData)
@@ -222,10 +202,20 @@ static ThinkBSTreeNode* think_bstree_node_new(void* pData)
     return pNode;
 }
 
-static void think_bstree_node_destory(ThinkBSTree* pTree, ThinkBSTreeNode** ppNode)
+static void think_bstree_node_destory(ThinkBSTree* pTree, ThinkBSTreeNode** ppNode, bool bFree)
 {
-    if (pTree->m_pDestoryFunc) {
+    if (pTree->m_pDestoryFunc && bFree) {
         (pTree->m_pDestoryFunc)((*ppNode)->m_pData);
+    }
+
+    if ((*ppNode)->m_pParent) {
+        if ((*ppNode)->m_pParent->m_pChildLeft == (*ppNode)) {
+            (*ppNode)->m_pParent->m_pChildLeft = NULL;
+        } else {
+            (*ppNode)->m_pParent->m_pChildRight = NULL;
+        }
+
+        (*ppNode)->m_pParent = NULL;
     }
 
     free(*ppNode);
@@ -357,7 +347,7 @@ bool think_bstree_remove(ThinkBSTree* pTree, const void* pData)
         return false;
     }
 
-    think_bstree_remove_node(pTree, pNode);
+    think_bstree_remove_node(pTree, pNode, true);
     pTree->m_nSize--;
 
     return true;
