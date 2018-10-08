@@ -387,19 +387,19 @@ void think_bstree_insert(ThinkBSTree* pTree, void* pData)
     pNode = think_bstree_node_new(pData);
     think_bstree_insert_node(pTree, pNode);
 
-    ThinkBSTreeNode* pCur = pNode;
-    while (pCur) {
-        int nVal = ((int)pCur->m_nHeightLeft - (int)pCur->m_nHeightRight);
-        if (nVal < -1) {
-            think_bstree_node_rotate(pTree, pCur, NODE_ROTETE_ACW);
-        } else if (nVal > 1) {
-            think_bstree_node_rotate(pTree, pCur, NODE_ROTETE_CW);
-        } else {
-
-        }
-
-        pCur = pCur->m_pParent;
-    }
+//    ThinkBSTreeNode* pCur = pNode;
+//    while (pCur) {
+//        int nVal = ((int)pCur->m_nHeightLeft - (int)pCur->m_nHeightRight);
+//        if (nVal < -1) {
+//            think_bstree_node_rotate(pTree, pCur, NODE_ROTETE_ACW);
+//        } else if (nVal > 1) {
+//            think_bstree_node_rotate(pTree, pCur, NODE_ROTETE_CW);
+//        } else {
+//
+//        }
+//
+//        pCur = pCur->m_pParent;
+//    }
 }
 
 void think_bstree_foreach_dlr(ThinkBSTree* pTree, ThinkCommonFunc pFunc, void* pUserData)
