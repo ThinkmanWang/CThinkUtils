@@ -244,7 +244,7 @@ void test10()
 void test11()
 {
     ThinkBSTree* pTree = think_bstree_new(my_compare, NULL);
-    for (int i = 1; i <= 10; ++i) {
+    for (int i = 1; i <= 100000; ++i) {
         think_bstree_insert(pTree, (void*)i);
     }
 
@@ -254,7 +254,7 @@ void test11()
 //    assert(10 == think_bstree_size(pTree));
 //    assert(2 == think_bstree_height(pTree));
 
-    think_bstree_foreach_ldr(pTree, foreach_set, NULL);
+//    think_bstree_foreach_ldr(pTree, foreach_set, NULL);
     log_debug("SUCCESS");
 }
 
