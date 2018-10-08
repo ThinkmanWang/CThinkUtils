@@ -244,12 +244,12 @@ void test10()
 void test11()
 {
     ThinkBSTree* pTree = think_bstree_new(my_compare, NULL);
-    for (int i = 1; i <= 24; ++i) {
+    for (int i = 1; i <= 10; ++i) {
         think_bstree_insert(pTree, (void*)i);
     }
 
     log_debug("Size: %d", think_bstree_size(pTree));
-//    log_debug("Height: %d", think_bstree_height(pTree));
+    log_debug("Height: %d", think_bstree_height(pTree));
 
 //    assert(10 == think_bstree_size(pTree));
 //    assert(2 == think_bstree_height(pTree));

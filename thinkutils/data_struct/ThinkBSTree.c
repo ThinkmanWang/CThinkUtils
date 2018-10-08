@@ -45,57 +45,127 @@ static void think_bstree_node_rotate(ThinkBSTree* pTree, ThinkBSTreeNode* pNodeR
     ThinkBSTreeNode* pNewRoot = NULL;
     if (NODE_ROTETE_CW == nRotate) {
         pNewRoot = pNodeRoot->m_pChildLeft;
+        pNodeRoot->m_pChildLeft = NULL;
         pNewRoot->m_pParent = pNodeRoot->m_pParent;
 
-        if (pNewRoot->m_pParent) {
-            pNewRoot->m_pParent->m_pChildLeft = pNewRoot;
+        if (pNodeRoot->m_pParent) {
+            if (pNewRoot->m_pParent->m_pChildLeft == pNodeRoot) {
+                pNewRoot->m_pParent->m_pChildLeft = pNewRoot;
+            } else {
+                pNewRoot->m_pParent->m_pChildRight = pNewRoot;
+            }
         }
 
-        pNodeRoot->m_pParent = NULL;
-        pNodeRoot->m_pChildLeft = NULL;
-        pNodeRoot->m_nHeightLeft = 0;
+        pNodeRoot->m_pParent = pNewRoot;
+
+        if (pNewRoot->m_pChildRight) {
+            pNewRoot->m_pChildRight->m_pParent = pNodeRoot;
+            pNodeRoot->m_pChildLeft = pNewRoot->m_pChildRight;
+            think_bstree_update_height(pNodeRoot->m_pChildLeft, NODE_ADD);
+        }
+
+        pNewRoot->m_pChildRight = pNodeRoot;
+        think_bstree_update_height(pNodeRoot, NODE_ADD);
     } else {
         pNewRoot = pNodeRoot->m_pChildRight;
+        pNodeRoot->m_pChildRight = NULL;
         pNewRoot->m_pParent = pNodeRoot->m_pParent;
 
-        if (pNewRoot->m_pParent) {
-            pNewRoot->m_pParent->m_pChildRight = pNewRoot;
+        if (pNodeRoot->m_pParent) {
+            if (pNewRoot->m_pParent->m_pChildLeft == pNodeRoot) {
+                pNewRoot->m_pParent->m_pChildLeft = pNewRoot;
+            } else {
+                pNewRoot->m_pParent->m_pChildRight = pNewRoot;
+            }
         }
 
-        pNodeRoot->m_pParent = NULL;
-        pNodeRoot->m_pChildRight = NULL;
-        pNodeRoot->m_nHeightRight = 0;
+        pNodeRoot->m_pParent = pNewRoot;
 
+        if (pNewRoot->m_pChildLeft) {
+            pNewRoot->m_pChildLeft->m_pParent = pNodeRoot;
+            pNodeRoot->m_pChildRight = pNewRoot->m_pChildLeft;
+            think_bstree_update_height(pNodeRoot->m_pChildRight, NODE_ADD);
+        }
+
+        pNewRoot->m_pChildLeft = pNodeRoot;
+        think_bstree_update_height(pNodeRoot, NODE_ADD);
     }
 
     if (pTree->m_pNodeRoot == pNodeRoot) {
         pTree->m_pNodeRoot = pNewRoot;
     }
 
-    ThinkBSTreeNode* pCur = pNewRoot;
-    ThinkBSTreeNode* pParent = pCur;
-    while (pCur) {
-        int nVal = (pTree->m_pCompareFunc)(pNodeRoot->m_pData, pCur->m_pData);
-        if (nVal < 0) {
-            pParent = pCur;
-            pCur = pCur->m_pChildLeft;
-        } else {
-            pParent = pCur;
-            pCur = pCur->m_pChildRight;
-        }
-    }
-
-    int nVal = (pTree->m_pCompareFunc)(pNodeRoot->m_pData, pParent->m_pData);
-    if (nVal < 0) {
-        pParent->m_pChildLeft = pNodeRoot;
-        pNodeRoot->m_pParent = pParent;
-    } else {
-        pParent->m_pChildRight = pNodeRoot;
-        pNodeRoot->m_pParent = pParent;
-    }
-
+    pNodeRoot->m_nHeightLeft = 0;
+    pNodeRoot->m_nHeightRight = 0;
     think_bstree_update_height(pNodeRoot, NODE_ADD);
+    think_bstree_update_height(pNewRoot, NODE_ADD);
 }
+
+//static void think_bstree_node_rotate(ThinkBSTree* pTree, ThinkBSTreeNode* pNodeRoot, NodeRotate nRotate)
+//{
+//    /**
+//     * remove root
+//     *     update root
+//     * insert root
+//     */
+//
+//    return_if_fail(pTree != NULL);
+//    return_if_fail(pNodeRoot != NULL);
+//
+//    ThinkBSTreeNode* pNewRoot = NULL;
+//    if (NODE_ROTETE_CW == nRotate) {
+//        pNewRoot = pNodeRoot->m_pChildLeft;
+//        pNewRoot->m_pParent = pNodeRoot->m_pParent;
+//
+//        if (pNewRoot->m_pParent) {
+//            pNewRoot->m_pParent->m_pChildLeft = pNewRoot;
+//        }
+//
+//        pNodeRoot->m_pParent = NULL;
+//        pNodeRoot->m_pChildLeft = NULL;
+//        pNodeRoot->m_nHeightLeft = 0;
+//    } else {
+//        pNewRoot = pNodeRoot->m_pChildRight;
+//        pNewRoot->m_pParent = pNodeRoot->m_pParent;
+//
+//        if (pNewRoot->m_pParent) {
+//            pNewRoot->m_pParent->m_pChildRight = pNewRoot;
+//        }
+//
+//        pNodeRoot->m_pParent = NULL;
+//        pNodeRoot->m_pChildRight = NULL;
+//        pNodeRoot->m_nHeightRight = 0;
+//
+//    }
+//
+//    if (pTree->m_pNodeRoot == pNodeRoot) {
+//        pTree->m_pNodeRoot = pNewRoot;
+//    }
+//
+//    ThinkBSTreeNode* pCur = pNewRoot;
+//    ThinkBSTreeNode* pParent = pCur;
+//    while (pCur) {
+//        int nVal = (pTree->m_pCompareFunc)(pNodeRoot->m_pData, pCur->m_pData);
+//        if (nVal < 0) {
+//            pParent = pCur;
+//            pCur = pCur->m_pChildLeft;
+//        } else {
+//            pParent = pCur;
+//            pCur = pCur->m_pChildRight;
+//        }
+//    }
+//
+//    int nVal = (pTree->m_pCompareFunc)(pNodeRoot->m_pData, pParent->m_pData);
+//    if (nVal < 0) {
+//        pParent->m_pChildLeft = pNodeRoot;
+//        pNodeRoot->m_pParent = pParent;
+//    } else {
+//        pParent->m_pChildRight = pNodeRoot;
+//        pNodeRoot->m_pParent = pParent;
+//    }
+//
+//    think_bstree_update_height(pNodeRoot, NODE_ADD);
+//}
 
 static void think_bstree_node_foreach(ThinkBSTreeNode* pRoot, ThinkCommonFunc pFunc, void* pUserData, ForEachMethod method)
 {
@@ -185,6 +255,20 @@ static void think_bstree_insert_node(ThinkBSTree* pTree, ThinkBSTreeNode* pNodeN
 insert_ret:
     think_bstree_update_height(pNodeNew, NODE_ADD);
     pTree->m_nSize++;
+
+    pCur = pNodeNew;
+    while (pCur) {
+        nVal = ((int)pCur->m_nHeightLeft - (int)pCur->m_nHeightRight);
+        if (nVal < -1) {
+            think_bstree_node_rotate(pTree, pCur, NODE_ROTETE_ACW);
+        } else if (nVal > 1) {
+            think_bstree_node_rotate(pTree, pCur, NODE_ROTETE_CW);
+        } else {
+
+        }
+
+        pCur = pCur->m_pParent;
+    }
 }
 
 static void think_bstree_remove_node(ThinkBSTree* pTree, ThinkBSTreeNode* pNodeRemove, bool bFree)
@@ -386,20 +470,6 @@ void think_bstree_insert(ThinkBSTree* pTree, void* pData)
 
     pNode = think_bstree_node_new(pData);
     think_bstree_insert_node(pTree, pNode);
-
-//    ThinkBSTreeNode* pCur = pNode;
-//    while (pCur) {
-//        int nVal = ((int)pCur->m_nHeightLeft - (int)pCur->m_nHeightRight);
-//        if (nVal < -1) {
-//            think_bstree_node_rotate(pTree, pCur, NODE_ROTETE_ACW);
-//        } else if (nVal > 1) {
-//            think_bstree_node_rotate(pTree, pCur, NODE_ROTETE_CW);
-//        } else {
-//
-//        }
-//
-//        pCur = pCur->m_pParent;
-//    }
 }
 
 void think_bstree_foreach_dlr(ThinkBSTree* pTree, ThinkCommonFunc pFunc, void* pUserData)
