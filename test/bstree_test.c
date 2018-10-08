@@ -251,10 +251,9 @@ void test11()
     log_debug("Size: %d", think_bstree_size(pTree));
     log_debug("Height: %d", think_bstree_height(pTree));
 
-//    assert(10 == think_bstree_size(pTree));
-//    assert(2 == think_bstree_height(pTree));
-
-//    think_bstree_foreach_ldr(pTree, foreach_set, NULL);
+    think_bstree_destory(&pTree);
+    log_debug("%p", pTree);
+    
     log_debug("SUCCESS");
 }
 

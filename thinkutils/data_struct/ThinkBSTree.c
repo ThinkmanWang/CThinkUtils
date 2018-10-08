@@ -30,6 +30,7 @@ static void think_bstree_remove_node(ThinkBSTree* pTree, ThinkBSTreeNode* pNodeR
 static void think_bstree_update_height(ThinkBSTreeNode* pNode, NodeOperation nOperation);
 static void think_bstree_node_foreach(ThinkBSTreeNode* pRoot, ThinkCommonFunc pFunc, void* pUserData, ForEachMethod method);
 static void think_bstree_node_rotate(ThinkBSTree* pTree, ThinkBSTreeNode* pNodeRoot, NodeRotate nRotate);
+static void think_bstree_destory_all_node(ThinkBSTree* pTree, ThinkBSTreeNode* pNode);
 
 static void think_bstree_node_rotate(ThinkBSTree* pTree, ThinkBSTreeNode* pNodeRoot, NodeRotate nRotate)
 {
@@ -378,9 +379,26 @@ ThinkBSTree* think_bstree_new(ThinkCompareDataFunc pCompareFunc, ThinkDestoryFun
     return pTree;
 }
 
+static void think_bstree_destory_all_node(ThinkBSTree* pTree, ThinkBSTreeNode* pNode)
+{
+    return_if_fail(pTree != NULL);
+    return_if_fail(pNode != NULL);
+
+    think_bstree_destory_all_node(pTree, pNode->m_pChildLeft);
+    think_bstree_destory_all_node(pTree, pNode->m_pChildRight);
+
+    think_bstree_node_destory(pTree, &pNode, true);
+}
+
 void think_bstree_destory(ThinkBSTree** ppTree)
 {
+    return_if_fail(ppTree != NULL);
+    return_if_fail((*ppTree) != NULL);
+    return_if_fail(((*ppTree)->m_pNodeRoot) != NULL);
 
+    think_bstree_destory_all_node((*ppTree), (*ppTree)->m_pNodeRoot);
+    free(*ppTree);
+    *ppTree = NULL;
 }
 
 void think_bstree_insert(ThinkBSTree* pTree, void* pData)
