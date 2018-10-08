@@ -15,6 +15,11 @@ typedef enum {
     , NODE_DEL
 } NodeOperation;
 
+typedef enum {
+    NODE_ROTETE_CW
+    , NODE_ROTETE_ACW
+} NodeRotate;
+
 static ThinkBSTreeNode* think_bstree_node_new(void* pData);
 static void think_bstree_node_destory(ThinkBSTree* pTree, ThinkBSTreeNode** ppNode, bool bFree);
 static ThinkBSTreeNode* think_bstree_node_exists(ThinkBSTree* pTree, const void* pData);
@@ -24,6 +29,73 @@ static void think_bstree_insert_node(ThinkBSTree* pTree, ThinkBSTreeNode* pNodeN
 static void think_bstree_remove_node(ThinkBSTree* pTree, ThinkBSTreeNode* pNodeRemove, bool bFree);
 static void think_bstree_update_height(ThinkBSTreeNode* pNode, NodeOperation nOperation);
 static void think_bstree_node_foreach(ThinkBSTreeNode* pRoot, ThinkCommonFunc pFunc, void* pUserData, ForEachMethod method);
+static void think_bstree_node_rotate(ThinkBSTree* pTree, ThinkBSTreeNode* pNodeRoot, NodeRotate nRotate);
+
+static void think_bstree_node_rotate(ThinkBSTree* pTree, ThinkBSTreeNode* pNodeRoot, NodeRotate nRotate)
+{
+    /**
+     * remove root
+     *     update root
+     * insert root
+     */
+
+    return_if_fail(pTree != NULL);
+    return_if_fail(pNodeRoot != NULL);
+
+    ThinkBSTreeNode* pNewRoot = NULL;
+    if (NODE_ROTETE_CW == nRotate) {
+        pNewRoot = pNodeRoot->m_pChildLeft;
+        pNewRoot->m_pParent = pNodeRoot->m_pParent;
+
+        if (pNewRoot->m_pParent) {
+            pNewRoot->m_pParent->m_pChildLeft = pNewRoot;
+        }
+
+        pNodeRoot->m_pParent = NULL;
+        pNodeRoot->m_pChildLeft = NULL;
+        pNodeRoot->m_nHeightLeft = 0;
+    } else {
+        pNewRoot = pNodeRoot->m_pChildRight;
+        pNewRoot->m_pParent = pNodeRoot->m_pParent;
+
+        if (pNewRoot->m_pParent) {
+            pNewRoot->m_pParent->m_pChildRight = pNewRoot;
+        }
+
+        pNodeRoot->m_pParent = NULL;
+        pNodeRoot->m_pChildRight = NULL;
+        pNodeRoot->m_nHeightRight = 0;
+
+    }
+
+    if (pTree->m_pNodeRoot == pNodeRoot) {
+        pTree->m_pNodeRoot = pNewRoot;
+    }
+
+    ThinkBSTreeNode* pCur = pNewRoot;
+    ThinkBSTreeNode* pParent = pCur;
+    while (pCur) {
+        int nVal = (pTree->m_pCompareFunc)(pNodeRoot->m_pData, pCur->m_pData);
+        if (nVal < 0) {
+            pParent = pCur;
+            pCur = pCur->m_pChildLeft;
+        } else {
+            pParent = pCur;
+            pCur = pCur->m_pChildRight;
+        }
+    }
+
+    int nVal = (pTree->m_pCompareFunc)(pNodeRoot->m_pData, pParent->m_pData);
+    if (nVal < 0) {
+        pParent->m_pChildLeft = pNodeRoot;
+        pNodeRoot->m_pParent = pParent;
+    } else {
+        pParent->m_pChildRight = pNodeRoot;
+        pNodeRoot->m_pParent = pParent;
+    }
+
+    think_bstree_update_height(pNodeRoot, NODE_ADD);
+}
 
 static void think_bstree_node_foreach(ThinkBSTreeNode* pRoot, ThinkCommonFunc pFunc, void* pUserData, ForEachMethod method)
 {
@@ -314,6 +386,20 @@ void think_bstree_insert(ThinkBSTree* pTree, void* pData)
 
     pNode = think_bstree_node_new(pData);
     think_bstree_insert_node(pTree, pNode);
+
+    ThinkBSTreeNode* pCur = pNode;
+    while (pCur) {
+        int nVal = ((int)pCur->m_nHeightLeft - (int)pCur->m_nHeightRight);
+        if (nVal < -1) {
+            think_bstree_node_rotate(pTree, pCur, NODE_ROTETE_ACW);
+        } else if (nVal > 1) {
+            think_bstree_node_rotate(pTree, pCur, NODE_ROTETE_CW);
+        } else {
+
+        }
+
+        pCur = pCur->m_pParent;
+    }
 }
 
 void think_bstree_foreach_dlr(ThinkBSTree* pTree, ThinkCommonFunc pFunc, void* pUserData)

@@ -241,18 +241,37 @@ void test10()
     log_debug("SUCCESS");
 }
 
+void test11()
+{
+    ThinkBSTree* pTree = think_bstree_new(my_compare, NULL);
+    for (int i = 1; i <= 10; ++i) {
+        think_bstree_insert(pTree, (void*)i);
+    }
+
+    log_debug("Size: %d", think_bstree_size(pTree));
+//    log_debug("Height: %d", think_bstree_height(pTree));
+
+//    assert(10 == think_bstree_size(pTree));
+//    assert(2 == think_bstree_height(pTree));
+
+    think_bstree_foreach_ldr(pTree, foreach_set, NULL);
+    log_debug("SUCCESS");
+}
+
 int main()
 {
-    test1();
-    test2();
-    test3();
-    test4();
-    test6();
-    test7();
+//    test1();
+//    test2();
+//    test3();
+//    test4();
+//    test6();
+//    test7();
+//
+//    test_foreach();
+//    test8();
+//    test9();
+//
+//    test10();
 
-    test_foreach();
-    test8();
-    test9();
-
-    test10();
+    test11();
 }
