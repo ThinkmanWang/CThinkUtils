@@ -184,9 +184,7 @@ ThinkTree* think_tree_find(ThinkTree* pTree, void* pData)
 {
     return_val_if_fail(pTree != NULL, NULL);
     return_val_if_fail(pData != NULL, NULL);
-//    return_val_if_fail(pTree->m_pChildren != NULL, NULL);
 
-//    ThinkTree* pCur = pTree;
     if (pTree->m_pData == pData) {
         return pTree;
     }
