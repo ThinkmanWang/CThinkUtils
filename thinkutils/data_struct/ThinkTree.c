@@ -2,6 +2,8 @@
 
 #include <stdlib.h>
 
+static void think_tree_size_real(ThinkTree* pTree, unsigned int* pCount);
+
 ThinkTree* think_tree_new(void* pData)
 {
     ThinkTree* pTree = (ThinkTree*) malloc(sizeof(ThinkTree));
@@ -261,31 +263,30 @@ bool think_tree_is_leaf(ThinkTree* pTree)
     return (NULL == pTree->m_pChildren);
 }
 
+static void think_tree_size_real(ThinkTree* pTree, unsigned int* pCount)
+{
+    if (pTree->m_pChildren) {
+        ThinkTree* pChild;
+        (*pCount)++;
+
+        pChild = pTree->m_pChildren;
+        while (pChild) {
+            think_tree_size_real(pChild, pCount);
+            pChild = pChild->m_pNext;
+        }
+    } else {
+        (*pCount)++;
+    }
+}
+
 unsigned int think_tree_size(ThinkTree* pTree)
 {
     return_val_if_fail(pTree != NULL, 0);
-    return_val_if_fail(pTree->m_pChildren != NULL, 1);
 
-    ThinkTree* pCur = pTree;
-    unsigned int nSize = 1;
+    unsigned int nCount = 0;
+    think_tree_size_real(pTree, &nCount);
 
-    while (pCur) {
-        ThinkTree* pNext = pCur->m_pNext;
-
-        if (pCur->m_pChildren) {
-            nSize += think_tree_size(pCur->m_pChildren);
-        }
-
-        ThinkTree* pBrother = pTree->m_pNext;
-        while (pBrother) {
-            nSize++;
-            pBrother = pBrother->m_pNext;
-        }
-
-        pCur = pNext;
-    }
-
-    return nSize;
+    return nCount;
 }
 
 unsigned int think_tree_children_size(ThinkTree* pTree)
