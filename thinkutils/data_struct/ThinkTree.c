@@ -29,7 +29,8 @@ void think_tree_unlink(ThinkTree* pTree)
         pTree->m_pNext->m_pPre = pTree->m_pPre;
     }
 
-    if (pTree->m_pParent->m_pChildren == pTree) {
+    if (pTree->m_pParent
+        && pTree->m_pParent->m_pChildren == pTree) {
         pTree->m_pParent->m_pChildren = pTree->m_pNext;
     }
 

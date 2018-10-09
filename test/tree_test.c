@@ -21,10 +21,13 @@ void test1()
     think_tree_prepend(pNode4, (void*)11);
     ThinkTree* pNode12 = think_tree_prepend(pNode4, (void*)12);
 
-    think_tree_unlink(pNode4);
+    think_tree_unlink(pTree);
 
     log_debug("Size: %d", think_tree_size(pTree));
     log_debug("Size: %d", think_tree_height(pTree));
+
+    log_debug("Size: %d", think_tree_size(pNode4));
+    log_debug("Children Size: %d", think_tree_children_size(pNode4));
 }
 
 int main()
