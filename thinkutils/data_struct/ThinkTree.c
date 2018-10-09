@@ -201,40 +201,6 @@ ThinkTree* think_tree_find(ThinkTree* pTree, void* pData)
     }
 
     return NULL;
-
-
-
-
-//    ThinkTree* pCur = pTree;
-//    ThinkTree* pNode = NULL;
-//
-//    while (pCur) {
-//        ThinkTree* pNext = pCur->m_pNext;
-//
-//        if (pCur->m_pData == pData) {
-//            return pCur;
-//        }
-//
-//        if (pCur->m_pChildren) {
-//            pNode = think_tree_find(pCur->m_pChildren, pData);
-//        }
-//
-//        if (pNode) {
-//            return pNode;
-//        }
-//
-//        ThinkTree* pBrother = pTree->m_pNext;
-//        while (pBrother) {
-//            if (pBrother->m_pData == pData) {
-//                return pBrother;
-//            }
-//            pBrother = pBrother->m_pNext;
-//        }
-//
-//        pCur = pNext;
-//    }
-//
-//    return pNode;
 }
 
 ThinkTree* think_tree_find_children(ThinkTree* pTree, void* pData)
