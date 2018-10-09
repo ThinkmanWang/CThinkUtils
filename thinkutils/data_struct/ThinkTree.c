@@ -240,7 +240,7 @@ void think_tree_foreach(ThinkTree* pTree, ThinkCommonFunc pFunc, void* pUserData
 
 bool think_tree_is_leaf(ThinkTree* pTree)
 {
-    return_val_if_fail(pTree != NULL, true);
+    return_val_if_fail(pTree != NULL, false);
     return (NULL == pTree->m_pChildren);
 }
 
