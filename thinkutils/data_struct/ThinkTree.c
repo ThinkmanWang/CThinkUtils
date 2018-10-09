@@ -237,26 +237,21 @@ ThinkTree* think_tree_find_children(ThinkTree* pTree, void* pData)
 }
 
 
-void think_tree_foreach(ThinkTree* pTree, ThinkCommonFunc func)
+void think_tree_foreach(ThinkTree* pTree, ThinkCommonFunc pFunc, void* pUserData)
 {
+    return_if_fail(pTree != NULL);
+    return_if_fail(pFunc != NULL);
 
+    pFunc(pTree->m_pData, pUserData);
+
+    if (pTree->m_pChildren) {
+        ThinkTree* pChild = pTree->m_pChildren;
+        while (pChild) {
+            think_tree_foreach(pChild, pFunc, pUserData);
+            pChild = pChild->m_pNext;
+        }
+    }
 }
-
-void think_tree_foreach_children(ThinkTree* pTree, ThinkCommonFunc func)
-{
-
-}
-
-
-//ThinkTree* think_tree_first_child(ThinkTree* pTree)
-//{
-//    return NULL;
-//}
-//
-//ThinkTree* think_tree_last_child(ThinkTree* pTree)
-//{
-//    return NULL;
-//}
 
 bool think_tree_is_leaf(ThinkTree* pTree)
 {

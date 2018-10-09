@@ -34,11 +34,7 @@ ThinkTree* think_tree_get_child(ThinkTree* pTree, unsigned int nPos);
 ThinkTree* think_tree_find(ThinkTree* pTree, void* pData);
 ThinkTree* think_tree_find_children(ThinkTree* pTree, void* pData);
 
-void think_tree_foreach(ThinkTree* pTree, ThinkCommonFunc func);
-void think_tree_foreach_children(ThinkTree* pTree, ThinkCommonFunc func);
-
-//ThinkTree* think_tree_first_child(ThinkTree* pTree);
-//ThinkTree* think_tree_last_child(ThinkTree* pTree);
+void think_tree_foreach(ThinkTree* pTree, ThinkCommonFunc pFunc, void* pUserData);
 
 bool think_tree_is_leaf(ThinkTree* pTree);
 
