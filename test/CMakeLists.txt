@@ -25,6 +25,9 @@ TARGET_LINK_LIBRARIES(btree_test ${GLIB2_LIBRARIES} ${GTHREAD2_LIBRARIES} log th
 add_executable(bstree_test bstree_test.c)
 TARGET_LINK_LIBRARIES(bstree_test ${GLIB2_LIBRARIES} ${GTHREAD2_LIBRARIES} log thinkutils data_struct)
 
+add_executable(tree_test tree_test.c)
+TARGET_LINK_LIBRARIES(tree_test ${GLIB2_LIBRARIES} ${GTHREAD2_LIBRARIES} log thinkutils data_struct)
+
 add_executable(spiral_array spiral_array.c)
 
 
