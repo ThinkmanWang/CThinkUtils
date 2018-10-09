@@ -10,13 +10,15 @@
 extern "C" {
 #endif
 
-typedef struct {
+typedef struct _ThinkTree ThinkTree;
+
+struct _ThinkTree{
     void* m_pData;
     ThinkTree* m_pNext;
     ThinkTree* m_pPre;
     ThinkTree* m_pParent;
     ThinkTree* m_pChildren;
-} ThinkTree;
+} ;
 
 ThinkTree* think_tree_new(void* pData);
 void think_tree_unlink(ThinkTree* pTree);
