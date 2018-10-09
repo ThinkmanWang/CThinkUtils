@@ -34,6 +34,11 @@ void test1()
     log_debug("Size: %d", think_tree_size(pNode4));
     log_debug("Children Size: %d", think_tree_children_size(pNode4));
 
+    ThinkTree* pNodeFind = think_tree_find(pTree, (void*)11);
+    if (pNodeFind) {
+        log_debug("%d", pNodeFind->m_pData);
+    }
+
     think_tree_foreach(pTree, foreach_tree, NULL);
 }
 

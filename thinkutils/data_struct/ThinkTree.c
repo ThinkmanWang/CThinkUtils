@@ -184,38 +184,59 @@ ThinkTree* think_tree_find(ThinkTree* pTree, void* pData)
 {
     return_val_if_fail(pTree != NULL, NULL);
     return_val_if_fail(pData != NULL, NULL);
-    return_val_if_fail(pTree->m_pChildren != NULL, NULL);
+//    return_val_if_fail(pTree->m_pChildren != NULL, NULL);
 
-    ThinkTree* pCur = pTree;
-    ThinkTree* pNode = NULL;
+//    ThinkTree* pCur = pTree;
+    if (pTree->m_pData == pData) {
+        return pTree;
+    }
 
-    while (pCur) {
-        ThinkTree* pNext = pCur->m_pNext;
-
-        if (pCur->m_pData == pData) {
-            return pCur;
-        }
-
-        if (pCur->m_pChildren) {
-            pNode = think_tree_find(pCur->m_pChildren, pData);
-        }
-
-        if (pNode) {
-            return pNode;
-        }
-
-        ThinkTree* pBrother = pTree->m_pNext;
-        while (pBrother) {
-            if (pBrother->m_pData == pData) {
-                return pBrother;
+    if (pTree->m_pChildren) {
+        ThinkTree* pChild = pTree->m_pChildren;
+        while (pChild) {
+            ThinkTree* pRet = think_tree_find(pChild, pData);
+            if (pRet) {
+                return pRet;
             }
-            pBrother = pBrother->m_pNext;
+            pChild = pChild->m_pNext;
         }
-
-        pCur = pNext;
     }
 
     return NULL;
+
+
+
+
+//    ThinkTree* pCur = pTree;
+//    ThinkTree* pNode = NULL;
+//
+//    while (pCur) {
+//        ThinkTree* pNext = pCur->m_pNext;
+//
+//        if (pCur->m_pData == pData) {
+//            return pCur;
+//        }
+//
+//        if (pCur->m_pChildren) {
+//            pNode = think_tree_find(pCur->m_pChildren, pData);
+//        }
+//
+//        if (pNode) {
+//            return pNode;
+//        }
+//
+//        ThinkTree* pBrother = pTree->m_pNext;
+//        while (pBrother) {
+//            if (pBrother->m_pData == pData) {
+//                return pBrother;
+//            }
+//            pBrother = pBrother->m_pNext;
+//        }
+//
+//        pCur = pNext;
+//    }
+//
+//    return pNode;
 }
 
 ThinkTree* think_tree_find_children(ThinkTree* pTree, void* pData)
