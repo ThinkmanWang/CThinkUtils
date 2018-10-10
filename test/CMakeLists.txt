@@ -32,5 +32,5 @@ add_executable(spiral_array spiral_array.c)
 
 
 INCLUDE_DIRECTORIES(${GLIB2_INCLUDE_DIR}
-        ${JsonGlib_INCLUDE_DIRS} thinkutils/data_struct)
+        ${JsonGlib_INCLUDE_DIRS} thinkutils/data_struct thinkutils/log)
 

@@ -4,6 +4,9 @@ AUX_SOURCE_DIRECTORY(. log_SOURCE_DIR)
 ADD_SUBDIRECTORY(data_struct)
 INCLUDE_DIRECTORIES(data_struct)
 
+ADD_SUBDIRECTORY(log)
+INCLUDE_DIRECTORIES(log)
+
 ADD_LIBRARY (thinkutils test.c datetime.c ini.c md5.c netutils.c string_utils.c parson.c)
 
 TARGET_LINK_LIBRARIES(thinkutils ${GLIB2_LIBRARIES} ${GTHREAD2_LIBRARIES})
