@@ -21,10 +21,7 @@ void print_spiral_array(int nRow, int nCel)
     for (int i = 0; i < nRow; ++i) {
         for (int j = 0; j < nCel; ++j) {
             ppArray[i][j] = 0;
-            printf("\t%d", ppArray[i][j]);
         }
-
-        printf("\n");
     }
 
     direction nDirection = DIRECTION_RIGHT;
@@ -72,9 +69,6 @@ void print_spiral_array(int nRow, int nCel)
                 break;
         }
     }
-
-    printf("\n");
-    printf("\n");
 
     for (int i = 0; i < nRow; ++i) {
         for (int j = 0; j < nCel; ++j) {
