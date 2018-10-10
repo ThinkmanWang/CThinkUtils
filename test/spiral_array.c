@@ -8,20 +8,8 @@ typedef enum {
     , DIRECTION_TOP
 } direction;
 
-int main(int argc,char** argv)
+void print_spiral_array(int nRow, int nCel)
 {
-    int nRow = 5, nCel = 5;
-    if (2 == argc) {
-        int _nRow = atoi(argv[1]);
-        if (_nRow < 2) {
-            printf("row count must >= 2\n");
-        } else {
-            nRow = nCel = _nRow;
-        }
-    } else {
-        printf("Usage: %s number\n", argv[0]);
-    }
-
     int** ppArray = NULL;
     ppArray = (int**)malloc(sizeof(int*) * nRow);
     for(int i=0; i < nRow; i++ )
@@ -95,6 +83,23 @@ int main(int argc,char** argv)
 
         printf("\n");
     }
+}
+
+int main(int argc,char** argv)
+{
+    int nRow = 5, nCel = 5;
+    if (2 == argc) {
+        int _nRow = atoi(argv[1]);
+        if (_nRow < 2) {
+            printf("row count must >= 2\n");
+        } else {
+            nRow = nCel = _nRow;
+        }
+    } else {
+        printf("Usage: %s number\n", argv[0]);
+    }
+
+    print_spiral_array(nRow, nCel);
 
     return 0;
 }
