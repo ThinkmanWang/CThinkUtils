@@ -40,6 +40,7 @@ TARGET_LINK_LIBRARIES(ptr_ary_test ${GLIB2_LIBRARIES} ${GTHREAD2_LIBRARIES} log 
 add_executable(list_test list_test.c)
 TARGET_LINK_LIBRARIES(list_test ${GLIB2_LIBRARIES} ${GTHREAD2_LIBRARIES} log thinkutils data_struct)
 
+add_executable(void_pointer_test void_pointer_test.c)
 
 
 INCLUDE_DIRECTORIES(${GLIB2_INCLUDE_DIR}
