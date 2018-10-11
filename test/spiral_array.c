@@ -6,7 +6,7 @@ typedef enum {
     , DIRECTION_BOTTOM
     , DIRECTION_LEFT
     , DIRECTION_TOP
-} direction;
+} Direction;
 
 void print_spiral_array(int nRow, int nCel)
 {
@@ -24,7 +24,7 @@ void print_spiral_array(int nRow, int nCel)
         }
     }
 
-    direction nDirection = DIRECTION_RIGHT;
+    Direction nDirection = DIRECTION_RIGHT;
 
     int nStartRow = 0, nStartCel = 0;
 
