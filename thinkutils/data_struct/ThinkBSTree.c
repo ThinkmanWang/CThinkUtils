@@ -390,7 +390,7 @@ static void think_bstree_destory_all_node(ThinkBSTree* pTree, ThinkBSTreeNode* p
     think_bstree_node_destory(pTree, &pNode, true);
 }
 
-void think_bstree_destory(ThinkBSTree** ppTree)
+void think_bstree_free(ThinkBSTree** ppTree)
 {
     return_if_fail(ppTree != NULL);
     return_if_fail((*ppTree) != NULL);

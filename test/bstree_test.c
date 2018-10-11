@@ -253,7 +253,7 @@ void test11()
 
     think_bstree_foreach_ldr(pTree, foreach_set, NULL);
 
-    think_bstree_destory(&pTree);
+    think_bstree_free(&pTree);
     log_debug("%p", pTree);
 
     log_debug("SUCCESS");

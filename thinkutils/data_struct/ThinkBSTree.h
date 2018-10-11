@@ -32,7 +32,7 @@ typedef struct _ThinkBSTree {
 }ThinkBSTree;
 
 ThinkBSTree* think_bstree_new(ThinkCompareDataFunc pCompareFunc, ThinkDestoryFunc pDestoryFunc);
-void think_bstree_destory(ThinkBSTree** ppTree);
+void think_bstree_free(ThinkBSTree** ppTree);
 
 void think_bstree_insert(ThinkBSTree* pTree, void* pData);
 
