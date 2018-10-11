@@ -10,6 +10,9 @@
 
 #include "utils.h"
 
+static ThinkList* think_list_get_node(ThinkList* pList, unsigned int nIndex);
+static void think_list_sort_real(ThinkList* pList, ThinkCompareDataFunc pCompareFunc, unsigned int nStart, unsigned int nEnd);
+
 static ThinkList* think_list_create_node(void* pData)
 {
     ThinkList* pNode = malloc(sizeof(ThinkList));
@@ -211,6 +214,19 @@ void* think_list_get(ThinkList* pList, unsigned int nIndex)
     return pNode->m_pData;
 }
 
+static ThinkList* think_list_get_node(ThinkList* pList, unsigned int nIndex)
+{
+    return_val_if_fail(pList != NULL, NULL);
+    return_val_if_fail(nIndex < think_list_length(pList), NULL);
+
+    ThinkList* pNode = pList;
+    for (int i = 0; i < nIndex; ++i) {
+        pNode = pNode->m_pNext;
+    }
+
+    return pNode;
+}
+
 void* think_list_pop(ThinkList** ppList)
 {
     return_val_if_fail(ppList != NULL, NULL);
@@ -258,4 +274,50 @@ void think_list_free(ThinkList** pList, ThinkDestoryFunc pFunc)
     while (*pList != NULL) {
         *pList = think_list_remove_at(*pList, 0, pFunc);
     }
+}
+
+static void think_list_sort_real(ThinkList* pList, ThinkCompareDataFunc pCompareFunc, unsigned int nStart, unsigned int nEnd)
+{
+    return_if_fail(pList != NULL);
+    return_if_fail(pCompareFunc != NULL);
+    return_if_fail(nStart < nEnd);
+
+    unsigned int nFirst = nStart;
+    unsigned int nLast = nEnd;
+    void* pKey = think_list_get(pList, nFirst);
+
+    while(nFirst < nLast)
+    {
+        while(nFirst < nLast && pCompareFunc(think_list_get(pList, nLast), pKey) >= 0) {
+            --nLast;
+        }
+
+        ThinkList* pNode1 = think_list_get_node(pList, nFirst);
+        ThinkList* pNode2 = think_list_get_node(pList, nLast);
+        pNode1->m_pData = pNode2->m_pData;
+
+        while(nFirst < nLast && pCompareFunc(think_list_get(pList, nFirst), pKey) <= 0) {
+            ++nFirst;
+        }
+
+        pNode1 = think_list_get_node(pList, nLast);
+        pNode2 = think_list_get_node(pList, nFirst);
+        pNode1->m_pData = pNode2->m_pData;
+    }
+
+    ThinkList* pNode1 = think_list_get_node(pList, nFirst);
+    pNode1->m_pData = pKey;
+    if (nFirst > 0) {
+        think_list_sort_real(pList, pCompareFunc, nStart, nFirst - 1);
+    }
+    think_list_sort_real(pList, pCompareFunc, nFirst + 1, nEnd);
+}
+
+void think_list_sort(ThinkList* pList, ThinkCompareDataFunc pFunc)
+{
+    return_if_fail(pList != NULL);
+    return_if_fail(pFunc != NULL);
+    return_if_fail(think_list_length(pList) > 1);
+
+    think_list_sort_real(pList, pFunc, 0, think_list_length(pList) - 1);
 }

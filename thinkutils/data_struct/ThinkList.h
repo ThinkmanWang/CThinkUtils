@@ -35,6 +35,9 @@ unsigned int think_list_length(ThinkList* pList);
 
 void think_list_free(ThinkList** pList, ThinkDestoryFunc pFunc);
 
+void think_list_sort(ThinkList* pList, ThinkCompareDataFunc pFunc);
+
+
 #ifdef __cplusplus
 }
 #endif
