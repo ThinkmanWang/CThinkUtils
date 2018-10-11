@@ -15,7 +15,7 @@ int test1()
     ThinkList* pList = NULL;
     
     //57, 68, 59, 52, 72, 28, 96, 33, 24, 24
-    pList = think_list_append(NULL, (void*)57);
+    pList = think_list_append(pList, (void*)57);
     pList = think_list_append(pList, (void*)68);
     pList = think_list_append(pList, (void*)59);
     pList = think_list_append(pList, (void*)52);
