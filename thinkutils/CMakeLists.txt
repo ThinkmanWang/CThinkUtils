@@ -1,4 +1,5 @@
 project(thinkutils)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 AUX_SOURCE_DIRECTORY(. log_SOURCE_DIR)
 
 ADD_SUBDIRECTORY(data_struct)

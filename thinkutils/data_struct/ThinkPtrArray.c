@@ -197,3 +197,44 @@ void* think_ptr_array_pop_tail(ThinkPtrArray* pArray)
     return pData;
 }
 
+void think_ptr_array_sort_real(ThinkPtrArray* pArray, ThinkCompareDataFunc pCompareFunc, unsigned int nStart, unsigned int nEnd)
+{
+    return_if_fail(pArray != NULL);
+    return_if_fail(pCompareFunc != NULL);
+    return_if_fail(nStart < nEnd);
+
+    unsigned int nFirst = nStart;
+    unsigned int nLast = nEnd;
+    void* pKey = pArray->m_pData[nFirst];
+
+    while(nFirst < nLast)
+    {
+        while(nFirst < nLast && pCompareFunc(pArray->m_pData[nLast], pKey) >= 0) {
+            --nLast;
+        }
+
+        pArray->m_pData[nFirst] = pArray->m_pData[nLast];
+
+        while(nFirst < nLast && pCompareFunc(pArray->m_pData[nFirst], pKey) <= 0) {
+            ++nFirst;
+        }
+
+        pArray->m_pData[nLast] = pArray->m_pData[nFirst];
+    }
+
+    pArray->m_pData[nFirst] = pKey;
+    if (nFirst > 0) {
+        think_ptr_array_sort_real(pArray, pCompareFunc, nStart, nFirst - 1);
+    }
+    think_ptr_array_sort_real(pArray, pCompareFunc, nFirst + 1, nEnd);
+}
+
+void think_ptr_array_sort(ThinkPtrArray* pArray, ThinkCompareDataFunc pCompareFunc)
+{
+    return_if_fail(pArray != NULL);
+    return_if_fail(pCompareFunc != NULL);
+    return_if_fail(pArray->m_nArySize > 1);
+
+    think_ptr_array_sort_real(pArray, pCompareFunc, 0, pArray->m_nLen - 1);
+}
+

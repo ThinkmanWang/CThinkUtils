@@ -15,6 +15,11 @@
         return val; \
     }
 
+typedef enum {
+    SORT_ASC
+    , SORT_DESC
+} SortBy;
+
 typedef void (*ThinkDestoryFunc) (void* pData);
 typedef void (*ThinkCommonFunc) (void* pData, void* user_data);
 typedef int (*ThinkCompareDataFunc) (const void* a, const void* b);

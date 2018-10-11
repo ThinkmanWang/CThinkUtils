@@ -37,6 +37,7 @@ void* think_ptr_array_get_array_index(ThinkPtrArray* pArray, unsigned int nIndex
 void* think_ptr_array_pop(ThinkPtrArray* pArray);
 void* think_ptr_array_pop_tail(ThinkPtrArray* pArray);
 
+void think_ptr_array_sort(ThinkPtrArray* pArray, ThinkCompareDataFunc pCompareFunc);
 
 #ifdef __cplusplus
 }
