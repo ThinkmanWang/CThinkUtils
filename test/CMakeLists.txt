@@ -30,6 +30,7 @@ TARGET_LINK_LIBRARIES(tree_test ${GLIB2_LIBRARIES} ${GTHREAD2_LIBRARIES} log thi
 
 add_executable(spiral_array spiral_array.c)
 
+add_executable(size_test size_test.c)
 
 INCLUDE_DIRECTORIES(${GLIB2_INCLUDE_DIR}
         ${JsonGlib_INCLUDE_DIRS} thinkutils/data_struct thinkutils/log)
