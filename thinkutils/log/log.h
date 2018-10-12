@@ -11,6 +11,10 @@
 #include <stdio.h>
 #include <stdarg.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define LOG_VERSION "0.1.0"
 
 typedef void (*log_LockFn)(void *udata, int lock);
@@ -31,5 +35,8 @@ void log_set_level(int level);
 void log_set_quiet(int enable);
 
 void log_log(int level, const char *file, const char* func, int line, const char *fmt, ...);
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -34,3 +34,4 @@ add_executable(ui ui_main.cpp)
 # Add the Qt5 Widgets for linking
 target_link_libraries(ui Qt5::Widgets ${GLIB2_LIBRARIES} ${GTHREAD2_LIBRARIES} log thinkutils data_struct)
 
+add_subdirectory(bstree_printer)

@@ -23,6 +23,7 @@ typedef enum {
 typedef void (*ThinkDestoryFunc) (void* pData);
 typedef void (*ThinkCommonFunc) (void* pData, void* user_data);
 typedef int (*ThinkCompareDataFunc) (const void* a, const void* b);
+typedef char* (*ThinkToStringFunc) (void* pData, char* pStr, unsigned int nMax);
 
 #define max( a , b ) ( (a) > (b) ? (a) : (b) )
 
