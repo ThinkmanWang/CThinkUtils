@@ -141,15 +141,16 @@ ThinkVertex* think_graph_add_vertex(ThinkGraph* pGraph, void* pData)
 
     ThinkVertex* pVertex = think_graph_vertex_new(pData);
     ThinkVertex* pCur = pGraph->m_pVertexs;
-    ThinkVertex* pParent = pCur;
-    if (NULL == pCur) {
+    ThinkVertex* pParent = NULL;
+
+    while (pCur) {
+        pParent = pCur;
+        pCur = pCur->m_pNext;
+    }
+
+    if (NULL == pParent) {
         pGraph->m_pVertexs = pVertex;
     } else {
-        while (pCur) {
-            pParent = pCur;
-            pCur = pCur->m_pNext;
-        }
-
         pParent->m_pNext = pVertex;
     }
 
@@ -166,6 +167,8 @@ ThinkVertex* think_graph_get_vertex(ThinkGraph* pGraph, void* pData)
         if (pCur->m_pData == pData) {
             return pCur;
         }
+
+        pCur = pCur->m_pNext;
     }
 
     return NULL;
@@ -218,6 +221,47 @@ void think_graph_remove_vertex(ThinkGraph* pGraph, void* pData, ThinkDestoryFunc
     think_graph_vertex_free(&pVertexRemove, pDescoryFunc);
 }
 
+unsigned int think_graph_vertex_size(ThinkGraph* pGraph)
+{
+    return_val_if_fail(pGraph != NULL, 0);
+
+    ThinkVertex* pCur = pGraph->m_pVertexs;
+    unsigned int nSize = 0;
+    while (pCur) {
+        nSize++;
+        pCur = pCur->m_pNext;
+    }
+
+    return nSize;
+}
+
+unsigned int think_graph_vertex_edge_size(ThinkVertex* pVertex)
+{
+    return_val_if_fail(pVertex != NULL, 0);
+
+    ThinkEdge* pCur = pVertex->m_pEdges;
+    unsigned int nSize = 0;
+    while (pCur) {
+        nSize++;
+        pCur = pCur->m_pNext;
+    }
+
+    return 0;
+}
+
+unsigned int think_graph_edge_size(ThinkGraph* pGraph)
+{
+    return_val_if_fail(pGraph != NULL, 0);
+    ThinkVertex* pCur = pGraph->m_pVertexs;
+    unsigned int nSize = 0;
+    while (pCur) {
+        nSize += think_graph_vertex_edge_size(pCur);
+        pCur = pCur->m_pNext;
+    }
+
+    return nSize;
+}
+
 static void think_graph_remove_all_edge(ThinkVertex* pVertex)
 {
     return_if_fail(pVertex != NULL);
@@ -267,26 +311,27 @@ static void think_graph_remove_all_edge_to_vertex(ThinkGraph* pGraph, ThinkVerte
     }
 }
 
-ThinkEdge* think_graph_add_edge(ThinkGraph* pGraph, ThinkVertex* pSrc, ThinkVertex* pDest, unsigned int nLength)
+ThinkEdge* think_graph_add_edge(ThinkGraph* pGraph, void* pSrc, void* pDest, unsigned int nLength)
 {
     return_val_if_fail(pGraph != NULL, NULL);
     return_val_if_fail(pSrc != NULL, NULL);
     return_val_if_fail(pDest != NULL, NULL);
     return_val_if_fail(nLength > 0, NULL);
 
-    ThinkEdge* pEdge = think_graph_edge_new(pSrc, pDest, nLength);
-    ThinkEdge* pCur = pSrc->m_pEdges;
-    if (NULL == pCur) {
-        pSrc->m_pEdges = pEdge;
-    } else {
-        while (pCur->m_pNext) {
-            pCur = pCur->m_pNext;
-        }
+    ThinkVertex* pVertexSrc = think_graph_get_vertex(pGraph, pSrc);
+    ThinkVertex* pVertexDest = think_graph_get_vertex(pGraph, pDest);
 
-        pCur->m_pNext = pEdge;
-    }
+    return think_graph_add_edge_plus(pGraph, pVertexSrc, pVertexDest, nLength);
+}
 
-    return pEdge;
+ThinkEdge* think_graph_add_edge_plus(ThinkGraph* pGraph, ThinkVertex* pSrc, ThinkVertex* pDest, unsigned int nLength)
+{
+    return_val_if_fail(pGraph != NULL, NULL);
+    return_val_if_fail(pSrc != NULL, NULL);
+    return_val_if_fail(pDest != NULL, NULL);
+    return_val_if_fail(nLength > 0, NULL);
+
+    return think_graph_edge_new(pSrc, pDest, nLength);
 }
 
 ThinkEdge* think_graph_get_all_edge_from_me(ThinkGraph* pGraph, void* pData)
@@ -352,4 +397,32 @@ unsigned int think_graph_get_edge_length(ThinkGraph* pGraph, void* pSrc, void* p
 ThinkShortestPath* think_graph_shortest_path(ThinkGraph* pGraph, void* pSrc, void* pDest)
 {
     return NULL;
+}
+
+void think_graph_print(ThinkGraph* pGraph, ThinkToStringFunc pToStringFunc)
+{
+    return_if_fail(pGraph);
+    return_if_fail(pToStringFunc != NULL);
+
+    ThinkVertex* pVertexCur = pGraph->m_pVertexs;
+    while (pVertexCur) {
+        if (NULL == pVertexCur->m_pData) {
+            continue;
+        }
+
+        char szVal[128];
+
+        (pToStringFunc)(pVertexCur->m_pData, szVal, 128);
+        printf("%s --> ", szVal);
+
+        ThinkEdge* pEdgeCur = pVertexCur->m_pEdges;
+        while (pEdgeCur) {
+            (pToStringFunc)(pEdgeCur->m_pDest->m_pData, szVal, 128);
+            printf(" %s|%d --> ", szVal, pEdgeCur->m_nLength);
+            pEdgeCur = pEdgeCur->m_pNext;
+        }
+
+        pVertexCur = pVertexCur->m_pNext;
+        printf(" NULL\n");
+    }
 }
