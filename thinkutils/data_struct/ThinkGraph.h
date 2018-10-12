@@ -58,7 +58,9 @@ unsigned int think_graph_edge_size(ThinkGraph* pGraph);
 ThinkEdge* think_graph_add_edge(ThinkGraph* pGraph, void* pSrc, void* pDest, unsigned int nLength);
 ThinkEdge* think_graph_add_edge_plus(ThinkGraph* pGraph, ThinkVertex* pSrc, ThinkVertex* pDest, unsigned int nLength);
 ThinkEdge* think_graph_get_all_edge_from_me(ThinkGraph* pGraph, void* pData);
-void think_graph_remove_edge(ThinkVertex* pVertex, ThinkEdge** ppEdge);
+ThinkEdge* think_graph_get_edge(ThinkGraph* pGraph, void* pSrc, void* pDest);
+void think_graph_remove_edge(ThinkGraph* pGraph, void* pSrc, void* pDest);
+void think_graph_remove_edge_plus(ThinkVertex* pVertex, ThinkEdge** ppEdge);
 
 unsigned int think_graph_get_edge_length(ThinkGraph* pGraph, void* pSrc, void* pDest);
 ThinkShortestPath* think_graph_shortest_path(ThinkGraph* pGraph, void* pSrc, void* pDest);

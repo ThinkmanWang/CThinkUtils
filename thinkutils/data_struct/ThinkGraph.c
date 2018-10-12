@@ -185,34 +185,25 @@ void think_graph_remove_vertex(ThinkGraph* pGraph, void* pData, ThinkDestoryFunc
         return;
     }
 
-    ThinkVertex* pParent = pGraph->m_pVertexs;
+
     ThinkVertex* pVertexRemove = NULL;
-
-    if (pParent->m_pData == pData) {
-        pVertexRemove = pParent;
-    } else {
-        pVertexRemove = pParent->m_pNext;
-    }
-
-    while (pVertexRemove) {
-        if (pVertexRemove->m_pData == pData) {
+    ThinkVertex* pCur = pGraph->m_pVertexs;
+    ThinkVertex* pParent = NULL;
+    while (pCur) {
+        if (pCur->m_pData == pData) {
+            pVertexRemove = pCur;
             break;
         }
 
-        pParent = pVertexRemove;
-        pVertexRemove = pVertexRemove->m_pNext;
-
+        pParent = pCur;
+        pCur = pCur->m_pNext;
     }
 
-    //remove pCur from pGraph->m_pVertexs
-    if (pGraph->m_pVertexs == pVertexRemove) {
+    if (NULL == pParent) {
         pGraph->m_pVertexs = pVertexRemove->m_pNext;
     } else {
         pParent->m_pNext = pVertexRemove->m_pNext;
     }
-
-    //free all edge for pVertexRemove
-    think_graph_remove_all_edge(pVertexRemove);
 
     //remove all edges that to pVertexRemove
     think_graph_remove_all_edge_to_vertex(pGraph, pVertexRemove);
@@ -283,14 +274,14 @@ static void think_graph_remove_all_edge_to_vertex(ThinkGraph* pGraph, ThinkVerte
 
     ThinkVertex* pVertecCur = pGraph->m_pVertexs;
     while (pVertecCur) {
-        ThinkEdge* pEdgeParent = pVertecCur->m_pEdges;
-        ThinkEdge* pEdgeCur = pEdgeParent;
+        ThinkEdge* pEdgeParent = NULL;
+        ThinkEdge* pEdgeCur = pVertecCur->m_pEdges;
 
         while (pEdgeCur) {
             if (pEdgeCur->m_pDest == pVertex) {
                 ThinkEdge* pEdgeRemove = pEdgeCur;
 
-                if (pEdgeCur == pVertecCur->m_pEdges) {
+                if (NULL == pEdgeParent) {
                     pVertecCur->m_pEdges = pEdgeCur->m_pNext;
 
                     pEdgeCur = pEdgeCur->m_pNext;
@@ -348,7 +339,39 @@ ThinkEdge* think_graph_get_all_edge_from_me(ThinkGraph* pGraph, void* pData)
     return NULL;
 }
 
-void think_graph_remove_edge(ThinkVertex* pVertex, ThinkEdge** ppEdge)
+ThinkEdge* think_graph_get_edge(ThinkGraph* pGraph, void* pSrc, void* pDest)
+{
+    return_val_if_fail(pGraph != NULL, NULL);
+    return_val_if_fail(pSrc != NULL, NULL);
+    return_val_if_fail(pDest != NULL, NULL);
+
+    ThinkVertex* pVertex = think_graph_get_vertex(pGraph, pSrc);
+    return_val_if_fail(pVertex != NULL, NULL);
+
+    ThinkEdge* pCur = pVertex->m_pEdges;
+    while (pCur && pCur->m_pDest->m_pData != pDest) {
+        pCur = pCur->m_pNext;
+    }
+
+    return pCur;
+}
+
+void think_graph_remove_edge(ThinkGraph* pGraph, void* pSrc, void* pDest)
+{
+    return_if_fail(pGraph != NULL);
+    return_if_fail(pSrc != NULL);
+    return_if_fail(pDest != NULL);
+
+    ThinkVertex* pVertex = think_graph_get_vertex(pGraph, pSrc);
+    return_if_fail(pVertex != NULL);
+
+    ThinkEdge* pEdge = think_graph_get_edge(pGraph, pSrc, pDest);
+    return_if_fail(pEdge != NULL);
+
+    think_graph_remove_edge_plus(pVertex, &pEdge);
+}
+
+void think_graph_remove_edge_plus(ThinkVertex* pVertex, ThinkEdge** ppEdge)
 {
     return_if_fail(pVertex != NULL);
     return_if_fail(ppEdge != NULL);
@@ -381,11 +404,10 @@ unsigned int think_graph_get_edge_length(ThinkGraph* pGraph, void* pSrc, void* p
     return_val_if_fail(pDest != 0, 0);
 
     ThinkVertex* pVertexSrc = think_graph_get_vertex(pGraph, pSrc);
-    ThinkVertex* pVertexDest = think_graph_get_vertex(pGraph, pDest);
 
     ThinkEdge* pCur = pVertexSrc->m_pEdges;
     while (pCur) {
-        if (pCur->m_pDest == pVertexDest) {
+        if (pCur->m_pDest->m_pData == pDest) {
             return pCur->m_nLength;
         }
 
@@ -426,4 +448,5 @@ void think_graph_print(ThinkGraph* pGraph, ThinkToStringFunc pToStringFunc)
         pVertexCur = pVertexCur->m_pNext;
         printf(" NULL\n");
     }
+    printf("\n\n");
 }
