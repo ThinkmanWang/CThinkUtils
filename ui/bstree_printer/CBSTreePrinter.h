@@ -9,14 +9,10 @@ class CBSTreePrinter : public QDialog {
     Q_OBJECT
 
 public:
-    explicit CBSTreePrinter(QWidget* pParent = nullptr);
+    CBSTreePrinter(QWidget* parent = 0);
 
-private:
+public:
     void setupUi();
-
-signals:
-
-public slots:
 
 private:
 

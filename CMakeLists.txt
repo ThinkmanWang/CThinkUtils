@@ -1,10 +1,6 @@
 cmake_minimum_required(VERSION 3.8.2)
 project(CThinkUtils)
 
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
 #enable_testing()
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(CMAKE_BUILD_TYPE Debug)
@@ -31,6 +27,8 @@ ADD_SUBDIRECTORY(test)
 INCLUDE_DIRECTORIES(${GLIB2_INCLUDE_DIR}
         ${JsonGlib_INCLUDE_DIRS})
 
+ADD_SUBDIRECTORY(ui)
+
 TARGET_LINK_LIBRARIES(CThinkUtils ${GLIB2_LIBRARIES} ${GTHREAD2_LIBRARIES} ${JsonGlib_LIBRARIES})
 TARGET_LINK_LIBRARIES(CThinkUtils pthread log thinkutils)
 
@@ -44,5 +42,4 @@ add_custom_command(TARGET CThinkUtils
         POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/config.ini config.ini)
 
-ADD_SUBDIRECTORY(ui)
 

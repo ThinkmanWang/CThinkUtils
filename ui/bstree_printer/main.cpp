@@ -7,7 +7,7 @@
 int main(int argc, char** argv)
 {
     QApplication app(argc, argv);
-    CBSTreePrinter* pDialog = new CBSTreePrinter();
+    CBSTreePrinter* pDialog = new CBSTreePrinter(NULL);
     pDialog->show();
 
     return app.exec();
