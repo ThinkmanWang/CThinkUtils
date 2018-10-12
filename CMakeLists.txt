@@ -1,8 +1,14 @@
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.8.2)
 project(CThinkUtils)
 
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+
 enable_testing()
-set(CMAKE_C_STANDARD 99)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+#set(CMAKE_C_STANDARD 99)
 set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
@@ -36,3 +42,6 @@ add_custom_command(TARGET CThinkUtils
 add_custom_command(TARGET CThinkUtils
         POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/config.ini config.ini)
+
+ADD_SUBDIRECTORY(ui)
+
