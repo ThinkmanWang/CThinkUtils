@@ -565,7 +565,7 @@ static int shortest_get_cur_shortest_distance(int** ppStatus, int nSrc, int nDes
 }
 
 /**
-
+see video: https://www.youtube.com/watch?v=pVfj6mxhdMw
 vertex	shortest	pre_vertex	visited
 A	0	NULL	1
 B	4	A	1
