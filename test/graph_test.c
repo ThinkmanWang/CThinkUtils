@@ -113,10 +113,44 @@ void test3()
     think_graph_free(&pGraph, NULL);
 }
 
+void test4()
+{
+    ThinkGraph* pGraph = think_graph_new();
+
+    think_graph_add_vertex(pGraph, (void*)1);
+    think_graph_add_vertex(pGraph, (void*)2);
+    think_graph_add_vertex(pGraph, (void*)3);
+    think_graph_add_vertex(pGraph, (void*)4);
+    think_graph_add_vertex(pGraph, (void*)5);
+    think_graph_add_vertex(pGraph, (void*)6);
+
+    think_graph_add_edge(pGraph, (void*)1, (void*)2, 4);
+    think_graph_add_edge(pGraph, (void*)1, (void*)3, 2);
+
+    think_graph_add_edge(pGraph, (void*)2, (void*)3, 5);
+    think_graph_add_edge(pGraph, (void*)2, (void*)4, 10);
+
+    think_graph_add_edge(pGraph, (void*)3, (void*)5, 3);
+
+    think_graph_add_edge(pGraph, (void*)4, (void*)6, 11);
+
+    think_graph_add_edge(pGraph, (void*)5, (void*)4, 4);
+    think_graph_add_edge(pGraph, (void*)5, (void*)6, 11);
+
+    log_debug("Vertex size: %d", think_graph_vertex_size(pGraph));
+    log_debug("Edge size: %d", think_graph_edge_size(pGraph));
+
+    think_graph_print(pGraph, to_string);
+
+    think_graph_shortest_path(pGraph, (void*)2, (void*)6);
+
+    think_graph_free(&pGraph, NULL);
+}
+
 int main(int argc, char** argv)
 {
 
-    test3();
+    test4();
 
     return 0;
 }

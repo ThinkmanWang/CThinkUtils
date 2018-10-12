@@ -35,17 +35,12 @@ typedef struct _ThinkEdge {
 
 typedef struct _ThinkGraph {
     ThinkVertex* m_pVertexs;
-//    ThinkDestoryFunc m_pDestoryFunc;
 } ThinkGraph;
 
-typedef struct _ThinkShortestPath {
-    void* m_pData;
-    struct _ThinkShortestPath* m_pNext;
-} ThinkShortestPath;
+
 
 ThinkGraph* think_graph_new();
 void think_graph_free(ThinkGraph** ppGraph, ThinkDestoryFunc pDescoryFunc);
-void think_graph_shortest_path_free(ThinkShortestPath** ppPath);
 
 ThinkVertex* think_graph_add_vertex(ThinkGraph* pGraph, void* pData);
 ThinkVertex* think_graph_get_vertex(ThinkGraph* pGraph, void* pData);
@@ -62,9 +57,27 @@ ThinkEdge* think_graph_get_edge(ThinkGraph* pGraph, void* pSrc, void* pDest);
 void think_graph_remove_edge(ThinkGraph* pGraph, void* pSrc, void* pDest);
 void think_graph_remove_edge_plus(ThinkVertex* pVertex, ThinkEdge** ppEdge);
 
-unsigned int think_graph_get_edge_length(ThinkGraph* pGraph, void* pSrc, void* pDest);
-ThinkShortestPath* think_graph_shortest_path(ThinkGraph* pGraph, void* pSrc, void* pDest);
+int think_graph_get_edge_length(ThinkGraph* pGraph, void* pSrc, void* pDest);
 void think_graph_print(ThinkGraph* pGraph, ThinkToStringFunc pToStringFunc);
+
+//-----------------------------------------------------------------------
+//for shortest path
+//-----------------------------------------------------------------------
+
+typedef struct _ThinkShortestPathNode ThinkShortestPathNode;
+
+typedef struct _ThinkShortestPathNode {
+    void* m_pData;
+    struct _ThinkShortestPathNode* m_pNext;
+};
+
+typedef struct _ThinkShortestPath {
+    unsigned int m_nDistance;
+    ThinkShortestPathNode* m_pNodes;
+} ThinkShortestPath;
+
+void think_graph_shortest_path_free(ThinkShortestPath** ppPath);
+ThinkShortestPath* think_graph_shortest_path(ThinkGraph* pGraph, void* pSrc, void* pDest);
 
 #ifdef __cplusplus
 }

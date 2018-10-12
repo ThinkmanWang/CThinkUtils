@@ -37,24 +37,6 @@ void think_graph_free(ThinkGraph** ppGraph, ThinkDestoryFunc pDescoryFunc)
     *ppGraph = NULL;
 }
 
-void think_graph_shortest_path_free(ThinkShortestPath** ppPath)
-{
-    return_if_fail(ppPath != NULL);
-    return_if_fail(*ppPath != NULL);
-
-    ThinkShortestPath* pCur = *ppPath;
-    while (pCur) {
-        ThinkShortestPath* pNext = pCur->m_pNext;
-
-        free(pCur);
-        pCur = NULL;
-
-        pCur = pNext;
-    }
-
-    *ppPath = NULL;
-}
-
 static ThinkVertex* think_graph_vertex_new(void* pData)
 {
     return_val_if_fail(pData != NULL, NULL);
@@ -308,6 +290,7 @@ ThinkEdge* think_graph_add_edge(ThinkGraph* pGraph, void* pSrc, void* pDest, uns
     return_val_if_fail(pGraph != NULL, NULL);
     return_val_if_fail(pSrc != NULL, NULL);
     return_val_if_fail(pDest != NULL, NULL);
+    return_val_if_fail(pSrc != pDest, NULL);
     return_val_if_fail(nLength > 0, NULL);
 
     ThinkVertex* pVertexSrc = think_graph_get_vertex(pGraph, pSrc);
@@ -321,6 +304,7 @@ ThinkEdge* think_graph_add_edge_plus(ThinkGraph* pGraph, ThinkVertex* pSrc, Thin
     return_val_if_fail(pGraph != NULL, NULL);
     return_val_if_fail(pSrc != NULL, NULL);
     return_val_if_fail(pDest != NULL, NULL);
+    return_val_if_fail(pSrc->m_pData != pDest->m_pData, NULL);
     return_val_if_fail(nLength > 0, NULL);
 
     return think_graph_edge_new(pSrc, pDest, nLength);
@@ -397,11 +381,15 @@ void think_graph_remove_edge_plus(ThinkVertex* pVertex, ThinkEdge** ppEdge)
 }
 
 
-unsigned int think_graph_get_edge_length(ThinkGraph* pGraph, void* pSrc, void* pDest)
+int think_graph_get_edge_length(ThinkGraph* pGraph, void* pSrc, void* pDest)
 {
-    return_val_if_fail(pGraph != 0, 0);
-    return_val_if_fail(pSrc != 0, 0);
-    return_val_if_fail(pDest != 0, 0);
+    return_val_if_fail(pGraph != 0, -1);
+    return_val_if_fail(pSrc != 0, -1);
+    return_val_if_fail(pDest != 0, -1);
+
+    if (pSrc == pDest) {
+        return 0;
+    }
 
     ThinkVertex* pVertexSrc = think_graph_get_vertex(pGraph, pSrc);
 
@@ -414,12 +402,7 @@ unsigned int think_graph_get_edge_length(ThinkGraph* pGraph, void* pSrc, void* p
         pCur = pCur->m_pNext;
     }
 
-    return 0;
-}
-
-ThinkShortestPath* think_graph_shortest_path(ThinkGraph* pGraph, void* pSrc, void* pDest)
-{
-    return NULL;
+    return -1;
 }
 
 void think_graph_print(ThinkGraph* pGraph, ThinkToStringFunc pToStringFunc)
@@ -449,4 +432,208 @@ void think_graph_print(ThinkGraph* pGraph, ThinkToStringFunc pToStringFunc)
         printf(" NULL\n");
     }
     printf("\n\n");
+}
+
+//-----------------------------------------------------------------------
+//for shortest path
+//-----------------------------------------------------------------------
+static int think_graph_get_vertex_position(ThinkGraph* pGraph, void* pData);
+static ThinkVertex* think_graph_get_vertex_by_position(ThinkGraph* pGraph, unsigned int nPos);
+
+#define ARRAY_CEL 4
+#define ARRAY_CEL_UNVISITED 3
+
+static int** shortest_init_status_array(unsigned int nRow, unsigned int nCel);
+static int shortest_next_pos(int** ppStatus, unsigned int nRow);
+static unsigned int shortest_vertex_unvisited(int** ppStatus, unsigned int nRow);
+static int shortest_get_cur_shortest_distance(int** ppStatus, int nSrc, int nDest);
+static int shortest_is_visited(int** ppStatus, int nPos);
+
+
+static int think_graph_get_vertex_position(ThinkGraph* pGraph, void* pData)
+{
+    return_val_if_fail(pGraph != NULL, -1);
+    return_val_if_fail(pData != NULL, -1);
+
+    ThinkVertex* pCur = pGraph->m_pVertexs;
+    int nPos = 0;
+    while (pCur) {
+        if (pCur->m_pData == pData) {
+            return nPos;
+        }
+
+        nPos++;
+        pCur = pCur->m_pNext;
+    }
+
+    return -1;
+}
+
+static ThinkVertex* think_graph_get_vertex_by_position(ThinkGraph* pGraph, unsigned int nPos)
+{
+    return_val_if_fail(pGraph != NULL, -1);
+
+    ThinkVertex* pCur = pGraph->m_pVertexs;
+    for (unsigned int i = 0; i < nPos; ++i) {
+        if (pCur) {
+            pCur = pCur->m_pNext;
+        } else {
+            return NULL;
+        }
+    }
+
+    return pCur;
+}
+
+void think_graph_shortest_path_free(ThinkShortestPath** ppPath)
+{
+    return_if_fail(ppPath != NULL);
+    return_if_fail(*ppPath != NULL);
+
+
+}
+
+static int** shortest_init_status_array(unsigned int nRow, unsigned int nCel)
+{
+    int** ppArray = (int**) malloc(sizeof(int*) * nRow);
+    for(int i=0; i < nRow; i++ )
+    {
+        ppArray[i] = (int *) malloc(sizeof(int) * 4 );
+    }
+
+    for (unsigned int i = 0; i < nRow; ++i) {
+        for (unsigned int j = 0; j < nCel; ++j) {
+            if (0 == j) {
+                ppArray[i][j] = i;
+            } else if (1 == j) {
+                ppArray[i][j] = INT32_MAX;
+            } else if (2 == j) {
+                ppArray[i][j] = -1;
+            } else {
+                ppArray[i][j] = 0;
+            }
+        }
+    }
+
+    return ppArray;
+}
+
+static unsigned int shortest_vertex_unvisited(int** ppStatus, unsigned int nRow)
+{
+    unsigned int nCount = 0;
+    for (unsigned int i = 0; i < nRow; ++i) {
+        if (0 == ppStatus[i][ARRAY_CEL_UNVISITED]) {
+            nCount++;
+        }
+    }
+
+    return nCount;
+}
+
+static int shortest_next_pos(int** ppStatus, unsigned int nRow)
+{
+    unsigned int nUnvisited = shortest_vertex_unvisited(ppStatus, nRow);
+    if (nUnvisited < 2) {
+        return -1;
+    }
+
+    int nPos = -1;
+    int nMin = INT32_MAX;
+    for (unsigned int i = 0; i < nRow; ++i) {
+        if (1 == shortest_is_visited(ppStatus, i)) {
+            continue;
+        }
+
+        if (ppStatus[i][1] <= nMin) {
+            nPos = i;
+            nMin = ppStatus[i][1];
+        }
+    }
+
+    return nPos;
+}
+
+static int shortest_is_visited(int** ppStatus, int nPos)
+{
+    return ppStatus[nPos][3];
+}
+
+static int shortest_get_cur_shortest_distance(int** ppStatus, int nSrc, int nDest)
+{
+    return_val_if_fail(ppStatus[nSrc][1] == 0, INT32_MAX);
+    return ppStatus[nDest][1];
+}
+
+/**
+
+vertex	shortest	pre_vertex	visited
+A	0	NULL	1
+B	4	A	1
+C	2	A	1
+D	9	E	1
+E	5	C	1
+F	20	D	0
+
+ */
+
+ThinkShortestPath* think_graph_shortest_path(ThinkGraph* pGraph, void* pSrc, void* pDest)
+{
+    return_val_if_fail(pGraph != NULL, NULL);
+    return_val_if_fail(pSrc != NULL, NULL);
+    return_val_if_fail(pDest != NULL, NULL);
+
+    int nSrc = think_graph_get_vertex_position(pGraph, pSrc);
+    int nDest = think_graph_get_vertex_position(pGraph, pDest);
+
+    return_val_if_fail(nSrc >= 0, NULL);
+    return_val_if_fail(nDest >= 0, NULL);
+
+    //init status table
+    unsigned int nRow = think_graph_vertex_size(pGraph);
+    unsigned int nCel = ARRAY_CEL;
+
+    int** ppStatus = shortest_init_status_array(nRow, nCel);
+    ppStatus[nSrc][1] = 0;
+    ppStatus[nSrc][2] = -1;
+
+    int nCurPos = shortest_next_pos(ppStatus, nRow);
+    while (nCurPos >= 0) {
+        if (1 == shortest_is_visited(ppStatus, nCurPos)) {
+            ppStatus[nCurPos][3] = 1;
+            nCurPos = shortest_next_pos(ppStatus, nRow);
+            continue;
+        }
+
+        int nCurPosDistance = shortest_get_cur_shortest_distance(ppStatus, nSrc, nCurPos);
+        for (unsigned int i = 0; i < nRow; ++i) {
+            int nCurMin = shortest_get_cur_shortest_distance(ppStatus, nSrc, i);
+
+
+            ThinkVertex* pVertexSrc = think_graph_get_vertex_by_position(pGraph, (unsigned int) nCurPos);
+            ThinkVertex* pVertexDest = think_graph_get_vertex_by_position(pGraph, i);
+            int nDestence = think_graph_get_edge_length(pGraph, pVertexSrc->m_pData, pVertexDest->m_pData);
+
+            if (-1 == nDestence) {
+                continue;
+            }
+
+            if (nCurPosDistance + nDestence < nCurMin) {
+                ppStatus[i][1] = nCurPosDistance + nDestence;
+                ppStatus[i][2] = nCurPos;
+            }
+        }
+
+        ppStatus[nCurPos][3] = 1;
+        nCurPos = shortest_next_pos(ppStatus, nRow);
+    }
+
+    for (unsigned int i = 0; i < nRow; ++i) {
+        for (int j = 0; j < ARRAY_CEL; ++j) {
+            printf("%d ", ppStatus[i][j]);
+        }
+
+        printf("\n");
+    }
+
+    return NULL;
 }
