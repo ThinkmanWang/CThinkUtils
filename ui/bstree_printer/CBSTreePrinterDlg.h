@@ -5,11 +5,11 @@
 #include <QWidget>
 #include <QDialog>
 
-class CBSTreePrinter : public QDialog {
+class CBSTreePrinterDlg : public QDialog {
     Q_OBJECT
 
 public:
-    CBSTreePrinter(QWidget* parent = 0);
+    CBSTreePrinterDlg(QWidget* parent = 0);
 
 public:
     void setupUi();

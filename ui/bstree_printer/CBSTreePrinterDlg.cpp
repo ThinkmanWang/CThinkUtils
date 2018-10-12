@@ -2,7 +2,7 @@
 // Created by 王晓丰 on 2018/10/12.
 //
 
-#include "CBSTreePrinter.h"
+#include "CBSTreePrinterDlg.h"
 
 #include <QGridLayout>
 #include <QDialog>
@@ -12,13 +12,13 @@
 #include <QUuid>
 #include <QWidget>
 
-CBSTreePrinter::CBSTreePrinter(QWidget* pParent)
+CBSTreePrinterDlg::CBSTreePrinterDlg(QWidget* pParent)
     : QDialog(pParent)
 {
     this->setupUi();
 }
 
-void CBSTreePrinter::setupUi()
+void CBSTreePrinterDlg::setupUi()
 {
 
 }

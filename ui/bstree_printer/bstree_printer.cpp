@@ -2,12 +2,12 @@
 #include <cstdlib>
 #include <QApplication>
 
-#include "CBSTreePrinter.h"
+#include "CBSTreePrinterDlg.h"
 
 int main(int argc, char** argv)
 {
     QApplication app(argc, argv);
-    CBSTreePrinter* pDialog = new CBSTreePrinter(NULL);
+    CBSTreePrinterDlg* pDialog = new CBSTreePrinterDlg(NULL);
     pDialog->show();
 
     return app.exec();
