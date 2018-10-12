@@ -39,7 +39,7 @@ void think_tree_unlink(ThinkTree* pTree)
     pTree->m_pNext = NULL;
 }
 
-void think_tree_destory(ThinkTree** ppTree, ThinkDestoryFunc pDestoryFunc)
+void think_tree_free(ThinkTree** ppTree, ThinkDestoryFunc pDestoryFunc)
 {
     return_if_fail(ppTree != NULL);
     return_if_fail((*ppTree) != NULL);
@@ -49,7 +49,7 @@ void think_tree_destory(ThinkTree** ppTree, ThinkDestoryFunc pDestoryFunc)
         ThinkTree* pNext = pCur->m_pNext;
 
         if (pCur->m_pChildren) {
-            think_tree_destory(&pCur->m_pChildren, pDestoryFunc);
+            think_tree_free(&pCur->m_pChildren, pDestoryFunc);
         }
 
         if (pDestoryFunc) {

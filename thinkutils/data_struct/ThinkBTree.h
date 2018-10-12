@@ -24,7 +24,7 @@ typedef struct _ThinkBTree {
 }ThinkBTree;
 
 ThinkBTree* think_btree_new(ThinkCompareDataFunc pCompareFunc, ThinkDestoryFunc pDestoryFunc);
-void think_btree_destory(ThinkBTree** ppTree);
+void think_btree_free(ThinkBTree** ppTree);
 
 void think_btree_insert(ThinkBTree* pTree, void* pData);
 

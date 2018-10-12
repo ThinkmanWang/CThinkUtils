@@ -46,7 +46,7 @@ static void think_btree_destory_node(ThinkBTree* pTree, ThinkBTreeNode** ppNode)
     *ppNode = NULL;
 }
 
-void think_btree_destory(ThinkBTree** ppTree)
+void think_btree_free(ThinkBTree** ppTree)
 {
 
 }

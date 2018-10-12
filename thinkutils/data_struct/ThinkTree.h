@@ -22,7 +22,7 @@ struct _ThinkTree{
 
 ThinkTree* think_tree_new(void* pData);
 void think_tree_unlink(ThinkTree* pTree);
-void think_tree_destory(ThinkTree** ppTree, ThinkDestoryFunc m_pDestoryFunc);
+void think_tree_free(ThinkTree** ppTree, ThinkDestoryFunc m_pDestoryFunc);
 
 ThinkTree* think_tree_insert(ThinkTree* pParent, unsigned int position, void* pData);
 ThinkTree* think_tree_insert_before(ThinkTree* pParent, ThinkTree* pNode, void* pData);

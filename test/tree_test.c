@@ -41,7 +41,7 @@ void test1()
 
     think_tree_foreach(pTree, foreach_tree, NULL);
 
-    think_tree_destory(&pTree, NULL);
+    think_tree_free(&pTree, NULL);
 }
 
 int main()
