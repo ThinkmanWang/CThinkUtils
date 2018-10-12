@@ -12,4 +12,4 @@ find_package(Qt5Widgets REQUIRED)
 add_executable(ui ui_main.cpp)
 target_link_libraries(ui Qt5::Widgets ${GLIB2_LIBRARIES} ${GTHREAD2_LIBRARIES} log thinkutils data_struct)
 
-add_subdirectory(bstree_printer)
+#add_subdirectory(bstree_printer)
