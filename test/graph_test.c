@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 #include "ThinkGraph.h"
+#include "log.h"
 
 //typedef char* (*ThinkToStringFunc) (void* pData, char* pStr, unsigned int nMax);
 char* to_string(void* pData, char* pStr, unsigned int nMax)
@@ -34,6 +35,10 @@ void test1()
     think_graph_add_edge(pGraph, (void*)4, (void*)6, 11);
 
     think_graph_add_edge(pGraph, (void*)5, (void*)4, 4);
+
+
+    log_debug("Vertex size: %d", think_graph_vertex_size(pGraph));
+    log_debug("Edge size: %d", think_graph_edge_size(pGraph));
 
     think_graph_print(pGraph, to_string);
 

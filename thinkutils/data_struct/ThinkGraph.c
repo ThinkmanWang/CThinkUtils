@@ -246,12 +246,13 @@ unsigned int think_graph_vertex_edge_size(ThinkVertex* pVertex)
         pCur = pCur->m_pNext;
     }
 
-    return 0;
+    return nSize;
 }
 
 unsigned int think_graph_edge_size(ThinkGraph* pGraph)
 {
     return_val_if_fail(pGraph != NULL, 0);
+
     ThinkVertex* pCur = pGraph->m_pVertexs;
     unsigned int nSize = 0;
     while (pCur) {
