@@ -10,7 +10,7 @@ int my_compare(const void* a, const void* b)
     return ((int)a - (int)b);
 }
 
-int test1()
+void test1()
 {
     ThinkList* pList = NULL;
     

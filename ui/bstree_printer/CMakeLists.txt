@@ -1,6 +1,7 @@
 project(bstree_printer)
 
-AUX_SOURCE_DIRECTORY(. bstree_printer_SOURCE_DIR)
+#AUX_SOURCE_DIRECTORY(. bstree_printer_SOURCE_DIR)
 
 add_executable(bstree_printer bstree_printer.cpp CBSTreePrinter.cpp)
-target_link_libraries(bstree_printer Qt5::Core Qt5::Widgets ${GLIB2_LIBRARIES} ${GTHREAD2_LIBRARIES} log thinkutils data_struct)
+target_link_libraries(bstree_printer Qt5::Widgets ${GLIB2_LIBRARIES} ${GTHREAD2_LIBRARIES} log thinkutils data_struct)
+#qt5_use_modules(bstree_printer Widgets)

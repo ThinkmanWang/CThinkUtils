@@ -87,7 +87,7 @@ int my_compare(const void* a, const void* b)
     return ((int)a - (int)b);
 }
 
-int test1()
+void test1()
 {
     ThinkPtrArray* pArray = think_ptr_array_new(NULL);
     
