@@ -142,7 +142,7 @@ void test4()
 
     think_graph_print(pGraph, to_string);
 
-    think_graph_shortest_path(pGraph, (void*)2, (void*)6);
+    think_graph_shortest_path(pGraph, (void*)1, (void*)6);
 
     think_graph_free(&pGraph, NULL);
 }
