@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.8.2)
+cmake_minimum_required(VERSION 3.9.5)
 project(CThinkUtils)
 
 set(CMAKE_AUTOMOC ON)
@@ -8,14 +8,16 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 enable_testing()
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-#set(CMAKE_C_STANDARD 99)
 set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
 find_package(GLIB2 REQUIRED)
 find_package(JsonGlib REQUIRED)
 
-set(CMAKE_CXX_FLAGS "-g -Wall")
+IF(APPLE)
+    SET(CMAKE_BUILD_TYPE "Release")
+    SET(CMAKE_OSX_ARCHITECTURES x86_64)
+ENDIF(APPLE)
 
 set(SOURCE_FILES main.c)
 add_executable(CThinkUtils ${SOURCE_FILES})

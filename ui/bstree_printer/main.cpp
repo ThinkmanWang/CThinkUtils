@@ -1,8 +1,15 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
+#include <QApplication>
+
+#include "CBSTreePrinter.h"
 
 int main(int argc, char** argv)
 {
-    return 0;
+    QApplication app(argc, argv);
+    CBSTreePrinter* pDialog = new CBSTreePrinter();
+    pDialog->show();
+
+    return app.exec();
 }
 
