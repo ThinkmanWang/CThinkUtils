@@ -2,6 +2,7 @@
 
 #include <stdlib.h>
 
+#include "ThinkStringBuilder.h"
 
 static ThinkVertex* think_graph_vertex_new(void* pData);
 static void think_graph_vertex_free(ThinkVertex** ppVertex, ThinkDestoryFunc pDestoryFunc);
@@ -434,6 +435,43 @@ void think_graph_print(ThinkGraph* pGraph, ThinkToStringFunc pToStringFunc)
     printf("\n\n");
 }
 
+char* think_graph_print_plus(ThinkGraph* pGraph, ThinkToStringFunc pToStringFunc)
+{
+    return_val_if_fail(pGraph, NULL);
+    return_val_if_fail(pToStringFunc != NULL, NULL);
+
+    ThinkStringBuilder* pSB = think_stringbuilder_create();
+    think_stringbuilder_append(pSB, "\n\n");
+
+    ThinkVertex* pVertexCur = pGraph->m_pVertexs;
+    while (pVertexCur) {
+        if (NULL == pVertexCur->m_pData) {
+            continue;
+        }
+
+        char szVal[128];
+
+        (pToStringFunc)(pVertexCur->m_pData, szVal, 128);
+        think_stringbuilder_appendf(pSB, "%s --> ", szVal);
+
+        ThinkEdge* pEdgeCur = pVertexCur->m_pEdges;
+        while (pEdgeCur) {
+            (pToStringFunc)(pEdgeCur->m_pDest->m_pData, szVal, 128);
+            think_stringbuilder_appendf(pSB, " %s|%d --> ", szVal, pEdgeCur->m_nLength);
+            pEdgeCur = pEdgeCur->m_pNext;
+        }
+
+        pVertexCur = pVertexCur->m_pNext;
+        think_stringbuilder_appendf(pSB, " NULL\n");
+    }
+    think_stringbuilder_appendf(pSB, "\n\n");
+
+    char* pszRet = think_stringbuilder_strdup(pSB);
+    think_stringbuilder_free(pSB);
+
+    return pszRet;
+}
+
 //-----------------------------------------------------------------------
 //for shortest path
 //-----------------------------------------------------------------------
@@ -448,7 +486,9 @@ static int shortest_next_pos(int** ppStatus, unsigned int nRow);
 static unsigned int shortest_vertex_unvisited(int** ppStatus, unsigned int nRow);
 static int shortest_get_cur_shortest_distance(int** ppStatus, int nSrc, int nDest);
 static int shortest_is_visited(int** ppStatus, int nPos);
-
+static ThinkShortestPath* think_graph_shortest_path_new();
+static void think_graph_shortest_path_node_prepand(ThinkShortestPath* pPath, void* pData);
+static ThinkShortestPathNode* think_graph_shortest_path_node_new(void* pData);
 
 static int think_graph_get_vertex_position(ThinkGraph* pGraph, void* pData)
 {
@@ -490,7 +530,16 @@ void think_graph_shortest_path_free(ThinkShortestPath** ppPath)
     return_if_fail(ppPath != NULL);
     return_if_fail(*ppPath != NULL);
 
+    ThinkShortestPathNode* pCur = (*ppPath)->m_pNodes;
+    while (pCur) {
+        ThinkShortestPathNode* pTemp = pCur;
+        pCur = pCur->m_pNext;
 
+        free(pTemp);
+    }
+
+    free(*ppPath);
+    *ppPath = NULL;
 }
 
 static int** shortest_init_status_array(unsigned int nRow, unsigned int nCel)
@@ -567,7 +616,7 @@ static int shortest_get_cur_shortest_distance(int** ppStatus, int nSrc, int nDes
 /**
 see video: https://www.youtube.com/watch?v=pVfj6mxhdMw
 vertex	shortest	pre_vertex	visited
-A	0	NULL	1
+A	0	-1	1
 B	4	A	1
 C	2	A	1
 D	9	E	1
@@ -627,13 +676,59 @@ ThinkShortestPath* think_graph_shortest_path(ThinkGraph* pGraph, void* pSrc, voi
         nCurPos = shortest_next_pos(ppStatus, nRow);
     }
 
-    for (unsigned int i = 0; i < nRow; ++i) {
-        for (int j = 0; j < ARRAY_CEL; ++j) {
-            printf("%d ", ppStatus[i][j]);
+//    for (unsigned int i = 0; i < nRow; ++i) {
+//        for (int j = 0; j < ARRAY_CEL; ++j) {
+//            printf("%d ", ppStatus[i][j]);
+//        }
+//
+//        printf("\n");
+//    }
+
+    ThinkShortestPath* pPath = think_graph_shortest_path_new();
+    pPath->m_nDistance = shortest_get_cur_shortest_distance(ppStatus, nSrc, nDest);
+    if (pPath->m_nDistance != INT32_MAX) {
+        int nPos = (unsigned int)nDest;
+        while (ppStatus[nPos][2] != -1) {
+            ThinkVertex* pVertex = think_graph_get_vertex_by_position(pGraph, (unsigned int)nPos);
+            think_graph_shortest_path_node_prepand(pPath, pVertex->m_pData);
+
+            nPos = ppStatus[nPos][2];
         }
 
-        printf("\n");
+        //prepend start vertex
+        ThinkVertex* pVertex = think_graph_get_vertex_by_position(pGraph, (unsigned int)nPos);
+        think_graph_shortest_path_node_prepand(pPath, pVertex->m_pData);
     }
 
-    return NULL;
+    return pPath;
+}
+
+static void think_graph_shortest_path_node_prepand(ThinkShortestPath* pPath, void* pData)
+{
+    ThinkShortestPathNode* pNode = think_graph_shortest_path_node_new(pData);
+    if (NULL == pPath->m_pNodes) {
+        pPath->m_pNodes = pNode;
+    } else {
+        pNode->m_pNext = pPath->m_pNodes;
+        pPath->m_pNodes = pNode;
+    }
+}
+
+static ThinkShortestPathNode* think_graph_shortest_path_node_new(void* pData)
+{
+    ThinkShortestPathNode* pNode = (ThinkShortestPathNode*) malloc(sizeof(ThinkShortestPathNode));
+    pNode->m_pData = pData;
+    pNode->m_pNext = NULL;
+
+    return pNode;
+}
+
+
+static ThinkShortestPath* think_graph_shortest_path_new()
+{
+    ThinkShortestPath* pPath = (ThinkShortestPath*) malloc(sizeof(ThinkShortestPath));
+    pPath->m_nDistance = INT32_MAX;
+    pPath->m_pNodes = NULL;
+
+    return pPath;
 }

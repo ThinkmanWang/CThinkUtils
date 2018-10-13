@@ -59,6 +59,8 @@ void think_graph_remove_edge_plus(ThinkVertex* pVertex, ThinkEdge** ppEdge);
 
 int think_graph_get_edge_length(ThinkGraph* pGraph, void* pSrc, void* pDest);
 void think_graph_print(ThinkGraph* pGraph, ThinkToStringFunc pToStringFunc);
+char* think_graph_print_plus(ThinkGraph* pGraph, ThinkToStringFunc pToStringFunc);
+
 
 //-----------------------------------------------------------------------
 //for shortest path
@@ -72,7 +74,7 @@ typedef struct _ThinkShortestPathNode {
 };
 
 typedef struct _ThinkShortestPath {
-    unsigned int m_nDistance;
+    int m_nDistance;
     ThinkShortestPathNode* m_pNodes;
 } ThinkShortestPath;
 
