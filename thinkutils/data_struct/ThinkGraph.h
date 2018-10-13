@@ -59,7 +59,7 @@ void think_graph_remove_edge_plus(ThinkVertex* pVertex, ThinkEdge** ppEdge);
 
 int think_graph_get_edge_length(ThinkGraph* pGraph, void* pSrc, void* pDest);
 void think_graph_print(ThinkGraph* pGraph, ThinkToStringFunc pToStringFunc);
-char* think_graph_print_plus(ThinkGraph* pGraph, ThinkToStringFunc pToStringFunc);
+char* think_graph_print_to_string(ThinkGraph* pGraph, ThinkToStringFunc pToStringFunc);
 
 
 //-----------------------------------------------------------------------

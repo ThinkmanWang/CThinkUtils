@@ -435,7 +435,7 @@ void think_graph_print(ThinkGraph* pGraph, ThinkToStringFunc pToStringFunc)
     printf("\n\n");
 }
 
-char* think_graph_print_plus(ThinkGraph* pGraph, ThinkToStringFunc pToStringFunc)
+char* think_graph_print_to_string(ThinkGraph* pGraph, ThinkToStringFunc pToStringFunc)
 {
     return_val_if_fail(pGraph, NULL);
     return_val_if_fail(pToStringFunc != NULL, NULL);

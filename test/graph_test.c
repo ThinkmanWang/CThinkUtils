@@ -142,7 +142,7 @@ void test4()
     log_debug("Edge size: %d", think_graph_edge_size(pGraph));
 
 //    think_graph_print(pGraph, to_string);
-    char* pszGraph = think_graph_print_plus(pGraph, to_string);
+    char* pszGraph = think_graph_print_to_string(pGraph, to_string);
     if (pszGraph) {
         log_debug(pszGraph);
 
