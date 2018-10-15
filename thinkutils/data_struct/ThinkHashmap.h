@@ -14,12 +14,13 @@ extern "C" {
 typedef struct _hashmap_node{
     char* m_pszKey;
     void* m_pData;
+    struct _hashmap_node* m_pNext;
 } ThinkHashmapNode;
 
 typedef struct _hashmap_map{
     size_t m_nSize;
     ThinkDestoryFunc m_pDestoryFunc;
-    void* m_pArray[HASHMAP_SIZE];
+    ThinkHashmapNode* m_pArray[HASHMAP_SIZE];
 } ThinkHashmap;
 
 typedef void (*ThinkHashFunc) (const char* key
