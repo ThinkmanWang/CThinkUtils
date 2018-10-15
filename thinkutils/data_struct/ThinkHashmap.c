@@ -15,12 +15,12 @@ static unsigned int hash(const char* pszKey)
     return (hash & 0x7FFFFFFF);
 }
 
-static ThinkHashmapNode* think_hashmap_node_new(const char* pszKey, void* pData)
+static ThinkHashMapNode* think_hashmap_node_new(const char* pszKey, void* pData)
 {
     return_val_if_fail(pszKey != NULL, NULL);
     return_val_if_fail(pData != NULL, NULL);
 
-    ThinkHashmapNode* pNode = (ThinkHashmapNode*) malloc(sizeof(ThinkHashmapNode));
+    ThinkHashMapNode* pNode = (ThinkHashMapNode*) malloc(sizeof(ThinkHashMapNode));
     pNode->m_pszKey = strdup(pszKey);
     pNode->m_pData = pData;
     pNode->m_pNext = NULL;
@@ -28,7 +28,7 @@ static ThinkHashmapNode* think_hashmap_node_new(const char* pszKey, void* pData)
     return pNode;
 }
 
-static void think_hashmap_node_free(ThinkHashmap* pMap, ThinkHashmapNode** ppNode) {
+static void think_hashmap_node_free(ThinkHashMap* pMap, ThinkHashMapNode** ppNode) {
     return_if_fail(ppNode != NULL);
     return_if_fail(*ppNode != NULL);
 
@@ -49,9 +49,9 @@ static void think_hashmap_node_free(ThinkHashmap* pMap, ThinkHashmapNode** ppNod
     *ppNode = NULL;
 }
 
-ThinkHashmap* think_hashmap_new(ThinkDestoryFunc pDestoryFunc)
+ThinkHashMap* think_hashmap_new(ThinkDestoryFunc pDestoryFunc)
 {
-    ThinkHashmap* pMap = (ThinkHashmap*) malloc(sizeof(ThinkHashmap));
+    ThinkHashMap* pMap = (ThinkHashMap*) malloc(sizeof(ThinkHashMap));
     pMap->m_nSize = 0;
     pMap->m_pDestoryFunc = pDestoryFunc;
     for (int i = 0; i < HASHMAP_SIZE; ++i) {
@@ -61,19 +61,19 @@ ThinkHashmap* think_hashmap_new(ThinkDestoryFunc pDestoryFunc)
     return pMap;
 }
 
-void think_hashmap_free(ThinkHashmap** ppMap)
+void think_hashmap_free(ThinkHashMap** ppMap)
 {
     return_if_fail(ppMap != NULL);
     return_if_fail(*ppMap != NULL);
 
     for (int i = 0; i < HASHMAP_SIZE; ++i) {
-        ThinkHashmapNode* pNode = (*ppMap)->m_pArray[i];
+        ThinkHashMapNode* pNode = (*ppMap)->m_pArray[i];
         if (NULL == pNode) {
             continue;
         }
 
         while (pNode) {
-            ThinkHashmapNode* pNext = pNode->m_pNext;
+            ThinkHashMapNode* pNext = pNode->m_pNext;
 
             think_hashmap_node_free((*ppMap), &pNode);
             (*ppMap)->m_nSize -= 1;
@@ -86,13 +86,13 @@ void think_hashmap_free(ThinkHashmap** ppMap)
     *ppMap = NULL;
 }
 
-size_t think_hashmap_size(ThinkHashmap* pMap)
+size_t think_hashmap_size(ThinkHashMap* pMap)
 {
     return pMap->m_nSize;
 }
 
 
-void think_hashmap_put(ThinkHashmap* pMap, const char* pszKey, void* pData)
+void think_hashmap_put(ThinkHashMap* pMap, const char* pszKey, void* pData)
 {
     return_if_fail(pMap != NULL);
     return_if_fail(pszKey != NULL);
@@ -102,13 +102,13 @@ void think_hashmap_put(ThinkHashmap* pMap, const char* pszKey, void* pData)
         think_hashmap_remove(pMap, pszKey);
     }
 
-    ThinkHashmapNode* pNode = think_hashmap_node_new(pszKey, pData);
+    ThinkHashMapNode* pNode = think_hashmap_node_new(pszKey, pData);
     return_if_fail(pNode != NULL);
 
     int nIndex = hash(pszKey) % HASHMAP_SIZE;
 
-    ThinkHashmapNode* pNewNode = think_hashmap_node_new(pszKey, pData);
-    ThinkHashmapNode* pCur = pMap->m_pArray[nIndex];
+    ThinkHashMapNode* pNewNode = think_hashmap_node_new(pszKey, pData);
+    ThinkHashMapNode* pCur = pMap->m_pArray[nIndex];
     if (NULL == pCur) {
         pMap->m_pArray[nIndex] = pNewNode;
     } else {
@@ -123,14 +123,14 @@ void think_hashmap_put(ThinkHashmap* pMap, const char* pszKey, void* pData)
 
 }
 
-void* think_hashmap_get(ThinkHashmap* pMap, const char* pszKey)
+void* think_hashmap_get(ThinkHashMap* pMap, const char* pszKey)
 {
     return_val_if_fail(pMap != NULL, NULL);
     return_val_if_fail(pszKey != NULL, NULL);
 
     int nIndex = hash(pszKey) % HASHMAP_SIZE;
 
-    ThinkHashmapNode* pCur = pMap->m_pArray[nIndex];
+    ThinkHashMapNode* pCur = pMap->m_pArray[nIndex];
     while (pCur) {
         if (0 == strcmp(pCur->m_pszKey, pszKey)) {
             return pCur->m_pData;
@@ -141,14 +141,14 @@ void* think_hashmap_get(ThinkHashmap* pMap, const char* pszKey)
     return NULL;
 }
 
-void think_hashmap_remove(ThinkHashmap* pMap, const char* pszKey)
+void think_hashmap_remove(ThinkHashMap* pMap, const char* pszKey)
 {
     return_if_fail(pMap != NULL);
     return_if_fail(pszKey != NULL);
 
     int nIndex = hash(pszKey) % HASHMAP_SIZE;
-    ThinkHashmapNode* pCur = pMap->m_pArray[nIndex];
-    ThinkHashmapNode* pParent = NULL;
+    ThinkHashMapNode* pCur = pMap->m_pArray[nIndex];
+    ThinkHashMapNode* pParent = NULL;
     while (pCur) {
 
         if (0 == strcmp(pCur->m_pszKey, pszKey)) {
@@ -173,13 +173,13 @@ void think_hashmap_remove(ThinkHashmap* pMap, const char* pszKey)
 }
 
 
-void think_hashmap_foreach(ThinkHashmap* pMap, ThinkHashFunc pFunc, void* pUserData)
+void think_hashmap_foreach(ThinkHashMap* pMap, ThinkHashFunc pFunc, void* pUserData)
 {
     return_if_fail(pMap != NULL);
     return_if_fail(pFunc != NULL);
 
     for (int i = 0; i < HASHMAP_SIZE; ++i) {
-        ThinkHashmapNode* pNode = pMap->m_pArray[i];
+        ThinkHashMapNode* pNode = pMap->m_pArray[i];
 
         while (pNode) {
 

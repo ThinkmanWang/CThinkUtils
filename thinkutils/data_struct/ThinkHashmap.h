@@ -11,31 +11,31 @@ extern "C" {
 
 #define HASHMAP_SIZE 1024
 
-typedef struct _hashmap_node{
+typedef struct _ThinkHashMapNode{
     char* m_pszKey;
     void* m_pData;
-    struct _hashmap_node* m_pNext;
-} ThinkHashmapNode;
+    struct _ThinkHashMapNode* m_pNext;
+} ThinkHashMapNode;
 
-typedef struct _hashmap_map{
+typedef struct _ThinkHashMap{
     size_t m_nSize;
     ThinkDestoryFunc m_pDestoryFunc;
-    ThinkHashmapNode* m_pArray[HASHMAP_SIZE];
-} ThinkHashmap;
+    ThinkHashMapNode* m_pArray[HASHMAP_SIZE];
+} ThinkHashMap;
 
 typedef void (*ThinkHashFunc) (const char* key
         , void* pData
         , void* user_data);
 
-ThinkHashmap* think_hashmap_new(ThinkDestoryFunc pDestoryFunc);
-void think_hashmap_free(ThinkHashmap** ppMap);
-size_t think_hashmap_size(ThinkHashmap* pMap);
+ThinkHashMap* think_hashmap_new(ThinkDestoryFunc pDestoryFunc);
+void think_hashmap_free(ThinkHashMap** ppMap);
+size_t think_hashmap_size(ThinkHashMap* pMap);
 
-void think_hashmap_put(ThinkHashmap* pMap, const char* pszKey, void* pData);
-void* think_hashmap_get(ThinkHashmap* pMap, const char* pszKey);
-void think_hashmap_remove(ThinkHashmap* pMap, const char* pszKey);
+void think_hashmap_put(ThinkHashMap* pMap, const char* pszKey, void* pData);
+void* think_hashmap_get(ThinkHashMap* pMap, const char* pszKey);
+void think_hashmap_remove(ThinkHashMap* pMap, const char* pszKey);
 
-void think_hashmap_foreach(ThinkHashmap* pMap, ThinkHashFunc pFunc, void* pUserData);
+void think_hashmap_foreach(ThinkHashMap* pMap, ThinkHashFunc pFunc, void* pUserData);
 
 
 #ifdef __cplusplus

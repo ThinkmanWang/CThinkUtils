@@ -36,7 +36,7 @@ int main()
     log_debug("%d\n", hash("asdfasf"));
     log_debug("%d\n", hash("asdfasfasdfagagdfgsdfgerwgrgwrgrtwgrtgrwtskadjfaksfhalkfadfadfadfafafadhasfhaskfhg"));
 
-    ThinkHashmap* pMap = think_hashmap_new(NULL);
+    ThinkHashMap* pMap = think_hashmap_new(NULL);
 
     think_hashmap_put(pMap, "1", (void*)1);
     think_hashmap_put(pMap, "2", (void*)2);
