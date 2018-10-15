@@ -13,7 +13,7 @@ extern "C" {
 
 typedef struct {
     void** m_pData;
-    unsigned int m_nLen;
+    unsigned int m_nLength;
     unsigned int m_nArySize;
     ThinkDestoryFunc m_pDestoryFunc;
 } ThinkPtrArray;

@@ -19,7 +19,7 @@ ThinkPtrArray* think_ptr_array_new(ThinkDestoryFunc pDestroyFunc)
         return NULL;
     }
 
-    pArray->m_nLen = 0;
+    pArray->m_nLength = 0;
 
     unsigned int nLen = sizeof(void *) * 2;
 
@@ -45,7 +45,7 @@ void think_ptr_array_free(ThinkPtrArray** pArray)
 {
     return_if_fail(NULL != pArray);
 
-    for (int i = 0; i < (*pArray)->m_nLen; ++i) {
+    for (int i = 0; i < (*pArray)->m_nLength; ++i) {
         if ((*pArray)->m_pDestoryFunc != NULL) {
             (*((*pArray)->m_pDestoryFunc))((*pArray)->m_pData[i]);
         }
@@ -59,7 +59,7 @@ static void think_ptr_array_maybe_expand(ThinkPtrArray* pArray)
 {
     return_if_fail(NULL != pArray);
 
-    if (pArray->m_nLen * sizeof(void*) <= pArray->m_nArySize / 2) {
+    if (pArray->m_nLength * sizeof(void*) <= pArray->m_nArySize / 2) {
         return;
     }
 
@@ -71,14 +71,14 @@ unsigned int think_ptr_array_length(ThinkPtrArray *pArray)
 {
     return_val_if_fail(NULL != pArray, 0);
 
-    return pArray->m_nLen;
+    return pArray->m_nLength;
 }
 
 void think_ptr_array_append(ThinkPtrArray* pArray, void* pData)
 {
     return_if_fail(NULL != pArray);
 
-    pArray->m_pData[pArray->m_nLen++] = pData;
+    pArray->m_pData[pArray->m_nLength++] = pData;
     think_ptr_array_maybe_expand(pArray);
 }
 
@@ -86,16 +86,16 @@ void think_ptr_array_insert_at(ThinkPtrArray* pArray, void* pData, unsigned int 
 {
     return_if_fail(NULL != pArray);
 
-    if (nIndex > pArray->m_nLen) {
+    if (nIndex > pArray->m_nLength) {
         return;
     }
 
-    for (unsigned int i = pArray->m_nLen; i > nIndex; --i) {
+    for (unsigned int i = pArray->m_nLength; i > nIndex; --i) {
         pArray->m_pData[i] = pArray->m_pData[i - 1];
     }
 
     pArray->m_pData[nIndex] = pData;
-    pArray->m_nLen += 1;
+    pArray->m_nLength += 1;
 
     think_ptr_array_maybe_expand(pArray);
 }
@@ -104,12 +104,12 @@ void think_ptr_array_prepend(ThinkPtrArray* pArray, void* pData)
 {
     return_if_fail(NULL != pArray);
 
-    for (int i = pArray->m_nLen; i > 0; --i) {
+    for (int i = pArray->m_nLength; i > 0; --i) {
         pArray->m_pData[i] = pArray->m_pData[i - 1];
     }
 
     pArray->m_pData[0] = pData;
-    pArray->m_nLen += 1;
+    pArray->m_nLength += 1;
 
     think_ptr_array_maybe_expand(pArray);
 }
@@ -118,11 +118,11 @@ void think_ptr_array_remove(ThinkPtrArray* pArray, void* pData, int bFree)
 {
     return_if_fail(NULL != pArray);
 
-    if (0 == pArray->m_nLen) {
+    if (0 == pArray->m_nLength) {
         return;
     }
 
-    for (int i = 0; i < pArray->m_nLen; ++i) {
+    for (int i = 0; i < pArray->m_nLength; ++i) {
         if (pData == pArray->m_pData[i]) {
             think_ptr_array_remove_at(pArray, i, bFree);
             break;
@@ -134,16 +134,16 @@ void think_ptr_array_remove_at(ThinkPtrArray* pArray, unsigned int nIndex, int b
 {
     return_if_fail(NULL != pArray);
 
-    if (0 == pArray->m_nLen) {
+    if (0 == pArray->m_nLength) {
         return;
     }
 
-    if (nIndex >= pArray->m_nLen) {
+    if (nIndex >= pArray->m_nLength) {
         return;
     }
 
     void* pData = pArray->m_pData[nIndex];
-    for (int i = nIndex + 1; i < pArray->m_nLen; ++i) {
+    for (int i = nIndex + 1; i < pArray->m_nLength; ++i) {
         pArray->m_pData[i - 1] = pArray->m_pData[i];
     }
 
@@ -151,14 +151,14 @@ void think_ptr_array_remove_at(ThinkPtrArray* pArray, unsigned int nIndex, int b
         (*(pArray->m_pDestoryFunc))(pData);
     }
 
-    pArray->m_nLen -= 1;
+    pArray->m_nLength -= 1;
 }
 
 void* think_ptr_array_get_array_index(ThinkPtrArray* pArray, unsigned int nIndex)
 {
     return_val_if_fail(NULL != pArray, NULL);
 
-    if (nIndex >= pArray->m_nLen) {
+    if (nIndex >= pArray->m_nLength) {
         return NULL;
     }
 
@@ -169,16 +169,16 @@ void* think_ptr_array_pop(ThinkPtrArray* pArray)
 {
     return_val_if_fail(NULL != pArray, NULL);
 
-    if (0 == pArray->m_nLen) {
+    if (0 == pArray->m_nLength) {
         return NULL;
     }
 
     void* pData = pArray->m_pData[0];
-    for (int i = 1; i < pArray->m_nLen; ++i) {
+    for (int i = 1; i < pArray->m_nLength; ++i) {
         pArray->m_pData[i - 1] = pArray->m_pData[i];
     }
 
-    pArray->m_nLen -= 1;
+    pArray->m_nLength -= 1;
 
     return pData;
 }
@@ -187,12 +187,12 @@ void* think_ptr_array_pop_tail(ThinkPtrArray* pArray)
 {
     return_val_if_fail(NULL != pArray, NULL);
 
-    if (0 == pArray->m_nLen) {
+    if (0 == pArray->m_nLength) {
         return NULL;
     }
 
-    void* pData = pArray->m_pData[pArray->m_nLen - 1];
-    pArray->m_nLen -= 1;
+    void* pData = pArray->m_pData[pArray->m_nLength - 1];
+    pArray->m_nLength -= 1;
 
     return pData;
 }
@@ -235,6 +235,6 @@ void think_ptr_array_sort(ThinkPtrArray* pArray, ThinkCompareDataFunc pCompareFu
     return_if_fail(pCompareFunc != NULL);
     return_if_fail(pArray->m_nArySize > 1);
 
-    think_ptr_array_sort_real(pArray, pCompareFunc, 0, pArray->m_nLen - 1);
+    think_ptr_array_sort_real(pArray, pCompareFunc, 0, pArray->m_nLength - 1);
 }
 
