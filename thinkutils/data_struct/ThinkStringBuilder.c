@@ -85,7 +85,7 @@ int think_stringbuilder_appendf(ThinkStringBuilder *sb, const char *format, ...)
  * The ThinkStringBuilder is not modified by this function and can therefore continue
  * to be used.
  */
-char *think_stringbuilder_strdup(ThinkStringBuilder *sb)
+char* think_stringbuilder_strdup(ThinkStringBuilder *sb)
 {
     char			*buf = NULL;
     char			*c = NULL;

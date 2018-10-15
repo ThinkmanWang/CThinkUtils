@@ -27,7 +27,7 @@ ThinkStringBuilder	*think_stringbuilder_create();
 int				think_stringbuilder_empty(ThinkStringBuilder *sb);
 int				think_stringbuilder_append(ThinkStringBuilder *sb, const char *str);
 int				think_stringbuilder_appendf(ThinkStringBuilder *sb, const char *format, ...);
-char			*think_stringbuilder_strdup(ThinkStringBuilder *sb);
+char*			think_stringbuilder_strdup(ThinkStringBuilder *sb);
 void 			think_stringbuilder_reset(ThinkStringBuilder *sb);
 void			think_stringbuilder_free(ThinkStringBuilder *sb);
 
