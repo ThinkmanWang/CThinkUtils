@@ -46,6 +46,9 @@ bool think_bstree_exists(ThinkBSTree* pTree, const void* pData);
 unsigned int think_bstree_size(ThinkBSTree* pTree);
 unsigned int think_bstree_height(ThinkBSTree* pTree);
 
+char* think_bstree_to_string(ThinkBSTree* pTree, ThinkToStringFunc pToStringFunc);
+
+
 #ifdef __cplusplus
 }
 #endif

@@ -477,3 +477,8 @@ unsigned int think_bstree_height(ThinkBSTree* pTree)
 
     return max(pTree->m_pNodeRoot->m_nHeightLeft, pTree->m_pNodeRoot->m_nHeightRight) + 1;
 }
+
+char* think_bstree_to_string(ThinkBSTree* pTree, ThinkToStringFunc pToStringFunc)
+{
+    return NULL;
+}
