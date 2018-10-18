@@ -24,7 +24,7 @@ ThinkPtrArray* think_ptr_array_new(ThinkDestoryFunc pDestroyFunc)
     unsigned int nLen = sizeof(void *) * 2;
 
     pArray->m_nArySize = nLen;
-    pArray->m_pData = malloc(nLen);
+    pArray->m_pData = (void**) malloc(nLen);
 
     if (NULL == pArray->m_pData) {
         goto err_ret;
