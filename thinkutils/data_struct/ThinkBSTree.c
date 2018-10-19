@@ -300,7 +300,17 @@ static void think_bstree_remove_node(ThinkBSTree* pTree, ThinkBSTreeNode* pNodeR
             think_bstree_remove_node(pTree, pMinSubNode, false);
         } else {
             think_bstree_update_height(pNodeRemove, NODE_DEL);
+            ThinkBSTreeNode* pParent = pNodeRemove->m_pParent;
             think_bstree_node_destory(pTree, &pNodeRemove, false);
+
+            int nVal = ((int)pParent->m_nHeightLeft - (int)pParent->m_nHeightRight);
+            if (nVal < -1) {
+                think_bstree_node_rotate(pTree, pParent, NODE_ROTETE_ACW);
+            } else if (nVal > 1) {
+                think_bstree_node_rotate(pTree, pParent, NODE_ROTETE_CW);
+            } else {
+
+            }
         }
     }
 }
