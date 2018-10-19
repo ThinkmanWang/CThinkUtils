@@ -126,6 +126,7 @@ void test4()
     think_graph_add_vertex(pGraph, (void*)6);
 
     think_graph_add_edge(pGraph, (void*)1, (void*)2, 4);
+    think_graph_add_edge(pGraph, (void*)1, (void*)2, 5);
     think_graph_add_edge(pGraph, (void*)1, (void*)3, 2);
 
     think_graph_add_edge(pGraph, (void*)2, (void*)3, 5);
