@@ -17,14 +17,14 @@ extern "C" {
 typedef struct _ThinkVertex ThinkVertex;
 typedef struct _ThinkEdge ThinkEdge;
 
-typedef struct _ThinkVertex {
+struct _ThinkVertex {
     void* m_pData;
 
     struct _ThinkVertex *m_pNext;
     ThinkEdge *m_pEdges;
 };
 
-typedef struct _ThinkEdge {
+struct _ThinkEdge {
     unsigned int m_nLength;
 
     ThinkVertex* m_pSrc;
@@ -68,7 +68,7 @@ char* think_graph_print_to_string(ThinkGraph* pGraph, ThinkToStringFunc pToStrin
 
 typedef struct _ThinkShortestPathNode ThinkShortestPathNode;
 
-typedef struct _ThinkShortestPathNode {
+struct _ThinkShortestPathNode {
     void* m_pData;
     struct _ThinkShortestPathNode* m_pNext;
 };

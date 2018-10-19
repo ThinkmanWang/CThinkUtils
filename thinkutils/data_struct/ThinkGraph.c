@@ -511,7 +511,7 @@ static int think_graph_get_vertex_position(ThinkGraph* pGraph, void* pData)
 
 static ThinkVertex* think_graph_get_vertex_by_position(ThinkGraph* pGraph, unsigned int nPos)
 {
-    return_val_if_fail(pGraph != NULL, -1);
+    return_val_if_fail(pGraph != NULL, NULL);
 
     ThinkVertex* pCur = pGraph->m_pVertexs;
     for (unsigned int i = 0; i < nPos; ++i) {
