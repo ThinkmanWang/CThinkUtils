@@ -50,6 +50,7 @@ unsigned int think_graph_vertex_size(ThinkGraph* pGraph);
 unsigned int think_graph_vertex_edge_size(ThinkVertex* pVertex);
 unsigned int think_graph_edge_size(ThinkGraph* pGraph);
 
+ThinkEdge* think_graph_edge_exists(ThinkGraph* pGraph, void* pSrc, void* pDest);
 ThinkEdge* think_graph_add_edge(ThinkGraph* pGraph, void* pSrc, void* pDest, unsigned int nLength);
 ThinkEdge* think_graph_add_edge_plus(ThinkGraph* pGraph, ThinkVertex* pSrc, ThinkVertex* pDest, unsigned int nLength);
 ThinkEdge* think_graph_get_all_edge_from_me(ThinkGraph* pGraph, void* pData);

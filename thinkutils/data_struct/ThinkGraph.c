@@ -286,6 +286,26 @@ static void think_graph_remove_all_edge_to_vertex(ThinkGraph* pGraph, ThinkVerte
     }
 }
 
+ThinkEdge* think_graph_edge_exists(ThinkGraph* pGraph, void* pSrc, void* pDest)
+{
+    return_val_if_fail(pGraph != NULL, NULL);
+    return_val_if_fail(pSrc != NULL, NULL);
+    return_val_if_fail(pDest != NULL, NULL);
+
+    ThinkVertex* pVertexSrc = think_graph_get_vertex(pGraph, pSrc);
+
+    ThinkEdge* pCur = pVertexSrc->m_pEdges;
+    while (pCur) {
+        if (pCur->m_pDest->m_pData == pDest) {
+            return pCur;
+        }
+
+        pCur = pCur->m_pNext;
+    }
+
+    return NULL;
+}
+
 ThinkEdge* think_graph_add_edge(ThinkGraph* pGraph, void* pSrc, void* pDest, unsigned int nLength)
 {
     return_val_if_fail(pGraph != NULL, NULL);
@@ -297,6 +317,11 @@ ThinkEdge* think_graph_add_edge(ThinkGraph* pGraph, void* pSrc, void* pDest, uns
     ThinkVertex* pVertexSrc = think_graph_get_vertex(pGraph, pSrc);
     ThinkVertex* pVertexDest = think_graph_get_vertex(pGraph, pDest);
 
+    ThinkEdge* pEdgeExists = think_graph_edge_exists(pGraph, pSrc, pDest);
+    if (pEdgeExists) {
+        think_graph_remove_edge_plus(pVertexSrc, &pEdgeExists);
+    }
+
     return think_graph_add_edge_plus(pGraph, pVertexSrc, pVertexDest, nLength);
 }
 
@@ -307,6 +332,11 @@ ThinkEdge* think_graph_add_edge_plus(ThinkGraph* pGraph, ThinkVertex* pSrc, Thin
     return_val_if_fail(pDest != NULL, NULL);
     return_val_if_fail(pSrc->m_pData != pDest->m_pData, NULL);
     return_val_if_fail(nLength > 0, NULL);
+
+    ThinkEdge* pEdgeExists = think_graph_edge_exists(pGraph, pSrc->m_pData, pDest->m_pData);
+    if (pEdgeExists) {
+        think_graph_remove_edge_plus(pSrc, &pEdgeExists);
+    }
 
     return think_graph_edge_new(pSrc, pDest, nLength);
 }
