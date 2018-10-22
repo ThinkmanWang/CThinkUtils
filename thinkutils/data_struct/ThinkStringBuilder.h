@@ -2,7 +2,7 @@
 #ifndef CTHINKUTILS_THINKSTRINGBUILDER_H
 #define CTHINKUTILS_THINKSTRINGBUILDER_H
 
-#include <lzma.h>
+//#include <lzma.h>
 
 #ifdef __cplusplus
 extern "C" {

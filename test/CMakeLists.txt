@@ -37,6 +37,8 @@ add_executable(size_test size_test.c)
 
 add_executable(qsort qsort.cpp)
 
+add_executable(refrence_test refrence_test.cpp)
+
 add_executable(ptr_ary_test ptr_ary_test.c)
 TARGET_LINK_LIBRARIES(ptr_ary_test ${GLIB2_LIBRARIES} ${GTHREAD2_LIBRARIES} log thinkutils data_struct)
 
