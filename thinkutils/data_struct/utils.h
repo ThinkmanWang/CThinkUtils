@@ -15,6 +15,12 @@
         return val; \
     }
 
+#define think_free(pVal) \
+    if (pVal) { \
+        free(pVal); \
+        pVal = NULL; \
+    }
+
 typedef enum {
     SORT_ASC
     , SORT_DESC

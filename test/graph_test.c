@@ -169,8 +169,7 @@ void test4()
     think_stringbuilder_free(pSB);
 
     log_debug("%s", pszStr);
-    free(pszStr);
-    pszStr = NULL;
+    think_free(pszStr);
 
     think_graph_shortest_path_free(&pPath);
     think_graph_free(&pGraph, NULL);
