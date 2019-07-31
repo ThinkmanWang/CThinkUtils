@@ -7,8 +7,9 @@
 #include <ntsid.h>
 #include <sys/time.h>
 
+#include "common.h"
 
-char* now(char* currTime)
+char* now(char* currTime, size_t nMax)
 {
     g_return_val_if_fail(currTime != NULL, NULL);
 
@@ -19,7 +20,7 @@ char* now(char* currTime)
     char szTime[256];
 
     memset(szTime, 0, 256);
-    sprintf(szTime, "%d-%02d-%02d %02d:%02d:%02d", (ptm->tm_year + 1900),
+    snprintf(szTime, MIN(nMax, 256), "%d-%02d-%02d %02d:%02d:%02d", (ptm->tm_year + 1900),
             ptm->tm_mon + 1, ptm->tm_mday, ptm->tm_hour, ptm->tm_min, ptm->tm_sec);
 
 //    g_free(ptm);
@@ -39,7 +40,7 @@ int hour()
     return ptm->tm_hour;
 }
 
-char* today(char* currTime)
+char* today(char* currTime, size_t nMax)
 {
     g_return_val_if_fail(currTime != NULL, NULL);
 
@@ -50,7 +51,7 @@ char* today(char* currTime)
     char szTime[256];
 
     memset(szTime, 0, 256);
-    sprintf(szTime, "%d-%02d-%02d", (ptm->tm_year + 1900), ptm->tm_mon + 1, ptm->tm_mday);
+    snprintf(szTime, MIN(nMax, 256), "%d-%02d-%02d", (ptm->tm_year + 1900), ptm->tm_mon + 1, ptm->tm_mday);
 //    g_free(ptm);
 
     strcpy(currTime, szTime);

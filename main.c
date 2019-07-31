@@ -41,7 +41,9 @@ void test_ini()
 void datetime_test()
 {
     char szDate[MAX_INPUT];
-    log_debug("%s", now(szDate));
+    log_debug("%s", now(szDate, MAX_INPUT));
+    log_debug("%s", today(szDate, MAX_INPUT));
+
     func1();
 
     char buf[MAX_INPUT];
