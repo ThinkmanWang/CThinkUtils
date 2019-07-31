@@ -7,8 +7,6 @@
 #include <ntsid.h>
 #include <sys/time.h>
 
-#include "common.h"
-
 char* now(char* currTime, size_t nMax)
 {
     g_return_val_if_fail(currTime != NULL, NULL);
