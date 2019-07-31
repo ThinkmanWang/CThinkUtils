@@ -53,25 +53,25 @@ void datetime_test()
     log_debug("hour ==> %d", hour());
 
     int nDiffDay = -3;
-    log_debug("diffday %d ==> %s", nDiffDay, diffday(szDate, nDiffDay));
+    log_debug("diffday %d ==> %s", nDiffDay, diffday(szDate, nDiffDay, MAX_INPUT));
 
     nDiffDay = -2;
-    log_debug("diffday %d ==> %s", nDiffDay, diffday(szDate, nDiffDay));
+    log_debug("diffday %d ==> %s", nDiffDay, diffday(szDate, nDiffDay, MAX_INPUT));
 
     nDiffDay = -1;
-    log_debug("diffday %d ==> %s", nDiffDay, diffday(szDate, nDiffDay));
+    log_debug("diffday %d ==> %s", nDiffDay, diffday(szDate, nDiffDay, MAX_INPUT));
 
     nDiffDay = 0;
-    log_debug("diffday %d ==> %s", nDiffDay, diffday(szDate, nDiffDay));
+    log_debug("diffday %d ==> %s", nDiffDay, diffday(szDate, nDiffDay, MAX_INPUT));
 
     nDiffDay = 1;
-    log_debug("diffday %d ==> %s", nDiffDay, diffday(szDate, nDiffDay));
+    log_debug("diffday %d ==> %s", nDiffDay, diffday(szDate, nDiffDay, MAX_INPUT));
 
     nDiffDay = 2;
-    log_debug("diffday %d ==> %s", nDiffDay, diffday(szDate, nDiffDay));
+    log_debug("diffday %d ==> %s", nDiffDay, diffday(szDate, nDiffDay, MAX_INPUT));
 
     nDiffDay = 3;
-    log_debug("diffday %d ==> %s", nDiffDay, diffday(szDate, nDiffDay));
+    log_debug("diffday %d ==> %s", nDiffDay, diffday(szDate, nDiffDay, MAX_INPUT));
 }
 
 void test_md5()

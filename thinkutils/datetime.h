@@ -9,7 +9,7 @@ extern "C" {
 char* now(char* currTime, size_t nMax);
 char* today(char* currTime, size_t nMax);
 int hour();
-char* diffday(char* szDate, int nDiffDay);
+char* diffday(char* szDate, int nDiffDay, size_t nMax);
 #ifdef __cplusplus
 }
 #endif

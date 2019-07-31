@@ -58,7 +58,7 @@ char* today(char* currTime, size_t nMax)
     return currTime;
 }
 
-char* diffday(char* szDate, int nDiffDay)
+char* diffday(char* szDate, int nDiffDay, size_t nMax)
 {
     g_return_val_if_fail(szDate != NULL, NULL);
 
@@ -69,7 +69,7 @@ char* diffday(char* szDate, int nDiffDay)
     char szTime[256];
 
     memset(szTime, 0, 256);
-    sprintf(szTime, "%d-%02d-%02d", (ptm->tm_year + 1900), ptm->tm_mon + 1, ptm->tm_mday);
+    snprintf(szTime, MIN(nMax, 256), "%d-%02d-%02d", (ptm->tm_year + 1900), ptm->tm_mon + 1, ptm->tm_mday);
 //    g_free(ptm);
 
     strcpy(szDate, szTime);

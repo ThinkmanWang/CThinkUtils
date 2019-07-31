@@ -5,15 +5,15 @@
 #ifndef CTHINKUTILS_COMMON_H
 #define CTHINKUTILS_COMMON_H
 
-//#ifdef __cplusplus
-//extern "C" {
-//#endif
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-#define MAX(a, b) (a >= b ? a : b)
-#define MIN(a, b) (a <= b ? a : b)
+//#define MAX(a, b) (a >= b ? a : b)
+//#define MIN(a, b) (a <= b ? a : b)
 
-//#ifdef __cplusplus
-//}
-//#endif
+#ifdef __cplusplus
+}
+#endif
 
 #endif //CTHINKUTILS_COMMON_H
