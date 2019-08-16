@@ -18,5 +18,5 @@ add_subdirectory(bstree_printer)
 #target_link_libraries(publisher Qt5::Widgets Qt5::DBus)
 
 add_executable(ui ui_main.cpp)
-target_link_libraries(ui Qt5::Widgets ${GLIB2_LIBRARIES} ${GTHREAD2_LIBRARIES} log thinkutils data_struct)
+target_link_libraries(ui Qt5::Widgets ${GLIB2_LIBRARIES} ${GTHREAD2_LIBRARIES} log thinkutils data_type)
 

@@ -20,7 +20,7 @@ add_executable(CThinkUtils ${SOURCE_FILES})
 ADD_SUBDIRECTORY(thinkutils)
 INCLUDE_DIRECTORIES(thinkutils)
 
-INCLUDE_DIRECTORIES(thinkutils/data_struct)
+INCLUDE_DIRECTORIES(thinkutils/data_type)
 INCLUDE_DIRECTORIES(thinkutils/log)
 
 ADD_SUBDIRECTORY(test)
