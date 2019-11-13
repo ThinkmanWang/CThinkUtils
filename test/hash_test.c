@@ -36,12 +36,12 @@ int main()
     log_debug("%d\n", hash("asdfasf"));
     log_debug("%d\n", hash("asdfasfasdfagagdfgsdfgerwgrgwrgrtwgrtgrwtskadjfaksfhalkfadfadfadfafafadhasfhaskfhg"));
 
-    ThinkHashMap* pMap = think_hashmap_new(NULL);
+    ThinkHashMap* pMap = think_hashmap_new(free);
 
-    think_hashmap_put(pMap, "1", "华鹏");
-    think_hashmap_put(pMap, "2", "老王");
-    think_hashmap_put(pMap, "3", "test str");
-    think_hashmap_put(pMap, "中文key", "中文value");
+    think_hashmap_put(pMap, "1", strdup("华鹏"));
+    think_hashmap_put(pMap, "2", strdup("老王"));
+    think_hashmap_put(pMap, "3", strdup("test str"));
+    think_hashmap_put(pMap, "中文key", strdup("中文value"));
 
     log_debug("Hashmap size: %d", think_hashmap_size(pMap));
     log_debug("Hashmap : %s->%s", "1", think_hashmap_get(pMap, "1"));
