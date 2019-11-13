@@ -19,7 +19,7 @@ static unsigned int hash(const char* pszKey)
 
 void foreach_map(char* pszKey, void* pData, void* pUserData)
 {
-    log_debug("Hashmap size: %s->%d %p", pszKey, pData, pUserData);
+    log_debug("Hashmap size: %s->%s %p", pszKey, pData, pUserData);
 }
 
 int main()
@@ -38,14 +38,15 @@ int main()
 
     ThinkHashMap* pMap = think_hashmap_new(NULL);
 
-    think_hashmap_put(pMap, "1", (void*)1);
-    think_hashmap_put(pMap, "2", (void*)2);
-    think_hashmap_put(pMap, "3", (void*)3);
+    think_hashmap_put(pMap, "1", "华鹏");
+    think_hashmap_put(pMap, "2", "老王");
+    think_hashmap_put(pMap, "3", "test str");
+    think_hashmap_put(pMap, "中文key", "中文value");
 
     log_debug("Hashmap size: %d", think_hashmap_size(pMap));
-    log_debug("Hashmap size: %s->%d", "1", think_hashmap_get(pMap, "1"));
-    log_debug("Hashmap size: %s->%d", "2", think_hashmap_get(pMap, "2"));
-    log_debug("Hashmap size: %s->%d", "3", think_hashmap_get(pMap, "3"));
+    log_debug("Hashmap : %s->%s", "1", think_hashmap_get(pMap, "1"));
+    log_debug("Hashmap : %s->%s", "2", think_hashmap_get(pMap, "2"));
+    log_debug("Hashmap : %s->%s", "3", think_hashmap_get(pMap, "3"));
 
     think_hashmap_foreach(pMap, (ThinkHashFunc) foreach_map, NULL);
     log_debug("");
