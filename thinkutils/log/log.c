@@ -81,7 +81,7 @@ void log_log(int level, const char *file, const char* func, int line, const char
     if (!L.quiet) {
         va_list args;
         char buf[16];
-        buf[strftime(buf, sizeof(buf), "%H:%M:%S", lt)] = '\0';
+        buf[strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", lt)] = '\0';
 #ifdef LOG_USE_COLOR
         fprintf(
       stderr, "%s %s%-5s\x1b[0m \x1b[90m%s:%d %s(): \x1b[0m ",
