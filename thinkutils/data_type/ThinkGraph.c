@@ -1,6 +1,7 @@
 #include "ThinkGraph.h"
 
 #include <stdlib.h>
+#include <stdint.h>
 
 #include "ThinkStringBuilder.h"
 
