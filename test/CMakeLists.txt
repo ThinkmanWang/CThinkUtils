@@ -48,3 +48,5 @@ TARGET_LINK_LIBRARIES(list_test ${GLIB2_LIBRARIES} ${GTHREAD2_LIBRARIES} log thi
 INCLUDE_DIRECTORIES(${GLIB2_INCLUDE_DIR}
         ${JsonGlib_INCLUDE_DIRS} thinkutils/data_type thinkutils/log)
 
+add_executable(mid mid.cpp)
+

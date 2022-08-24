@@ -30,7 +30,7 @@ void test1()
     think_list_sort(pList, my_compare);
     for (unsigned int i = 0; i < think_list_length(pList); ++i) {
         void* pData = think_list_get(pList, i);
-        log_debug("%d", (int)pData);
+        log_debug("%p", pData);
     }
 
     think_list_free(&pList, NULL);
